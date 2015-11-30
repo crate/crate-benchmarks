@@ -29,6 +29,7 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import io.crate.TimestampFormat;
 import io.crate.testserver.action.sql.SQLBulkResponse;
 import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -110,7 +111,7 @@ public class PartitionedBulkInsertBenchmark extends BenchmarkBase {
         long inserted = 0;
         long errors = 0;
 
-        SQLBulkResponse bulkResponse = execute(SINGLE_INSERT_SQL_STMT, bulkArgs);
+        SQLBulkResponse bulkResponse = execute(SINGLE_INSERT_SQL_STMT, bulkArgs, TimeValue.timeValueMinutes(2));
         for (SQLBulkResponse.Result result : bulkResponse.results()) {
             assertThat(result.errorMessage(), is(nullValue()));
             if (result.rowCount() < 0) {

@@ -44,9 +44,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
@@ -143,10 +140,10 @@ public abstract class BenchmarkBase extends RandomizedTest {
                 " \"isoAlpha3\" string," +
                 " \"isoNumeric\" string," +
                 " languages string," +
-                " population integer" +
                 " north float," +
+                " population integer," +
                 " south float," +
-                " west float," +
+                " west float" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
         testCluster.ensureGreen();
     }
@@ -251,8 +248,10 @@ public abstract class BenchmarkBase extends RandomizedTest {
     }
 
     public void loadBulk() throws Exception {
-        Path path = Paths.get(dataPath());
-        URI pathUri = path.toUri();
-        execute(String.format(Locale.ENGLISH, "COPY \"%s\" FROM ? WITH (shared=true)", tableName()), new Object[]{ pathUri });
+        String pathUri = "file://" + getClass().getResource(dataPath()).toURI().getPath();
+        SQLResponse sqlResponse = execute(String.format(Locale.ENGLISH, "COPY \"%s\" FROM ? WITH (shared=true)", tableName()), new Object[]{ pathUri });
+        if (sqlResponse.rowCount() <= 0L) {
+            throw new IllegalStateException("loadBulk failed importing");
+        }
     }
 }

@@ -67,16 +67,18 @@ public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
     public void testConcurrentCopyFrom() throws Exception {
         ThreadPoolExecutor executor = EsExecutors.newFixed(2, 2, EsExecutors.daemonThreadFactory("COPY FROM"));
         final Iterator<CrateTestServer> serverIt = CLUSTER.servers().iterator();
+        final String copyFromSource0 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_0.json.gz").getPath();
+        final String copyFromSource3 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_3.json.gz").getPath();
         try {
             executor.execute(() -> {
                     SQLResponse response = serverIt.next().execute("COPY concurrent_cp FROM ? with (shared=true, compression='gzip', bulk_size=100)", new Object[]{
-                            getClass().getResource("/setup/data/concurrent_copy_from_0.json.gz").getPath()
+                            copyFromSource0
                     }, TimeValue.timeValueMinutes(4));
                     System.out.println(String.format("ROWS: %s DURATION: %s", response.rowCount(), response.duration()));
             });
             executor.execute(() -> {
                     SQLResponse response = serverIt.next().execute("COPY concurrent_cp FROM ? with (shared=true, compression='gzip', bulk_size=100)", new Object[]{
-                            getClass().getResource("/setup/data/concurrent_copy_from_3.json.gz").getPath()
+                            copyFromSource3
                     }, TimeValue.timeValueMinutes(4));
                     System.out.println(String.format("ROWS: %s DURATION: %s", response.rowCount(), response.duration()));
             });

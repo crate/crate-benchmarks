@@ -76,8 +76,8 @@ public class GroupByArbitraryBenchmark extends BenchmarkBase {
             null,                                   // isoAlpha3
             null,                                   // isoNumeric
             null,                                   // languages
-            random.nextInt(Integer.MAX_VALUE),      // population
             null,                                   // north
+            random.nextInt(Integer.MAX_VALUE),      // population
             null,                                   // south
             null,                                   // west
         };

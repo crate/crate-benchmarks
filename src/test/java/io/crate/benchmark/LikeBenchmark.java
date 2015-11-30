@@ -78,8 +78,8 @@ public class LikeBenchmark extends BenchmarkBase {
             strValue = String.format("%d", value);
         }
         return new Object[] {
-                value,
-                strValue
+                value,      // id
+                strValue    // value
         };
     }
 

@@ -23,17 +23,13 @@ package io.crate.stress;
 
 import io.crate.concurrent.Threaded;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testing.CrateTestServer;
-import io.crate.testserver.action.sql.SQLRequest;
 import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.client.CrateClient;
 import io.crate.testserver.shade.org.elasticsearch.action.ActionFuture;
 import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CountDownLatch;
 
 public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
@@ -50,13 +46,8 @@ public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
                 .build();
     }
 
-    private CrateClient crateClient;
-
     @Override
     public void prepareFirst() {
-        CrateTestServer server = CLUSTER.randomServer();
-        crateClient = new CrateClient(String.format(Locale.ENGLISH, "%s:%s", server.crateHost, server.transportPort));
-
         execute("create table rejected (id long primary key, value string, category int) with (number_of_replicas=0)");
         ensureYellow();
         int numArgs = 10_000;
@@ -81,7 +72,7 @@ public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
         for (int i = 0; i < numRequests; i++) {
             String value = values[randomIntBetween(0, 4)];
             futures.add(
-                    crateClient.sql(new SQLRequest("update rejected set value=? where category = ?", new Object[]{value + "U", (randomIntBetween(0, 19))}))
+                    CLUSTER.executeAsync("update rejected set value=? where category = ?", new Object[]{value + "U", (randomIntBetween(0, 19))})
             );
             latch.countDown();
         }

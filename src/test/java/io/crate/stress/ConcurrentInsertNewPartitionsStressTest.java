@@ -26,6 +26,7 @@ import io.crate.concurrent.Threaded;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.action.sql.SQLBulkResponse;
 import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -79,7 +80,7 @@ public class ConcurrentInsertNewPartitionsStressTest extends AbstractIntegration
         for (int i = 0; i < numRows; i++) {
             bulkArgs[i] = getRandomObject();
         }
-        SQLBulkResponse response = execute("insert into motiondata (d, device_id, ts, ax) values (?,?,?,?)", bulkArgs);
+        SQLBulkResponse response = execute("insert into motiondata (d, device_id, ts, ax) values (?,?,?,?)", bulkArgs, TimeValue.timeValueMinutes(5));
         for (SQLBulkResponse.Result result : response.results()) {
             assertThat(result.errorMessage(), is(nullValue()));
             if (result.rowCount() < 0) {

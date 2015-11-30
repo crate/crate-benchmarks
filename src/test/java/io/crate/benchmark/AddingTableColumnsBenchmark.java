@@ -45,7 +45,7 @@ public class AddingTableColumnsBenchmark extends BenchmarkBase {
     private void createTable(int columnsAmount, String tableName) {
         StringBuilder randomColumns = new StringBuilder();
         for (int i = 0; i < columnsAmount; ++i) {
-            randomColumns.append("col")
+            randomColumns.append("icol")
                     .append(getRandom().nextInt(Integer.MAX_VALUE))
                     .append(getRandom().nextInt(Integer.MAX_VALUE))
                     .append(" string,")
@@ -56,10 +56,10 @@ public class AddingTableColumnsBenchmark extends BenchmarkBase {
         }
 
         execute("create table " + tableName + " (" +
+                " continent string," +
                 " countryName string," +
                 randomColumns.toString() +
-                " population integer," +
-                " continent string" +
+                " population integer" +
                 ") clustered into 1 shards with (number_of_replicas=0)", new Object[0]);
         testCluster.ensureGreen();
     }

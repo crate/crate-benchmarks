@@ -124,6 +124,7 @@ public class CrossJoinBenchmark extends BenchmarkBase {
     }
 
 
+    /** TODO: uncomment with next crate release
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testQTF() {
@@ -153,7 +154,7 @@ public class CrossJoinBenchmark extends BenchmarkBase {
                 QTF_WITH_OFFSET_SQL_STMT,
                 2, TimeUnit.MINUTES
         );
-    }
+    }*/
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
@@ -181,11 +182,8 @@ public class CrossJoinBenchmark extends BenchmarkBase {
 
     private void executeConcurrently(int numConcurrent, final String stmt, int timeout, TimeUnit timeoutUnit) throws Exception {
         ExecutorService executor = Executors.newFixedThreadPool(numConcurrent);
-        List<Callable<Object>> tasks = Collections.nCopies(numConcurrent, Executors.callable(new Runnable() {
-            @Override
-            public void run() {
-                execute(stmt);
-            }
+        List<Callable<Object>> tasks = Collections.nCopies(numConcurrent, Executors.callable(() -> {
+            execute(stmt);
         }));
         List<Future<Object>> futures = executor.invokeAll(tasks);
         for (Future<Object> future : futures) {
@@ -196,7 +194,7 @@ public class CrossJoinBenchmark extends BenchmarkBase {
         executor.shutdownNow();
     }
 
-    /*
+    /* TODO: uncomment once supported
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testQAF3Tables() {

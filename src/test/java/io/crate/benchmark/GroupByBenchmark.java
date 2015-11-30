@@ -40,15 +40,15 @@ public class GroupByBenchmark extends BenchmarkBase {
     public static final int NUMBER_OF_DOCUMENTS = 500_000; // was 1_000_000
     public static final int BENCHMARK_ROUNDS = 1000;
 
-    public static final String MAX_STMT = String.format("select max(\"areaInSqKm\") from %s group by continent", TABLE_NAME);
-    public static final String MIN_STMT = String.format("select min(\"areaInSqKm\") from %s group by continent", TABLE_NAME);
-    public static final String AVG_STMT = String.format("select avg(\"population\") from %s group by continent", TABLE_NAME);
-    public static final String COUNT_STAR_STMT = String.format("select count(*) from %s group by continent", TABLE_NAME);
-    public static final String COUNT_COLUMN_STMT = String.format("select count(\"countryName\") from %s group by continent", TABLE_NAME);
-    public static final String COUNT_DISTINCT_STMT = String.format("select count(distinct \"countryName\") from %s group by continent", TABLE_NAME);
-    public static final String ARBITRARY_STMT = String.format("select arbitrary(\"countryName\") from %s group by continent", TABLE_NAME);
-    public static final String GROUP_BY_ROUTING_STMT = String.format("select sum(population), type from %s group by type order by 1", TABLE_NAME);
-    public static final String GROUP_BY_ROUTING_HIGH_LIMIT_STMT = String.format("select sum(population), type from %s group by type order by 1 limit 100000", TABLE_NAME);
+    public static final String MAX_STMT = String.format("select max(\"areaInSqKm\") from \"%s\" group by continent", TABLE_NAME);
+    public static final String MIN_STMT = String.format("select min(\"areaInSqKm\") from \"%s\" group by continent", TABLE_NAME);
+    public static final String AVG_STMT = String.format("select avg(\"population\") from \"%s\" group by continent", TABLE_NAME);
+    public static final String COUNT_STAR_STMT = String.format("select count(*) from \"%s\" group by continent", TABLE_NAME);
+    public static final String COUNT_COLUMN_STMT = String.format("select count(\"countryName\") from \"%s\" group by continent", TABLE_NAME);
+    public static final String COUNT_DISTINCT_STMT = String.format("select count(distinct \"countryName\") from \"%s\" group by continent", TABLE_NAME);
+    public static final String ARBITRARY_STMT = String.format("select arbitrary(\"countryName\") from \"%s\" group by continent", TABLE_NAME);
+    public static final String GROUP_BY_ROUTING_STMT = String.format("select sum(population), type from \"%s\" group by type order by 1", TABLE_NAME);
+    public static final String GROUP_BY_ROUTING_HIGH_LIMIT_STMT = String.format("select sum(population), type from \"%s\" group by type order by 1 limit 100000", TABLE_NAME);
 
 
     @Override
@@ -81,11 +81,11 @@ public class GroupByBenchmark extends BenchmarkBase {
                 " \"isoAlpha3\" string," +
                 " \"isoNumeric\" string," +
                 " languages string," +
-                " population integer" +
                 " north float," +
+                " population integer," +
                 " south float," +
                 " type integer," +
-                " west float," +
+                " west float" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
         testCluster.ensureGreen();
     }
@@ -108,8 +108,8 @@ public class GroupByBenchmark extends BenchmarkBase {
                 null,                                   // isoAlpha3
                 null,                                   // isoNumeric
                 null,                                   // languages
-                random.nextInt(Integer.MAX_VALUE),      // population
                 null,                                   // north
+                random.nextInt(Integer.MAX_VALUE),      // population
                 null,                                   // south
                 getRandom().nextInt(100_000),           // type
                 null,                                   // west

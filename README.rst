@@ -23,7 +23,7 @@ lots of concurrent load on your local machine::
 In order to run the external benchmarks that test a running
 crate cluster only via the CrateClient which is exposed in the CrateTestCluster and -Server::
 
-    ./gradlew externalBenchmarks
+    ./gradlew bench
 
 You were warned that both stresstests and benchmarks
 put lots of pressure and load on your machine. Be prepared!

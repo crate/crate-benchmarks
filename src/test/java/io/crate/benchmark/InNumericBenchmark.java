@@ -80,8 +80,8 @@ public class InNumericBenchmark extends BenchmarkBase {
         int value = VALUE.getAndIncrement();
         VALUES.add(value);
         return new Object[] {
-                value,
-                random.nextLong()
+                value,              // int_val
+                random.nextLong()   // long_val
         };
     }
 

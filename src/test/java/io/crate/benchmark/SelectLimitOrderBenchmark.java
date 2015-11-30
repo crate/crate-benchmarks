@@ -81,9 +81,9 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
     protected Object[] generateRow() throws IOException {
         Random random = ThreadLocalRandom.current();
         return new Object[] {
-                random.nextInt(Integer.MAX_VALUE),
-                random.nextLong(),
-                generatedStrings[random.nextInt(generatedStrings.length)]
+                random.nextInt(Integer.MAX_VALUE),                          // int_val
+                random.nextLong(),                                          // long_val
+                generatedStrings[random.nextInt(generatedStrings.length)]   // str_val
         };
     }
 

@@ -32,7 +32,8 @@ import io.crate.testserver.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testserver.shade.org.elasticsearch.action.delete.DeleteResponse;
 import io.crate.testserver.shade.org.elasticsearch.action.deletebyquery.DeleteByQueryAction;
 import io.crate.testserver.shade.org.elasticsearch.action.deletebyquery.DeleteByQueryRequest;
-import io.crate.testserver.shade.org.elasticsearch.common.xcontent.XContentFactory;
+import io.crate.testserver.shade.org.elasticsearch.action.support.QuerySourceBuilder;
+import io.crate.testserver.shade.org.elasticsearch.index.query.TermQueryBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -89,15 +90,10 @@ public class DeleteBenchmark extends BenchmarkBase {
     }
 
     public DeleteByQueryRequest getDeleteApiByQueryRequest() throws Exception {
-
-        return new DeleteByQueryRequest(TABLE_NAME).source(
-                XContentFactory.jsonBuilder()
-                        .startObject()
-                        .startObject("term")
-                        .field("countryCode", getCountryCode())
-                        .endObject()
-                        .endObject().bytes().toBytes()
-        );
+        return new DeleteByQueryRequest(TABLE_NAME)
+                .source(
+                        new QuerySourceBuilder().setQuery(
+                                new TermQueryBuilder("countryCode", getCountryCode())));
     }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)

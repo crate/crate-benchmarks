@@ -73,8 +73,8 @@ public class InStringBenchmark extends BenchmarkBase {
         String strValue = String.valueOf(value);
         VALUES.add(strValue);
         return new Object[]{
-            value,
-            strValue
+            value,      // id
+            strValue    // value
         };
     }
 

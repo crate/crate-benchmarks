@@ -27,11 +27,12 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
+import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.action.sql.SQLResponse;
 import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.testserver.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
 import io.crate.testserver.shade.org.elasticsearch.action.delete.DeleteRequest;
-import org.junit.Before;
+import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ import java.util.HashMap;
 @AxisRange(min = 0)
 @BenchmarkHistoryChart(filePrefix="benchmark-bulk-delete-history", labelWith = LabelType.CUSTOM_KEY)
 @BenchmarkMethodChart(filePrefix = "benchmark-bulk-delete")
-public class BulkDeleteBenchmark extends BenchmarkBase{
+public class BulkDeleteBenchmark extends BenchmarkBase {
 
     public static final String INDEX_NAME = "users";
     public static final int BENCHMARK_ROUNDS = 3;
@@ -49,22 +50,27 @@ public class BulkDeleteBenchmark extends BenchmarkBase{
     public static final String SELECT_ALL_IDS_STMT = "SELECT id, _id FROM users";
     public static final String DELETE_SQL_STMT = "DELETE FROM users where id = ?";
 
+
+    static {
+        testCluster = CrateTestCluster.builder(CLUSTER_NAME)
+                .fromVersion(CRATE_VERSION)
+                .settings(ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build())
+                .numberOfNodes(2)
+                .build();
+    }
+
+
     @Override
     protected String tableName() {
         return INDEX_NAME;
     }
 
-    @Before
-    public void prepare() {
-        execute("set global transient threadpool.index.queue_size=?", new Object[]{ROWS});
-    }
-
     @Override
     protected void createTable() {
         execute("create table users (" +
-                "    id string primary key," +
-                "    name string," +
-                "    age integer" +
+                "  age integer," +
+                "  id string primary key," +
+                "  name string" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
         testCluster.ensureGreen();
     }
