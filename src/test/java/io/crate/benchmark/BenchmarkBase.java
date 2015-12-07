@@ -72,6 +72,9 @@ public abstract class BenchmarkBase extends RandomizedTest {
     @ClassRule
     public static CrateTestCluster testCluster = CrateTestCluster.builder(CLUSTER_NAME)
             .fromVersion(CRATE_VERSION)
+            .settings(ImmutableSettings.builder()
+                    .put("index.store.type", "memory")
+                    .build())
             .numberOfNodes(2)
             .build();
 
