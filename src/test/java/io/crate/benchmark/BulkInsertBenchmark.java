@@ -50,7 +50,7 @@ public class BulkInsertBenchmark extends BenchmarkBase {
                                                       "\"isoAlpha3\", \"currencyCode\", \"continent\", \"continentName\", \"languages\", \"fipsCode\", \"capital\", \"population\") " +
                                                       "VALUES " + Joiner.on(",").join(Collections.nCopies(ROWS, "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"));
 
-    private Object[] getArgs() {
+    public static Object[] getArgs() {
         Object[] bulkObjects = new Object[ROWS * 15];
         for(int i=0; i < ROWS; i++){
             Object[] row = getRandomObject();
@@ -61,7 +61,7 @@ public class BulkInsertBenchmark extends BenchmarkBase {
         return bulkObjects;
     }
 
-    private Object[][] getBulkArgs() {
+    public static Object[][] getBulkArgs() {
         Object[][] bulkArgs = new Object[ROWS][];
         for (int i = 0; i < ROWS; i++) {
             bulkArgs[i] = getRandomObject();
@@ -69,7 +69,7 @@ public class BulkInsertBenchmark extends BenchmarkBase {
         return bulkArgs;
     }
 
-    private Object[] getRandomObject() {
+    private static Object[] getRandomObject() {
         return new Object[]{
                 RandomStringUtils.randomAlphabetic(10), // countryName
                 RandomStringUtils.randomAlphabetic(2),  // countryCode

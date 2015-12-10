@@ -67,7 +67,7 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static final String DATA = "/setup/data/bench.json";
 
     public static final String CLUSTER_NAME = "benchmarks";
-    public static final String CRATE_VERSION = System.getProperty("crate.version", "0.53.0");
+    public static final String CRATE_VERSION = System.getProperty("crate.version", "0.54.0");
 
     @ClassRule
     public static CrateTestCluster testCluster = CrateTestCluster.builder(CLUSTER_NAME)

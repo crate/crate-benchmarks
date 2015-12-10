@@ -22,7 +22,7 @@ test {
 }
 
 // DEFAULT CRATE VERSION to test against
-project.ext.defaultCrateVersion = '0.53.0'
+project.ext.defaultCrateVersion = '0.54.0'
 
 task getVersion << {
     if (!project.hasProperty('crateVersion')) {
