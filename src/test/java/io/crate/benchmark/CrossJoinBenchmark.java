@@ -124,7 +124,6 @@ public class CrossJoinBenchmark extends BenchmarkBase {
     }
 
 
-    /** TODO: uncomment with next crate release
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testQTF() {
@@ -154,7 +153,7 @@ public class CrossJoinBenchmark extends BenchmarkBase {
                 QTF_WITH_OFFSET_SQL_STMT,
                 2, TimeUnit.MINUTES
         );
-    }*/
+    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
@@ -194,11 +193,10 @@ public class CrossJoinBenchmark extends BenchmarkBase {
         executor.shutdownNow();
     }
 
-    /* TODO: uncomment once supported
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testQAF3Tables() {
         execute("select articles.name as article, colors.name as color, small.info['size'] as size " +
                 "from articles, colors, small order by article, color limit 20000");
-    }*/
+    }
 }
