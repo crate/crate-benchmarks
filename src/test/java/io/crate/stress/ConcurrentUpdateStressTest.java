@@ -21,8 +21,8 @@
 
 package io.crate.stress;
 
+import io.crate.benchmark.TestsUtils;
 import io.crate.concurrent.Threaded;
-import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.action.sql.SQLResponse;
 import io.crate.testserver.shade.org.elasticsearch.action.ActionFuture;
 import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
@@ -37,13 +37,12 @@ public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
     private String[] values;
 
     static {
-        CLUSTER = CrateTestCluster.builder(CLUSTER_NAME)
-                .fromVersion(CRATE_VERSION)
-                .numberOfNodes(2)
-                .settings(ImmutableSettings.builder()
+        cluster = TestsUtils.testCluster(
+                CLUSTER_NAME,
+                ImmutableSettings.builder()
                         .put("threadpool.search.queue_size", 3000)
-                        .build())
-                .build();
+                        .build(),
+                2);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
         for (int i = 0; i < numRequests; i++) {
             String value = values[randomIntBetween(0, 4)];
             futures.add(
-                    CLUSTER.executeAsync("update rejected set value=? where category = ?", new Object[]{value + "U", (randomIntBetween(0, 19))})
+                    cluster.executeAsync("update rejected set value=? where category = ?", new Object[]{value + "U", (randomIntBetween(0, 19))})
             );
             latch.countDown();
         }

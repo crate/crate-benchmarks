@@ -27,7 +27,6 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.action.sql.SQLResponse;
 import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.testserver.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
@@ -50,15 +49,13 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
     public static final String SELECT_ALL_IDS_STMT = "SELECT id, _id FROM users";
     public static final String DELETE_SQL_STMT = "DELETE FROM users where id = ?";
 
-
     static {
-        testCluster = CrateTestCluster.builder(CLUSTER_NAME)
-                .fromVersion(CRATE_VERSION)
-                .settings(ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build())
-                .numberOfNodes(2)
-                .build();
+        testCluster = TestsUtils.testCluster(
+                CLUSTER_NAME,
+                ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build(),
+                2
+        );
     }
-
 
     @Override
     protected String tableName() {
