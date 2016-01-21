@@ -37,6 +37,17 @@ e.g.::
     ./gradlew bench
         -Dcrate.url=https://cdn.crate.io/downloads/releases/crate-0.54.3.tar.gz
 
+
+Crate benchmarks use ``CONSOLE``, ``H2``, and ``XML`` consumers to
+persist its results. Benchmark results can be also backed up to Crate.
+To achieve that, you need to provide following properties::
+
+    ./gradlew bench
+        -Djub.consumers=CONSOLE,CRATE
+        -Djub.crate.host=localhost
+        -Djub.crate.http=4200
+        -Djub.crate.transport=4300
+
 Finally
 -------
 
