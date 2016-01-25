@@ -28,6 +28,11 @@ crate cluster only via the CrateClient which is exposed in the CrateTestCluster 
 You were warned that both stresstests and benchmarks
 put lots of pressure and load on your machine. Be prepared!
 
+By default Crate Stresstests and Benchmarks fetch Crate by version, by setting
+``crate.version`` property to a required version. It is also possible to provide
+a URL with the certain specific version. In order to do that the ``crate.url`` property
+must be set.
+If both properties are set, then the ``crate.url`` is used.
 
 Finally
 -------

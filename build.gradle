@@ -25,9 +25,13 @@ test {
 project.ext.defaultCrateVersion = '0.54.0'
 
 task getVersion << {
-    if (!project.hasProperty('crateVersion')) {
-        project.ext.crateVersion = project.defaultCrateVersion
-    }
+//    if (!project.hasProperty('crateVersion')) {
+//        project.ext.crateVersion = project.defaultCrateVersion
+//    }
+//    println project.ext.crateVersion
+    project.ext.crateUrl = System.properties['crate.url']
+    project.ext.crateVersion = System.properties['crate.version']
+    println project.ext.crateUrl
     println project.ext.crateVersion
 }
 
@@ -65,8 +69,10 @@ task bench(type: Test, dependsOn: ['getVersion']) {
     systemProperty 'jub.charts.dir', benchmark_dir
 
     doFirst {
-        systemProperty 'jub.customkey', project.crateVersion
+//        systemProperty 'jub.customkey', project.crateVersion
+//        systemProperty 'crate.version', project.crateVersion
         systemProperty 'crate.version', project.crateVersion
+        systemProperty 'crate.url', project.crateUrl
     }
 
 
