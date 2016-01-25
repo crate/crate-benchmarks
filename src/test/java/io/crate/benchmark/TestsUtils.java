@@ -10,20 +10,25 @@ public class TestsUtils {
 
     public static final String CRATE_FROM_VERSION_PROPERTY = System.getProperty("crate.version");
     public static final String CRATE_FROM_URL_PROPERTY = System.getProperty("crate.url");
-
-    public static CrateTestCluster testCluster(String clusterName, Settings settings, int numNodes) {
-        CrateTestCluster.Builder builder = CrateTestCluster.builder(clusterName)
-                .settings(settings)
-                .numberOfNodes(numNodes);
-
-        if (CRATE_FROM_URL_PROPERTY != null) {
-            URL url = url(CRATE_FROM_URL_PROPERTY);
-            return builder.fromURL(url).build();
-        }
-        return builder.fromFile(CRATE_FROM_VERSION_PROPERTY).build();
+    static {
+        System.out.print(CRATE_FROM_URL_PROPERTY);
     }
 
-    private static URL url(String crateDownloadURL) {
+    public static CrateTestCluster testCluster(String clusterName, Settings settings, int numNodes) {
+        CrateTestCluster.Builder builder = CrateTestCluster.builder(clusterName);
+
+
+        if (CRATE_FROM_URL_PROPERTY != null) {
+            builder.fromURL(makeUrl(CRATE_FROM_URL_PROPERTY));
+        } else {
+            builder.fromFile(CRATE_FROM_VERSION_PROPERTY);
+        }
+        return builder
+                .settings(settings)
+                .numberOfNodes(numNodes).build();
+    }
+
+    private static URL makeUrl(String crateDownloadURL) {
         try {
             return new URL(crateDownloadURL);
         } catch (MalformedURLException e) {
