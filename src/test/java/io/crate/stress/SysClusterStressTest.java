@@ -22,9 +22,10 @@
 package io.crate.stress;
 
 import com.carrotsearch.randomizedtesting.annotations.Repeat;
+import io.crate.benchmark.TestUtils;
 import io.crate.concurrent.Threaded;
-import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.action.sql.SQLResponse;
+import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,7 +34,10 @@ import static org.hamcrest.core.Is.is;
 public class SysClusterStressTest extends AbstractIntegrationStressTest {
 
     static {
-        CLUSTER = CrateTestCluster.cluster(CLUSTER_NAME, CRATE_VERSION, 2);
+        cluster = TestUtils.testCluster(
+                CLUSTER_NAME,
+                ImmutableSettings.builder().build(),
+                2);
     }
 
     @Test
