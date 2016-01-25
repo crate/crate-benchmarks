@@ -22,13 +22,15 @@ test {
 }
 
 // DEFAULT CRATE VERSION to test against
-project.ext.defaultCrateVersion = '0.54.0'
+project.ext.defaultCrateVersion = '0.54.4'
 
 task getVersion << {
-    if (!project.hasProperty('crateVersion')) {
+    project.ext.crateUrl = System.getProperty('crate.url', null)
+    project.ext.crateVersion = System.getProperty('crate.version', null)
+
+    if (project.crateVersion == null && project.crateUrl == null) {
         project.ext.crateVersion = project.defaultCrateVersion
     }
-    println project.ext.crateVersion
 }
 
 tasks.withType(Test) {
@@ -47,9 +49,19 @@ task stress(type: Test, dependsOn: ['getVersion']) {
     group = 'crate'
 
     doFirst {
-        systemProperty 'crate.version', project.crateVersion
+        if (project.crateUrl != null) {
+            systemProperty 'jub.customkey', extractVersion(project.crateUrl)
+            systemProperty 'crate.url',  project.crateUrl
+        } else {
+            systemProperty 'jub.customkey', project.crateVersion
+            systemProperty 'crate.version', project.crateVersion
+        }
     }
     include('io/crate/stress/**')
+}
+
+def extractVersion(String url) {
+    url.find(/(\d+).(\d+).(\d+)/)
 }
 
 task bench(type: Test, dependsOn: ['getVersion']) {
@@ -65,8 +77,13 @@ task bench(type: Test, dependsOn: ['getVersion']) {
     systemProperty 'jub.charts.dir', benchmark_dir
 
     doFirst {
-        systemProperty 'jub.customkey', project.crateVersion
-        systemProperty 'crate.version', project.crateVersion
+        if (project.crateUrl != null) {
+            systemProperty 'jub.customkey', extractVersion(project.crateUrl)
+            systemProperty 'crate.url',  project.crateUrl
+        } else {
+            systemProperty 'jub.customkey', project.crateVersion
+            systemProperty 'crate.version', project.crateVersion
+        }
     }
 
 

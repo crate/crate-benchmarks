@@ -29,6 +29,14 @@ You were warned that both stresstests and benchmarks
 put lots of pressure and load on your machine. Be prepared!
 
 
+By default the stresstests and benchmark use the Crate version specified by the
+``crate.version`` system property. It is also possible to provide a specific
+Crate version using a URL. The URL is set using the ``crate.url`` system property,
+e.g.::
+
+    ./gradlew bench
+        -Dcrate.url=https://cdn.crate.io/downloads/releases/crate-0.54.3.tar.gz
+
 Finally
 -------
 
