@@ -68,7 +68,7 @@ public class AddingTableColumnsBenchmark extends BenchmarkBase {
     @Test
     public void testAlterTable10() throws Exception {
         for (int i = 0; i < 10; ++i) {
-            execute("alter table table_10 add column " + getRandom().nextInt() + " string", new Object[0]);
+            execute("alter table table_10 add column " + String.format("col%s string", atLeast(0)));
         }
     }
 
@@ -76,7 +76,7 @@ public class AddingTableColumnsBenchmark extends BenchmarkBase {
     @Test
     public void testAlterTable5k() throws Exception {
         for (int i = 0; i < 10; ++i) {
-            execute("alter table table_5k add column " + getRandom().nextInt() + " string", new Object[0]);
+            execute("alter table table_5k add column " + String.format("col%s string", atLeast(0)));
         }
     }
 
