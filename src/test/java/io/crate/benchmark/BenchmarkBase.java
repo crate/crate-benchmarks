@@ -77,9 +77,11 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static final String CLUSTER_NAME = "benchmarks";
 
     @ClassRule
-    public static CrateTestCluster testCluster = TestUtils.testCluster(CLUSTER_NAME, ImmutableSettings.builder()
-            .put("index.store.type", "memory")
-            .build(), 2 );
+    public static CrateTestCluster testCluster = TestUtils.testCluster(
+            CLUSTER_NAME,
+            ImmutableSettings.builder().put("index.store.type", "memory").build(),
+            2
+    );
 
     @Rule
     public BenchmarkRule benchmarkRun = new BenchmarkRule(getConsumers());
