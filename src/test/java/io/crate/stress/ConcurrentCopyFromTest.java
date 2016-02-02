@@ -23,9 +23,10 @@
 package io.crate.stress;
 
 import com.carrotsearch.randomizedtesting.annotations.Repeat;
-import io.crate.testing.CrateTestCluster;
+import io.crate.benchmark.TestUtils;
 import io.crate.testing.CrateTestServer;
 import io.crate.testserver.action.sql.SQLResponse;
+import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testserver.shade.org.elasticsearch.common.util.concurrent.EsExecutors;
 import org.junit.Before;
@@ -38,7 +39,10 @@ import java.util.concurrent.TimeUnit;
 public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
 
     static {
-        CLUSTER = CrateTestCluster.cluster(CLUSTER_NAME, CRATE_VERSION, 2);
+        cluster = TestUtils.testCluster(
+                CLUSTER_NAME,
+                ImmutableSettings.builder().build(),
+                2);
     }
 
     @Before
@@ -66,7 +70,7 @@ public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
     @Test
     public void testConcurrentCopyFrom() throws Exception {
         ThreadPoolExecutor executor = EsExecutors.newFixed(2, 2, EsExecutors.daemonThreadFactory("COPY FROM"));
-        final Iterator<CrateTestServer> serverIt = CLUSTER.servers().iterator();
+        final Iterator<CrateTestServer> serverIt = cluster.servers().iterator();
         final String copyFromSource0 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_0.json.gz").getPath();
         final String copyFromSource3 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_3.json.gz").getPath();
         try {

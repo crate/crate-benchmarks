@@ -22,10 +22,11 @@
 package io.crate.stress;
 
 import io.crate.TimestampFormat;
+import io.crate.benchmark.TestUtils;
 import io.crate.concurrent.Threaded;
-import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.action.sql.SQLBulkResponse;
 import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Test;
 
@@ -38,7 +39,10 @@ import static org.hamcrest.core.IsNull.nullValue;
 public class ConcurrentInsertNewPartitionsStressTest extends AbstractIntegrationStressTest {
 
     static {
-        CLUSTER = CrateTestCluster.cluster(CLUSTER_NAME, CRATE_VERSION, 2);
+        cluster = TestUtils.testCluster(
+                CLUSTER_NAME,
+                ImmutableSettings.builder().build(),
+                2);
     }
 
     private static final long TS = TimestampFormat.parseTimestampString("2015-01-01");

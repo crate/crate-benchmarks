@@ -31,9 +31,6 @@ import org.junit.rules.TestRule;
 
 public class BaseCreateBenchmark extends BenchmarkBase {
 
-    @Rule
-    public TestRule benchmarkRun = new BenchmarkRule();
-
     private boolean tablesCreated = false;
 
     protected int tablesAmount() {

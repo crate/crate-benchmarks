@@ -21,9 +21,13 @@
 
 package io.crate.benchmark;
 
+import com.carrotsearch.junitbenchmarks.BenchmarkOptionsSystemProperties;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import com.carrotsearch.junitbenchmarks.ConsumerName;
+import com.carrotsearch.junitbenchmarks.IResultsConsumer;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
+import io.crate.consumer.CrateConsumer;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testing.CrateTestServer;
 import io.crate.testserver.action.sql.SQLBulkResponse;
@@ -44,7 +48,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,20 +75,45 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static final String DATA = "/setup/data/bench.json";
 
     public static final String CLUSTER_NAME = "benchmarks";
-    public static final String CRATE_VERSION = System.getProperty("crate.version", "0.53.0");
 
     @ClassRule
-    public static CrateTestCluster testCluster = CrateTestCluster.builder(CLUSTER_NAME)
-            .fromVersion(CRATE_VERSION)
-            .settings(ImmutableSettings.builder()
-                    .put("index.store.type", "memory")
-                    .build())
-            .numberOfNodes(2)
-            .build();
+    public static CrateTestCluster testCluster = TestUtils.testCluster(
+            CLUSTER_NAME,
+            ImmutableSettings.builder().put("index.store.type", "memory").build(),
+            2
+    );
 
     @Rule
-    public BenchmarkRule benchmarkRun = new BenchmarkRule();
+    public BenchmarkRule benchmarkRun = new BenchmarkRule(getConsumers());
 
+    private IResultsConsumer[] getConsumers() {
+        final ArrayList<IResultsConsumer> result = new ArrayList<>();
+
+        List<String> consumers = new LinkedList<>(Arrays.asList(System.getProperty(
+                BenchmarkOptionsSystemProperties.CONSUMERS_PROPERTY,
+                ConsumerName.CONSOLE.toString()).split(","))
+        );
+
+        if (consumers.contains("CRATE")) {
+            consumers.remove("CRATE");
+            result.add(new CrateConsumer());
+        }
+
+        consumers.forEach(consumer -> {
+            try {
+                result.add(ConsumerName.valueOf(consumer.toUpperCase()).clazz.newInstance());
+            } catch (Throwable e) {
+                if (e instanceof Error) {
+                    throw (Error) e;
+                }
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        });
+        return result.toArray(new IResultsConsumer[result.size()]);
+    }
 
     protected TransportClient esClient = null;
     public final ESLogger logger = Loggers.getLogger(getClass());
