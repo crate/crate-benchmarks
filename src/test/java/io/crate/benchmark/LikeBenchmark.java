@@ -64,7 +64,7 @@ public class LikeBenchmark extends BenchmarkBase {
                 "  id int primary key, " +
                 "  value string" +
                 ") with (number_of_replicas=0)");
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     @Override

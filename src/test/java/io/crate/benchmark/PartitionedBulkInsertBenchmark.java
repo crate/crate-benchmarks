@@ -27,9 +27,9 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import io.crate.TimestampFormat;
-import io.crate.testserver.action.sql.SQLBulkResponse;
-import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
-import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
+import io.crate.action.sql.SQLBulkResponse;
+import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,7 +74,7 @@ public class PartitionedBulkInsertBenchmark extends BenchmarkBase {
                 ")\n" +
                 "partitioned by (d)\n" +
                 "clustered by (device_id)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     private Object[][] getBulkArgs(boolean uniquePartitions, int numRows) {

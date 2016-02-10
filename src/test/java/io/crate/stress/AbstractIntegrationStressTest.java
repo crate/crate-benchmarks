@@ -23,16 +23,24 @@ package io.crate.stress;
 
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
+import io.crate.action.sql.SQLBulkRequest;
+import io.crate.action.sql.SQLBulkResponse;
+import io.crate.action.sql.SQLRequest;
+import io.crate.action.sql.SQLResponse;
+import io.crate.client.CrateClient;
 import io.crate.concurrent.ThreadedExecutionRule;
+import io.crate.shade.com.google.common.base.MoreObjects;
+import io.crate.shade.com.google.common.util.concurrent.SettableFuture;
+import io.crate.shade.org.elasticsearch.action.ActionFuture;
+import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
+import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
+import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
+import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.action.sql.SQLBulkResponse;
-import io.crate.testserver.action.sql.SQLRequest;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.com.google.common.base.MoreObjects;
-import io.crate.testserver.shade.com.google.common.util.concurrent.SettableFuture;
-import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
+import io.crate.testing.CrateTestServer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 
@@ -60,7 +68,8 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
     private final SettableFuture<Void> preparedFuture = SettableFuture.create();
     private final AtomicInteger stillRunning = new AtomicInteger(0);
     private final SettableFuture<Void> cleanUpFuture = SettableFuture.create();
-
+    protected static CrateClient crateClient;
+    protected TransportClient esClient = null;
 
     /**
      * preparation only executed in the first thread that reaches @Before
@@ -72,8 +81,23 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
      */
     public void cleanUpLast() throws Exception {}
 
+    @BeforeClass
+    public static void init() {
+        String[] servers  = CLUSTER.servers().stream()
+                .map(server -> String.format("%s:%d", server.crateHost(), server.transportPort()))
+                .toArray(String[]::new);
+        crateClient = new CrateClient(servers);
+    }
+
     @Before
     public void delegateToPrepareFirst() throws Exception {
+        if (esClient == null) {
+            esClient = new TransportClient(ImmutableSettings.builder().put("cluster.name", CLUSTER_NAME).build());
+            for (CrateTestServer server : CLUSTER.servers()) {
+                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost(), server.transportPort());
+                esClient.addTransportAddress(serverAdress);
+            }
+        }
         if (firstPrepared.compareAndSet(false, true)) {
             prepareFirst();
             preparedFuture.set(null);
@@ -94,35 +118,48 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
         }
     }
 
-    public SQLResponse execute(String stmt) {
-        return execute(stmt, SQLRequest.EMPTY_ARGS, REQUEST_TIMEOUT);
+    protected SQLResponse execute(String statement) {
+        return execute(statement, SQLRequest.EMPTY_ARGS, REQUEST_TIMEOUT);
     }
 
-    public SQLResponse execute(String stmt, Object[] args) {
-        return execute(stmt, args, REQUEST_TIMEOUT);
+    protected SQLResponse execute(String statement, TimeValue timeout) {
+        return execute(statement, SQLRequest.EMPTY_ARGS, timeout);
     }
 
-    public SQLResponse execute(String stmt, TimeValue timeout) {
-        return execute(stmt, SQLRequest.EMPTY_ARGS, timeout);
+    protected SQLResponse execute(String statement, Object[] args) {
+        return execute(statement, args, REQUEST_TIMEOUT);
     }
 
-    public SQLResponse execute(String stmt, Object[] args, TimeValue timeout) {
-        return CLUSTER.execute(stmt, args, timeout);
+    protected SQLResponse execute(String statement, Object[] args, TimeValue timeout) {
+        return crateClient.sql(new SQLRequest(statement, args)).actionGet(timeout);
     }
 
-    public SQLBulkResponse execute(String stmt, Object[][] bulkArgs) {
-        return execute(stmt, bulkArgs, REQUEST_TIMEOUT);
+    protected SQLBulkResponse execute(String statement, Object[][] bulkArgs) {
+        return execute(statement, bulkArgs, REQUEST_TIMEOUT);
     }
 
-    public SQLBulkResponse execute(String stmt, Object[][] bulkArgs, TimeValue timeout) {
-        return CLUSTER.execute(stmt, bulkArgs, timeout);
+    protected SQLBulkResponse execute(String statement, Object[][] bulkArgs, TimeValue timeout) {
+        return crateClient.bulkSql(new SQLBulkRequest(statement, bulkArgs)).actionGet(timeout.getMillis());
     }
 
-    public void ensureGreen() {
-        CLUSTER.ensureGreen();
+    public ActionFuture<SQLResponse> executeAsync(String statement) {
+        return executeAsync(statement, SQLRequest.EMPTY_ARGS);
     }
 
-    public void ensureYellow() {
-        CLUSTER.ensureYellow();
+    public ActionFuture<SQLResponse> executeAsync(String statement, Object[] args) {
+        return crateClient.sql(new SQLRequest(statement, args));
     }
+
+    public ActionFuture<SQLBulkResponse> executeAsync(String statement, Object[][] bulkArgs) {
+        return crateClient.bulkSql(new SQLBulkRequest(statement, bulkArgs));
+    }
+
+    protected void ensureGreen() {
+        esClient.admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
+    }
+
+    protected void ensureYellow() {
+        esClient.admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
+    }
+
 }

@@ -26,7 +26,7 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.shade.org.elasticsearch.common.bytes.BytesArray;
+import io.crate.shade.org.elasticsearch.common.bytes.BytesArray;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -87,7 +87,7 @@ public class GroupByBenchmark extends BenchmarkBase {
                 " type integer," +
                 " west float" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     @Override

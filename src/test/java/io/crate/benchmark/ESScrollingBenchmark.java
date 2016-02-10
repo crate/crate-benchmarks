@@ -25,12 +25,12 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.action.sql.SQLBulkResponse;
-import io.crate.testserver.shade.org.elasticsearch.action.search.SearchResponse;
-import io.crate.testserver.shade.org.elasticsearch.common.bytes.BytesArray;
-import io.crate.testserver.shade.org.elasticsearch.common.logging.ESLogger;
-import io.crate.testserver.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.testserver.shade.org.elasticsearch.search.sort.SortBuilders;
+import io.crate.action.sql.SQLBulkResponse;
+import io.crate.shade.org.elasticsearch.action.search.SearchResponse;
+import io.crate.shade.org.elasticsearch.common.bytes.BytesArray;
+import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
+import io.crate.shade.org.elasticsearch.common.logging.Loggers;
+import io.crate.shade.org.elasticsearch.search.sort.SortBuilders;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -39,9 +39,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertThat;
 
 
 @BenchmarkHistoryChart(filePrefix="benchmark-lucenedoccollector-history", labelWith = LabelType.CUSTOM_KEY)
@@ -96,7 +96,7 @@ public class ESScrollingBenchmark extends BenchmarkBase {
                 " \"isoNumeric\" string," +
                 " population integer" +
                 ") clustered into 1 shards with (number_of_replicas=0)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     @Override

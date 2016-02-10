@@ -23,11 +23,13 @@
 package io.crate.stress;
 
 import com.carrotsearch.randomizedtesting.annotations.Repeat;
+import io.crate.action.sql.SQLRequest;
+import io.crate.action.sql.SQLResponse;
+import io.crate.client.CrateClient;
+import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
+import io.crate.shade.org.elasticsearch.common.util.concurrent.EsExecutors;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testing.CrateTestServer;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
-import io.crate.testserver.shade.org.elasticsearch.common.util.concurrent.EsExecutors;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -71,16 +73,18 @@ public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
         final String copyFromSource3 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_3.json.gz").getPath();
         try {
             executor.execute(() -> {
-                    SQLResponse response = serverIt.next().execute("COPY concurrent_cp FROM ? with (shared=true, compression='gzip', bulk_size=100)", new Object[]{
-                            copyFromSource0
-                    }, TimeValue.timeValueMinutes(4));
-                    System.out.println(String.format("ROWS: %s DURATION: %s", response.rowCount(), response.duration()));
+                CrateTestServer server = serverIt.next();
+                CrateClient crateClient = new CrateClient(String.format("%s:%d", server.crateHost(), server.transportPort()));
+                SQLResponse response = crateClient.sql(new SQLRequest("COPY concurrent_cp FROM ? with (shared=true, compression='gzip', bulk_size=100)",
+                        new Object[]{copyFromSource0})).actionGet(TimeValue.timeValueMinutes(4));
+                System.out.println(String.format("ROWS: %s DURATION: %s", response.rowCount(), response.duration()));
             });
             executor.execute(() -> {
-                    SQLResponse response = serverIt.next().execute("COPY concurrent_cp FROM ? with (shared=true, compression='gzip', bulk_size=100)", new Object[]{
-                            copyFromSource3
-                    }, TimeValue.timeValueMinutes(4));
-                    System.out.println(String.format("ROWS: %s DURATION: %s", response.rowCount(), response.duration()));
+                CrateTestServer server = serverIt.next();
+                CrateClient crateClient = new CrateClient(String.format("%s:%d", server.crateHost(), server.transportPort()));
+                SQLResponse response = crateClient.sql(new SQLRequest("COPY concurrent_cp FROM ? with (shared=true, compression='gzip', bulk_size=100)",
+                        new Object[]{copyFromSource3})).actionGet(TimeValue.timeValueMinutes(4));
+                System.out.println(String.format("ROWS: %s DURATION: %s", response.rowCount(), response.duration()));
             });
             executor.shutdown();
             executor.awaitTermination(10, TimeUnit.MINUTES);

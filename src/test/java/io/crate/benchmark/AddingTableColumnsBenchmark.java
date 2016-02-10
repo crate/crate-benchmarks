@@ -61,7 +61,7 @@ public class AddingTableColumnsBenchmark extends BenchmarkBase {
                 randomColumns.toString() +
                 " population integer" +
                 ") clustered into 1 shards with (number_of_replicas=0)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     @BenchmarkOptions(benchmarkRounds = 2, warmupRounds = 5)

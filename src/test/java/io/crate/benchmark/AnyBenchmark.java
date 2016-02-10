@@ -26,8 +26,8 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.com.google.common.base.Joiner;
+import io.crate.action.sql.SQLResponse;
+import io.crate.shade.com.google.common.base.Joiner;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class AnyBenchmark extends BenchmarkBase  {
                 "  id int primary key, " +
                 "  value string" +
                 ") with (number_of_replicas=0)");
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     @Override

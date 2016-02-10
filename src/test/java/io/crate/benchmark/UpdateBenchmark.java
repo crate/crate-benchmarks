@@ -26,10 +26,10 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.org.elasticsearch.action.update.UpdateAction;
-import io.crate.testserver.shade.org.elasticsearch.action.update.UpdateRequest;
-import io.crate.testserver.shade.org.elasticsearch.action.update.UpdateResponse;
+import io.crate.action.sql.SQLResponse;
+import io.crate.shade.org.elasticsearch.action.update.UpdateAction;
+import io.crate.shade.org.elasticsearch.action.update.UpdateRequest;
+import io.crate.shade.org.elasticsearch.action.update.UpdateResponse;
 import org.junit.Before;
 import org.junit.Test;
 

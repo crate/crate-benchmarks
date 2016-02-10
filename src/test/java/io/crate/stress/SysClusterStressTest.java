@@ -22,13 +22,13 @@
 package io.crate.stress;
 
 import com.carrotsearch.randomizedtesting.annotations.Repeat;
+import io.crate.action.sql.SQLResponse;
 import io.crate.concurrent.Threaded;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.action.sql.SQLResponse;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class SysClusterStressTest extends AbstractIntegrationStressTest {
 

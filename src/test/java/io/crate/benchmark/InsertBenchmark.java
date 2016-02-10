@@ -26,11 +26,11 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.shade.org.elasticsearch.action.bulk.BulkAction;
-import io.crate.testserver.shade.org.elasticsearch.action.bulk.BulkRequest;
-import io.crate.testserver.shade.org.elasticsearch.action.index.IndexAction;
-import io.crate.testserver.shade.org.elasticsearch.action.index.IndexRequest;
-import io.crate.testserver.shade.org.elasticsearch.common.xcontent.XContentFactory;
+import io.crate.shade.org.elasticsearch.action.bulk.BulkAction;
+import io.crate.shade.org.elasticsearch.action.bulk.BulkRequest;
+import io.crate.shade.org.elasticsearch.action.index.IndexAction;
+import io.crate.shade.org.elasticsearch.action.index.IndexRequest;
+import io.crate.shade.org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

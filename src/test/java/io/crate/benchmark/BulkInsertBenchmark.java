@@ -27,8 +27,8 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.shade.com.google.common.base.Joiner;
-import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.shade.com.google.common.base.Joiner;
+import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.util.Collections;

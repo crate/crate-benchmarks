@@ -27,11 +27,11 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
+import io.crate.action.sql.SQLResponse;
+import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
+import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
-import io.crate.testserver.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
-import io.crate.testserver.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Test;
 
@@ -52,8 +52,9 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
 
 
     static {
-        testCluster = CrateTestCluster.builder(CLUSTER_NAME)
+        testCluster = CrateTestCluster
                 .fromVersion(CRATE_VERSION)
+                .clusterName(CLUSTER_NAME)
                 .settings(ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build())
                 .numberOfNodes(2)
                 .build();
@@ -72,7 +73,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
                 "  id string primary key," +
                 "  name string" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
 

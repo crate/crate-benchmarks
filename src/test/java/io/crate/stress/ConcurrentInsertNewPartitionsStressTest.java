@@ -22,18 +22,18 @@
 package io.crate.stress;
 
 import io.crate.TimestampFormat;
+import io.crate.action.sql.SQLBulkResponse;
 import io.crate.concurrent.Threaded;
+import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.action.sql.SQLBulkResponse;
-import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
-import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class ConcurrentInsertNewPartitionsStressTest extends AbstractIntegrationStressTest {
 

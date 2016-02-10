@@ -55,7 +55,7 @@ public class UpsertBenchmark extends BenchmarkBase {
                 "    url string," +
                 "    count integer" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
 
         BULK_ARGS_MANY = new Object[1000][];
         for (int i = 0; i < 1000; i++) {

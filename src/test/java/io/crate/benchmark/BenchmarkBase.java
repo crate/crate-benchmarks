@@ -24,21 +24,24 @@ package io.crate.benchmark;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
+import io.crate.action.sql.SQLBulkRequest;
+import io.crate.action.sql.SQLBulkResponse;
+import io.crate.action.sql.SQLRequest;
+import io.crate.action.sql.SQLResponse;
+import io.crate.client.CrateClient;
+import io.crate.shade.com.google.common.base.Joiner;
+import io.crate.shade.com.google.common.base.MoreObjects;
+import io.crate.shade.com.google.common.base.Preconditions;
+import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
+import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
+import io.crate.shade.org.elasticsearch.common.logging.Loggers;
+import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
+import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
+import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testing.CrateTestServer;
-import io.crate.testserver.action.sql.SQLBulkResponse;
-import io.crate.testserver.action.sql.SQLRequest;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.com.google.common.base.Joiner;
-import io.crate.testserver.shade.com.google.common.base.MoreObjects;
-import io.crate.testserver.shade.com.google.common.base.Preconditions;
-import io.crate.testserver.shade.org.elasticsearch.client.transport.TransportClient;
-import io.crate.testserver.shade.org.elasticsearch.common.logging.ESLogger;
-import io.crate.testserver.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
-import io.crate.testserver.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
-import io.crate.testserver.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -50,9 +53,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
+import static org.junit.Assert.assertThat;
 
 
 @Ignore
@@ -70,9 +73,10 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static final String CRATE_VERSION = System.getProperty("crate.version", "0.53.0");
 
     @ClassRule
-    public static CrateTestCluster testCluster = CrateTestCluster.builder(CLUSTER_NAME)
+    public static CrateTestCluster testCluster = CrateTestCluster
             .fromVersion(CRATE_VERSION)
-            .settings(ImmutableSettings.builder()
+            .clusterName(CLUSTER_NAME)
+            .settings(io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings.builder()
                     .put("index.store.type", "memory")
                     .build())
             .numberOfNodes(2)
@@ -83,31 +87,44 @@ public abstract class BenchmarkBase extends RandomizedTest {
 
 
     protected TransportClient esClient = null;
+    protected static CrateClient crateClient;
+
     public final ESLogger logger = Loggers.getLogger(getClass());
 
-    public SQLResponse execute(String stmt, Object[] args) {
-        return execute(stmt, args, REQUEST_TIMEOUT);
+    protected SQLResponse execute(String statement) {
+        return execute(statement, SQLRequest.EMPTY_ARGS, REQUEST_TIMEOUT);
     }
 
-    public SQLResponse execute(String stmt, Object[] args, TimeValue timeout) {
-        return testCluster.randomServer().execute(stmt, args, timeout);
+    protected SQLResponse execute(String statement, TimeValue timeout) {
+        return execute(statement, SQLRequest.EMPTY_ARGS, timeout);
     }
 
-    public SQLResponse execute(String stmt) {
-        return testCluster.randomServer().execute(stmt, SQLRequest.EMPTY_ARGS, REQUEST_TIMEOUT);
+    protected SQLResponse execute(String statement, Object[] args) {
+        return execute(statement, args, REQUEST_TIMEOUT);
     }
 
-    public SQLResponse execute(String stmt, TimeValue timeout) {
-        return testCluster.randomServer().execute(stmt, SQLRequest.EMPTY_ARGS, timeout);
+    protected SQLResponse execute(String statement, Object[] args, TimeValue timeout) {
+        return crateClient.sql(new SQLRequest(statement, args)).actionGet(timeout);
     }
 
-
-    public SQLBulkResponse execute(String stmt, Object[][] bulkArgs) {
-        return testCluster.randomServer().execute(stmt, bulkArgs, REQUEST_TIMEOUT);
+    protected SQLBulkResponse execute(String statement, Object[][] bulkArgs) {
+        return execute(statement, bulkArgs, REQUEST_TIMEOUT);
     }
 
-    public SQLBulkResponse execute(String stmt, Object[][] bulkArgs, TimeValue timeout) {
-        return testCluster.randomServer().execute(stmt, bulkArgs, timeout);
+    protected SQLBulkResponse execute(String statement, Object[][] bulkArgs, TimeValue timeout) {
+        return crateClient.bulkSql(new SQLBulkRequest(statement, bulkArgs)).actionGet(timeout.getMillis());
+    }
+
+    protected void ensureGreen() {
+        esClient.admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
+    }
+
+    @BeforeClass
+    public static void init() {
+        String[] servers  = testCluster.servers().stream()
+                .map(server -> String.format("%s:%d", server.crateHost(), server.transportPort()))
+                .toArray(String[]::new);
+        crateClient = new CrateClient(servers);
     }
 
     @Before
@@ -115,7 +132,7 @@ public abstract class BenchmarkBase extends RandomizedTest {
         if (esClient == null) {
             esClient = new TransportClient(ImmutableSettings.builder().put("cluster.name", CLUSTER_NAME).build());
             for (CrateTestServer server : testCluster.servers()) {
-                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost, server.transportPort);
+                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost(), server.transportPort());
                 esClient.addTransportAddress(serverAdress);
             }
         }
@@ -148,7 +165,7 @@ public abstract class BenchmarkBase extends RandomizedTest {
                 " south float," +
                 " west float" +
                 ") clustered into 2 shards with (number_of_replicas=0)", new Object[0]);
-        testCluster.ensureGreen();
+        ensureGreen();
     }
 
     protected void doGenerateData() throws Exception {

@@ -27,15 +27,19 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.shade.org.apache.commons.lang3.RandomStringUtils;
-import io.crate.testserver.shade.org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
+import io.crate.shade.org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.junit.AfterClass;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 @AxisRange(min = 0)
 @BenchmarkHistoryChart(filePrefix="benchmark-cross-joins-history", labelWith = LabelType.CUSTOM_KEY)
@@ -73,9 +77,9 @@ public class CrossJoinBenchmark extends BenchmarkBase {
 
     @AfterClass
     public static void afterClass() {
-        testCluster.execute("drop table if exists articles");
-        testCluster.execute("drop table if exists colors");
-        testCluster.execute("drop table if exists small");
+        crateClient.sql("drop table if exists articles");
+        crateClient.sql("drop table if exists colors");
+        crateClient.sql("drop table if exists small");
     }
 
     @Override

@@ -26,12 +26,12 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.action.sql.SQLResponse;
-import io.crate.testserver.shade.org.elasticsearch.action.search.SearchAction;
-import io.crate.testserver.shade.org.elasticsearch.action.search.SearchRequest;
-import io.crate.testserver.shade.org.elasticsearch.action.search.SearchResponse;
-import io.crate.testserver.shade.org.elasticsearch.common.xcontent.XContentBuilder;
-import io.crate.testserver.shade.org.elasticsearch.common.xcontent.XContentFactory;
+import io.crate.action.sql.SQLResponse;
+import io.crate.shade.org.elasticsearch.action.search.SearchAction;
+import io.crate.shade.org.elasticsearch.action.search.SearchRequest;
+import io.crate.shade.org.elasticsearch.action.search.SearchResponse;
+import io.crate.shade.org.elasticsearch.common.xcontent.XContentBuilder;
+import io.crate.shade.org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
                 "  long_val long," +
                 "  str_val string" +
                 ") clustered into 4 shards with (number_of_replicas=0)");
-        testCluster.ensureGreen();
+        ensureGreen();
         generatedStrings = generateRandomStrings(NUMBER_OF_DOCUMENTS * 0.10);
     }
 

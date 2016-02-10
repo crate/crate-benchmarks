@@ -25,8 +25,8 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.testserver.shade.org.elasticsearch.action.count.CountAction;
-import io.crate.testserver.shade.org.elasticsearch.action.count.CountRequest;
+import io.crate.shade.org.elasticsearch.action.count.CountAction;
+import io.crate.shade.org.elasticsearch.action.count.CountRequest;
 import org.junit.Test;
 
 @AxisRange(min = 0)
