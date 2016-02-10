@@ -56,7 +56,7 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
             MoreObjects.firstNonNull(System.getenv(SQL_REQUEST_TIMEOUT), "5")), TimeUnit.SECONDS);
 
     public static final String CLUSTER_NAME = "stress";
-    public static final String CRATE_VERSION = System.getProperty("crate.version", "0.53.0");
+    public static final String CRATE_VERSION = System.getProperty("crate.version");
 
     @ClassRule
     public static CrateTestCluster CLUSTER;

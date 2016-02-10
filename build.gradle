@@ -6,11 +6,13 @@ repositories {
     jcenter()
 }
 
+project.ext.crateVersion = System.getProperty('crate.version', '0.54.4')
+
 dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'com.carrotsearch:junit-benchmarks:0.7.2'
     testCompile 'com.h2database:h2:1.3.173'
-    testCompile 'io.crate:crate-client:0.54.4'
+    testCompile 'io.crate:crate-client:' + project.crateVersion
 
     testCompile 'io.crate:crate-testing:0.3.0'
     testCompile ('com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.3.1') {
@@ -20,16 +22,6 @@ dependencies {
 
 test {
     enabled = false
-}
-
-// DEFAULT CRATE VERSION to test against
-project.ext.defaultCrateVersion = '0.54.4'
-
-task getVersion << {
-    if (!project.hasProperty('crateVersion')) {
-        project.ext.crateVersion = project.defaultCrateVersion
-    }
-    println project.ext.crateVersion
 }
 
 tasks.withType(Test) {
@@ -43,7 +35,7 @@ tasks.withType(Test) {
     testLogging.showStandardStreams = true
 }
 
-task stress(type: Test, dependsOn: ['getVersion']) {
+task stress(type: Test) {
     description = 'Run the Crate stresstests which are very resource hungry'
     group = 'crate'
 
@@ -53,7 +45,7 @@ task stress(type: Test, dependsOn: ['getVersion']) {
     include('io/crate/stress/**')
 }
 
-task bench(type: Test, dependsOn: ['getVersion']) {
+task bench(type: Test) {
     description = 'Run the external crate Benchmarks'
     group = 'crate'
 
