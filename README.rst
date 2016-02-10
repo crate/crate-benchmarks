@@ -28,6 +28,15 @@ crate cluster only via the CrateClient which is exposed in the CrateTestCluster 
 You were warned that both stresstests and benchmarks
 put lots of pressure and load on your machine. Be prepared!
 
+Crate benchmarks use ``CONSOLE``, ``H2``, and ``XML`` consumers to
+persist its results. Benchmark results can be also backed up to Crate.
+To achieve that, you need to provide following properties::
+
+    ./gradlew bench
+        -Djub.consumers=CONSOLE,CRATE
+        -Djub.crate.host=localhost
+        -Djub.crate.http=4200
+        -Djub.crate.transport=4300
 
 Finally
 -------

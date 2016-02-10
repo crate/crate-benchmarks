@@ -16,6 +16,7 @@ dependencies {
     testCompile 'io.crate:crate-client:' + project.crateVersion
 
     testCompile 'io.crate:crate-testing:0.3.1'
+    testCompile 'com.google.code.gson:gson:2.2.4'
     testCompile ('com.carrotsearch.randomizedtesting:randomizedtesting-runner:2.3.1') {
         exclude group: 'junit', module: 'junit'
     }
@@ -63,10 +64,14 @@ task bench(type: Test) {
     def benchmark_dir = project.projectDir.path + '/reports/bench/'
 
     // Properties for JUnit Benchmarks
-    systemProperty 'jub.consumers', 'CONSOLE,H2,XML'
+    systemProperty 'jub.consumers', System.getProperty('jub.consumers', 'CONSOLE')
     systemProperty 'jub.db.file', benchmark_dir + 'results'
     systemProperty 'jub.xml.file', benchmark_dir + 'results.xml'
     systemProperty 'jub.charts.dir', benchmark_dir
+
+    systemProperty 'jub.crate.host', System.getProperty('jub.crate.host', null)
+    systemProperty 'jub.crate.http', System.getProperty('jub.crate.http', "4200")
+    systemProperty 'jub.crate.transport', System.getProperty('jub.crate.transport', "4300")
 
     doFirst {
         if (project.crateUrl != null) {

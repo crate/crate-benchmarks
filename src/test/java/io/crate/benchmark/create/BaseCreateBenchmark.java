@@ -22,17 +22,11 @@
 package io.crate.benchmark.create;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import io.crate.benchmark.BenchmarkBase;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 
 public class BaseCreateBenchmark extends BenchmarkBase {
-
-    @Rule
-    public TestRule benchmarkRun = new BenchmarkRule();
 
     private boolean tablesCreated = false;
 

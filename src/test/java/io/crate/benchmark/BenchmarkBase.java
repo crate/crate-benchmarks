@@ -21,7 +21,10 @@
 
 package io.crate.benchmark;
 
+import com.carrotsearch.junitbenchmarks.BenchmarkOptionsSystemProperties;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import com.carrotsearch.junitbenchmarks.ConsumerName;
+import com.carrotsearch.junitbenchmarks.IResultsConsumer;
 import com.carrotsearch.randomizedtesting.RandomizedTest;
 import com.carrotsearch.randomizedtesting.annotations.ThreadLeakScope;
 import io.crate.action.sql.SQLBulkRequest;
@@ -38,6 +41,7 @@ import io.crate.shade.org.elasticsearch.common.logging.Loggers;
 import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
+import io.crate.consumer.CrateConsumer;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testing.CrateTestServer;
 import org.junit.Before;
@@ -47,7 +51,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -82,8 +90,36 @@ public abstract class BenchmarkBase extends RandomizedTest {
             .build();
 
     @Rule
-    public BenchmarkRule benchmarkRun = new BenchmarkRule();
+    public BenchmarkRule benchmarkRun = new BenchmarkRule(getConsumers());
 
+    private IResultsConsumer[] getConsumers() {
+        final ArrayList<IResultsConsumer> result = new ArrayList<>();
+
+        List<String> consumers = new LinkedList<>(Arrays.asList(System.getProperty(
+                BenchmarkOptionsSystemProperties.CONSUMERS_PROPERTY,
+                ConsumerName.CONSOLE.toString()).split(","))
+        );
+
+        if (consumers.contains("CRATE")) {
+            consumers.remove("CRATE");
+            result.add(new CrateConsumer());
+        }
+
+        consumers.forEach(consumer -> {
+            try {
+                result.add(ConsumerName.valueOf(consumer.toUpperCase()).clazz.newInstance());
+            } catch (Throwable e) {
+                if (e instanceof Error) {
+                    throw (Error) e;
+                }
+                if (e instanceof RuntimeException) {
+                    throw (RuntimeException) e;
+                }
+                throw new RuntimeException(e.getMessage(), e);
+            }
+        });
+        return result.toArray(new IResultsConsumer[result.size()]);
+    }
 
     protected TransportClient esClient = null;
     protected static CrateClient crateClient;
