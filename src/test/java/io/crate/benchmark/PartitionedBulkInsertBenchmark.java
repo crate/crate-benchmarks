@@ -55,7 +55,7 @@ public class PartitionedBulkInsertBenchmark extends BenchmarkBase {
 
     @Before
     public void prepare() {
-        execute("set GLOBAL transient bulk.request_timeout='5m', bulk.partition_creation_timeout='5m'");
+        execute("set GLOBAL transient bulk.request_timeout='10m', bulk.partition_creation_timeout='10m'");
     }
 
     @Override
