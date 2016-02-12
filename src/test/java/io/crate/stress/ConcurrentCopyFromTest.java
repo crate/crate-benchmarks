@@ -40,7 +40,11 @@ import java.util.concurrent.TimeUnit;
 public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
 
     static {
-        CLUSTER = CrateTestCluster.cluster(CLUSTER_NAME, CRATE_VERSION, 2);
+        testCluster = CrateTestCluster
+                .fromSysProperties()
+                .clusterName(CLUSTER_NAME)
+                .numberOfNodes(2)
+                .build();
     }
 
     @Before
@@ -68,7 +72,7 @@ public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
     @Test
     public void testConcurrentCopyFrom() throws Exception {
         ThreadPoolExecutor executor = EsExecutors.newFixed(2, 2, EsExecutors.daemonThreadFactory("COPY FROM"));
-        final Iterator<CrateTestServer> serverIt = CLUSTER.servers().iterator();
+        final Iterator<CrateTestServer> serverIt = testCluster.servers().iterator();
         final String copyFromSource0 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_0.json.gz").getPath();
         final String copyFromSource3 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_3.json.gz").getPath();
         try {

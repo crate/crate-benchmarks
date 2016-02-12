@@ -37,8 +37,8 @@ public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
     private String[] values;
 
     static {
-        CLUSTER = CrateTestCluster
-                .fromVersion(CRATE_VERSION)
+        testCluster = CrateTestCluster
+                .fromSysProperties()
                 .clusterName(CLUSTER_NAME)
                 .numberOfNodes(2)
                 .settings(ImmutableSettings.builder()

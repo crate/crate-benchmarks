@@ -38,7 +38,11 @@ import static org.junit.Assert.assertThat;
 public class ConcurrentInsertNewPartitionsStressTest extends AbstractIntegrationStressTest {
 
     static {
-        CLUSTER = CrateTestCluster.cluster(CLUSTER_NAME, CRATE_VERSION, 2);
+        testCluster = CrateTestCluster
+                .fromSysProperties()
+                .clusterName(CLUSTER_NAME)
+                .numberOfNodes(2)
+                .build();
     }
 
     private static final long TS = TimestampFormat.parseTimestampString("2015-01-01");

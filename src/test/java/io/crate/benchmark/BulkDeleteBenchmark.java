@@ -53,7 +53,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
 
     static {
         testCluster = CrateTestCluster
-                .fromVersion(CRATE_VERSION)
+                .fromSysProperties()
                 .clusterName(CLUSTER_NAME)
                 .settings(ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build())
                 .numberOfNodes(2)

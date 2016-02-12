@@ -56,10 +56,9 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
             MoreObjects.firstNonNull(System.getenv(SQL_REQUEST_TIMEOUT), "5")), TimeUnit.SECONDS);
 
     public static final String CLUSTER_NAME = "stress";
-    public static final String CRATE_VERSION = System.getProperty("crate.version");
 
     @ClassRule
-    public static CrateTestCluster CLUSTER;
+    public static CrateTestCluster testCluster;
 
     @Rule
     public ThreadedExecutionRule threadedExecutionRule = new ThreadedExecutionRule();
@@ -83,7 +82,7 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
 
     @BeforeClass
     public static void init() {
-        String[] servers  = CLUSTER.servers().stream()
+        String[] servers  = testCluster.servers().stream()
                 .map(server -> String.format("%s:%d", server.crateHost(), server.transportPort()))
                 .toArray(String[]::new);
         crateClient = new CrateClient(servers);
@@ -93,7 +92,7 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
     public void delegateToPrepareFirst() throws Exception {
         if (esClient == null) {
             esClient = new TransportClient(ImmutableSettings.builder().put("cluster.name", CLUSTER_NAME).build());
-            for (CrateTestServer server : CLUSTER.servers()) {
+            for (CrateTestServer server : testCluster.servers()) {
                 InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost(), server.transportPort());
                 esClient.addTransportAddress(serverAdress);
             }
