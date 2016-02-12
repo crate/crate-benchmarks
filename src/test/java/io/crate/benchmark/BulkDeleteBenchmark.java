@@ -23,6 +23,7 @@ package io.crate.benchmark;
 
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
+import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
@@ -33,12 +34,13 @@ import io.crate.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
+import org.junit.Rule;
 import org.junit.Test;
 
 import java.util.HashMap;
 
 @AxisRange(min = 0)
-@BenchmarkHistoryChart(filePrefix="benchmark-bulk-delete-history", labelWith = LabelType.CUSTOM_KEY)
+@BenchmarkHistoryChart(filePrefix = "benchmark-bulk-delete-history", labelWith = LabelType.CUSTOM_KEY)
 @BenchmarkMethodChart(filePrefix = "benchmark-bulk-delete")
 public class BulkDeleteBenchmark extends BenchmarkBase {
 
@@ -60,6 +62,8 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
                 .build();
     }
 
+    @Rule
+    public BenchmarkRule benchmarkRun = new BenchmarkRule(getConsumers());
 
     @Override
     protected String tableName() {
@@ -83,7 +87,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
 
         for (int i = 0; i < ROWS; i++) {
             Object[] object = getRandomObject();
-            bulkArgs[i]  = object;
+            bulkArgs[i] = object;
         }
         execute(SINGLE_INSERT_SQL_STMT, bulkArgs);
         refresh(tableName());
@@ -100,7 +104,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
         return new Object[]{
                 RandomStringUtils.randomAlphabetic(40),  // id
                 RandomStringUtils.randomAlphabetic(10),  // name
-                (int)(Math.random() * 100),                // age
+                (int) (Math.random() * 100),                // age
         };
     }
 
@@ -110,7 +114,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
         HashMap<String, String> ids = createSampleData();
         BulkRequestBuilder request = new BulkRequestBuilder(esClient);
 
-        for(String id: ids.values()){
+        for (String id : ids.values()) {
             DeleteRequest deleteRequest = new DeleteRequest("users", "default", id);
             request.add(deleteRequest);
         }
@@ -125,7 +129,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
         HashMap<String, String> ids = createSampleData();
 
         int i = 0;
-        for(String id: ids.keySet()){
+        for (String id : ids.keySet()) {
             bulkArgs[i] = new Object[]{id};
             i++;
         }
@@ -137,7 +141,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
     @Test
     public void testSQLSingleDelete() {
         HashMap<String, String> ids = createSampleData();
-        for(String id: ids.keySet()){
+        for (String id : ids.keySet()) {
             execute(DELETE_SQL_STMT, new Object[]{id});
         }
     }

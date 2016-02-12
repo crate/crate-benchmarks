@@ -3,9 +3,9 @@ package io.crate.consumer;
 import com.carrotsearch.junitbenchmarks.AutocloseConsumer;
 import com.carrotsearch.junitbenchmarks.Result;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.crate.action.sql.SQLRequest;
-import io.crate.action.sql.SQLResponse;
 import io.crate.client.CrateClient;
 import org.apache.log4j.Logger;
 
@@ -21,7 +21,6 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public final class CrateConsumer extends AutocloseConsumer implements Closeable {
 
@@ -30,24 +29,15 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
     private static final JsonParser jsonParser = new JsonParser();
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
 
-    private final String[] hosts;
-    private final int httpPort;
-
+    private final String testServerHost;
+    private final int testServerHttpPort;
     private final CrateClient client;
 
-    public CrateConsumer(String[] hosts, int httpPort, int transportPort) {
-        this.hosts = hosts;
-        this.httpPort = httpPort;
-        client = new CrateClient(composeUrls(hosts, transportPort).toArray(String[]::new));
+    public CrateConsumer(String testServerHost, int testServerHttpPort) {
+        this.testServerHost = testServerHost;
+        this.testServerHttpPort = testServerHttpPort;
+        client = new CrateClient(composeUrls(getHosts(), getPort(CrateConsumerConstants.CRATE_TRANSPORT_PORT)));
         client.sql(CrateConsumerConstants.CREATE_TABLE_IF_NOT_EXISTS_STMT).actionGet();
-    }
-
-    public CrateConsumer() {
-        this(
-                getHosts(),
-                getPort(CrateConsumerConstants.CRATE_HTTP_PORT),
-                getPort(CrateConsumerConstants.CRATE_TRANSPORT_PORT)
-        );
     }
 
     private static String[] getHosts() {
@@ -68,19 +58,22 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
                 .format("Missing global property: %s", portProperty));
     }
 
-    private static Stream<String> composeUrls(String[] hosts, int port) {
+    private static String[] composeUrls(String[] hosts, int port) {
         return Arrays.stream(hosts)
-                .map(host -> String.format("http://%s:%d", host, port));
+                .map(host -> String.format("http://%s:%d", host, port))
+                .toArray(String[]::new);
     }
 
     @Override
     public void accept(Result result) throws IOException {
         try {
+            JsonObject versionInfo = clusterVersionInfo();
+
             Object[] args = new Object[]{
                     result.getShortTestClassName(),
                     result.getTestMethodName(),
-                    crateBuildVersion(),
-                    crateBuildTimestamp(),
+                    crateBuildVersion(versionInfo),
+                    crateBuildTimestamp(versionInfo),
                     System.currentTimeMillis(),
                     benchmarkValues(result)
             };
@@ -109,24 +102,23 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
         }};
     }
 
-    private String crateBuildVersion() {
-        SQLResponse response = client.sql(CrateConsumerConstants.SELECT_VERSIONS).actionGet();
-        Object[][] rows = response.rows();
-        assert rows.length != 0;
-        return String.valueOf(rows[0][0]);
+    private JsonObject clusterVersionInfo() throws IOException {
+        URL url = new URL(String.format("http://%s:%d", testServerHost, testServerHttpPort));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.connect();
+        JsonElement root = jsonParser.parse(new InputStreamReader((InputStream) connection.getContent()));
+        return root.getAsJsonObject()
+                .get("version").getAsJsonObject();
     }
 
-    private long crateBuildTimestamp() throws ParseException, IOException {
-        URL url = new URL(composeUrls(hosts, httpPort).findAny().get());
-        HttpURLConnection request = (HttpURLConnection) url.openConnection();
-        request.connect();
-
-        JsonElement root = jsonParser.parse(new InputStreamReader((InputStream) request.getContent()));
-        String timestamp = root.getAsJsonObject()
-                .get("version").getAsJsonObject()
-                .get("build_timestamp").getAsString();
-        return parseTimestamp(timestamp);
+    private long crateBuildTimestamp(JsonObject versionInfo) throws ParseException, IOException {
+        return parseTimestamp(versionInfo.get("build_timestamp").getAsString());
     }
+
+    private String crateBuildVersion(JsonObject versionInfo) {
+        return versionInfo.get("number").getAsString();
+    }
+
 
     private static long parseTimestamp(String timestamp) throws ParseException {
         return dateFormat.parse(timestamp).getTime();

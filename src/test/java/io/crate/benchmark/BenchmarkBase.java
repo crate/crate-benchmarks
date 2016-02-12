@@ -92,7 +92,7 @@ public abstract class BenchmarkBase extends RandomizedTest {
     @Rule
     public BenchmarkRule benchmarkRun = new BenchmarkRule(getConsumers());
 
-    private IResultsConsumer[] getConsumers() {
+    protected IResultsConsumer[] getConsumers() {
         final ArrayList<IResultsConsumer> result = new ArrayList<>();
 
         List<String> consumers = new LinkedList<>(Arrays.asList(System.getProperty(
@@ -102,7 +102,8 @@ public abstract class BenchmarkBase extends RandomizedTest {
 
         if (consumers.contains("CRATE")) {
             consumers.remove("CRATE");
-            result.add(new CrateConsumer());
+            CrateTestServer server = testCluster.randomServer();
+            result.add(new CrateConsumer(server.crateHost(), server.httpPort()));
         }
 
         consumers.forEach(consumer -> {

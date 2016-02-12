@@ -35,7 +35,6 @@ To achieve that, you need to provide following properties::
     ./gradlew bench
         -Djub.consumers=CONSOLE,CRATE
         -Djub.crate.host=localhost
-        -Djub.crate.http=4200
         -Djub.crate.transport=4300
 
 Finally

@@ -5,7 +5,6 @@ public class CrateConsumerConstants {
     private static final String TABLE_NAME = "benchmark.history";
 
     static final String CRATE_HOST = "jub.crate.host";
-    static final String CRATE_HTTP_PORT = "jub.crate.http";
     static final String CRATE_TRANSPORT_PORT = "jub.crate.transport";
 
     static final String CREATE_TABLE_IF_NOT_EXISTS_STMT = String.format("CREATE TABLE IF NOT EXISTS %s (" +
