@@ -111,7 +111,7 @@ public class PartitionedBulkInsertBenchmark extends BenchmarkBase {
         long inserted = 0;
         long errors = 0;
 
-        SQLBulkResponse bulkResponse = execute(SINGLE_INSERT_SQL_STMT, bulkArgs, TimeValue.timeValueMinutes(2));
+        SQLBulkResponse bulkResponse = execute(SINGLE_INSERT_SQL_STMT, bulkArgs, TimeValue.timeValueMinutes(7));
         for (SQLBulkResponse.Result result : bulkResponse.results()) {
             assertThat(result.errorMessage(), is(nullValue()));
             if (result.rowCount() < 0) {
