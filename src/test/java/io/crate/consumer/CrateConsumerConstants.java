@@ -8,9 +8,9 @@ public class CrateConsumerConstants {
     static final String CRATE_TRANSPORT_PORT = "jub.crate.transport";
 
     static final String CREATE_TABLE_IF_NOT_EXISTS_STMT = String.format("CREATE TABLE IF NOT EXISTS %s (" +
-            " benchmark_group STRING," +
-            " method STRING," +
-            " build_timestamp TIMESTAMP," +
+            " benchmark_group STRING PRIMARY KEY," +
+            " method STRING PRIMARY KEY," +
+            " build_timestamp TIMESTAMP PRIMARY KEY," +
             " build_version STRING," +
             " bench_run_timestamp TIMESTAMP," +
             " benchmark_values OBJECT (STRICT) AS (" +
