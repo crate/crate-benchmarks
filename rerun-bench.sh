@@ -10,7 +10,7 @@ for BUILD in $BUILDS; do
   CRATE_URL="https://cdn.crate.io/downloads/releases/nightly/$BUILD"
   rm -rf parts
   echo "start stresstest with: $CRATE_URL"
-  ./gradlew -s --console=plain --daemon bench \
+  ./gradlew -s --console=plain bench \
     -Dcrate.testing.from_url=$CRATE_URL \
     -Djub.consumers=CONSOLE,CRATE \
     -Djub.crate.host=crate1,crate2,crate3 \
