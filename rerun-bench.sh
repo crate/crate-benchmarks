@@ -5,7 +5,15 @@ export CRATE_HEAP_SIZE=10g
 export CRATE_TESTS_SQL_REQUEST_TIMEOUT="600" # 10 minutes
 ulimit -a
 
-BUILDS=$(curl -s https://cdn.crate.io/downloads/releases/nightly/ | grep "crate-*" | awk  -F '[<>]' '/<a / { print $3 } ')
+if [ -z "$1" ]; then
+  BUILDS=$(curl -s https://cdn.crate.io/downloads/releases/nightly/ | grep "crate-*" | awk  -F '[<>]' '/<a / { print $3 } ')
+else
+  for ARG in "$@"
+  do
+    BUILDS=$(echo $BUILDS $ARG|sed "s/,/ /g")
+  done
+fi
+
 for BUILD in $BUILDS; do
   CRATE_URL="https://cdn.crate.io/downloads/releases/nightly/$BUILD"
   rm -rf parts
