@@ -8,10 +8,7 @@ ulimit -a
 if [ -z "$1" ]; then
   BUILDS=$(curl -s https://cdn.crate.io/downloads/releases/nightly/ | grep "crate-*" | awk  -F '[<>]' '/<a / { print $3 } ')
 else
-  for ARG in "$@"
-  do
-    BUILDS=$(echo $BUILDS $ARG|sed "s/,/ /g")
-  done
+  BUILDS=$@
 fi
 
 for BUILD in $BUILDS; do
