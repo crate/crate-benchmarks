@@ -32,6 +32,7 @@ import io.crate.action.sql.SQLBulkResponse;
 import io.crate.action.sql.SQLRequest;
 import io.crate.action.sql.SQLResponse;
 import io.crate.client.CrateClient;
+import io.crate.consumer.CrateConsumer;
 import io.crate.shade.com.google.common.base.Joiner;
 import io.crate.shade.com.google.common.base.MoreObjects;
 import io.crate.shade.com.google.common.base.Preconditions;
@@ -41,7 +42,6 @@ import io.crate.shade.org.elasticsearch.common.logging.Loggers;
 import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
-import io.crate.consumer.CrateConsumer;
 import io.crate.testing.CrateTestCluster;
 import io.crate.testing.CrateTestServer;
 import org.junit.Before;
@@ -54,6 +54,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -83,9 +84,9 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static CrateTestCluster testCluster = CrateTestCluster
             .fromSysProperties()
             .clusterName(CLUSTER_NAME)
-            .settings(io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings.builder()
-                    .put("index.store.type", "memory")
-                    .build())
+            .settings(new HashMap<String, Object>() {{
+                put("index.store.type", "memory");
+            }})
             .numberOfNodes(2)
             .build();
 

@@ -33,7 +33,6 @@ import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -57,7 +56,9 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
         testCluster = CrateTestCluster
                 .fromSysProperties()
                 .clusterName(CLUSTER_NAME)
-                .settings(ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build())
+                .settings(new HashMap<String, Object>() {{
+                    put("threadpool.index.queue_size", ROWS);
+                }})
                 .numberOfNodes(2)
                 .build();
     }
