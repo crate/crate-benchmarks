@@ -27,7 +27,6 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.shade.org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -82,10 +81,10 @@ public class CrossJoinBenchmark extends BenchmarkBase {
         crateClient.sql("drop table if exists small");
     }
 
-    @Override
-    public boolean indexExists() {
-        return esClient.admin().indices().exists(new IndicesExistsRequest("articles", "colors", "small")).actionGet().isExists();
-    }
+//    @Override
+//    public boolean indexExists() {
+//        return esClient.admin().indices().exists(new IndicesExistsRequest("articles", "colors", "small")).actionGet().isExists();
+//    }
 
     @Override
     public boolean generateData() {
@@ -114,7 +113,7 @@ public class CrossJoinBenchmark extends BenchmarkBase {
     private Object[] getRandomObject(int numDifferent) {
         return new Object[]{
                 (int)(Math.random() * numDifferent),  // id
-                RandomStringUtils.randomAlphabetic(10),  // name
+                randomAsciiOfLength(10),  // name
                 (float)(Math.random() * 100),            // coolness || price
         };
     }
