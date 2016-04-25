@@ -30,10 +30,6 @@ import io.crate.action.sql.SQLResponse;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteAction;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteResponse;
-import io.crate.shade.org.elasticsearch.action.deletebyquery.DeleteByQueryAction;
-import io.crate.shade.org.elasticsearch.action.deletebyquery.DeleteByQueryRequest;
-import io.crate.shade.org.elasticsearch.action.support.QuerySourceBuilder;
-import io.crate.shade.org.elasticsearch.index.query.TermQueryBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -89,29 +85,29 @@ public class DeleteBenchmark extends BenchmarkBase {
         return new DeleteRequest(TABLE_NAME, "default", getDeleteId());
     }
 
-    public DeleteByQueryRequest getDeleteApiByQueryRequest() throws Exception {
-        return new DeleteByQueryRequest(TABLE_NAME)
-                .source(
-                        new QuerySourceBuilder().setQuery(
-                                new TermQueryBuilder("countryCode", getCountryCode())));
-    }
+//    public DeleteByQueryRequest getDeleteApiByQueryRequest() throws Exception {
+//        return new DeleteByQueryRequest(TABLE_NAME)
+//                .source(
+//                        new QuerySourceBuilder().setQuery(
+//                                new TermQueryBuilder("countryCode", getCountryCode())));
+//    }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testDeleteApiById() throws Exception {
-        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-            DeleteResponse response = esClient.execute(DeleteAction.INSTANCE, getDeleteApiByIdRequest()).actionGet();
-            Assert.assertTrue(response.isFound());
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testDeleteApiById() throws Exception {
+//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
+//            DeleteResponse response = esClient.execute(DeleteAction.INSTANCE, getDeleteApiByIdRequest()).actionGet();
+//            Assert.assertTrue(response.isFound());
+//        }
+//    }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testDeleteApiByQuery() throws Exception {
-        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-            esClient.execute(DeleteByQueryAction.INSTANCE, getDeleteApiByQueryRequest()).actionGet();
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testDeleteApiByQuery() throws Exception {
+//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
+//            esClient.execute(DeleteByQueryAction.INSTANCE, getDeleteApiByQueryRequest()).actionGet();
+//        }
+//    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test

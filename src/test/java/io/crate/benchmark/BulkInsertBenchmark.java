@@ -28,7 +28,6 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.shade.com.google.common.base.Joiner;
-import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.util.Collections;
@@ -71,20 +70,20 @@ public class BulkInsertBenchmark extends BenchmarkBase {
 
     private Object[] getRandomObject() {
         return new Object[]{
-                RandomStringUtils.randomAlphabetic(10), // countryName
-                RandomStringUtils.randomAlphabetic(2),  // countryCode
-                RandomStringUtils.randomAlphabetic(3),  // isoNumeric
+                randomAsciiOfLength(10), // countryName
+                randomAsciiOfLength(2),  // countryCode
+                randomAsciiOfLength(3),  // isoNumeric
                 Math.random(),                          // east
                 Math.random(),                          // north
                 Math.random(),                          // west
                 Math.random(),                          // south
-                RandomStringUtils.randomAlphabetic(3),  // isoAlpha3
-                RandomStringUtils.randomAlphabetic(3),  // currencyCode
-                RandomStringUtils.randomAlphabetic(2),  // contintent
-                RandomStringUtils.randomAlphabetic(10), // contintentName
-                RandomStringUtils.randomAlphabetic(3),  // languages
-                RandomStringUtils.randomAlphabetic(3),  // fipsCode
-                RandomStringUtils.randomAlphabetic(10), // capital
+                randomAsciiOfLength(3),  // isoAlpha3
+                randomAsciiOfLength(3),  // currencyCode
+                randomAsciiOfLength(2),  // contintent
+                randomAsciiOfLength(10), // contintentName
+                randomAsciiOfLength(3),  // languages
+                randomAsciiOfLength(3),  // fipsCode
+                randomAsciiOfLength(10), // capital
                 getRandom().nextInt(),                  // population
         };
     }

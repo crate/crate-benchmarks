@@ -42,12 +42,12 @@ public class CountBenchmark extends BenchmarkBase {
         return true;
     }
 
-    @Test
-    public void testESCount() throws Exception {
-        for (int i = 0; i < NUM_REQUESTS_PER_TEST; i++) {
-            esClient.execute(CountAction.INSTANCE, new CountRequest("countries")).actionGet();
-        }
-    }
+//    @Test
+//    public void testESCount() throws Exception {
+//        for (int i = 0; i < NUM_REQUESTS_PER_TEST; i++) {
+//            esClient.execute(CountAction.INSTANCE, new CountRequest("countries")).actionGet();
+//        }
+//    }
 
     @Test
     public void testSQLCount() throws Exception {

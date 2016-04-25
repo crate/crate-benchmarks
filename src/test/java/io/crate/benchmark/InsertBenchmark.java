@@ -127,19 +127,19 @@ public class InsertBenchmark extends BenchmarkBase {
         }
     }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testInsertSingleApi() {
-        for (int i=0;i<NUM_REQUESTS_PER_TEST;i++) {
-            esClient.execute(IndexAction.INSTANCE, getSingleApiInsertRequest()).actionGet();
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testInsertSingleApi() {
+//        for (int i=0;i<NUM_REQUESTS_PER_TEST;i++) {
+//            esClient.execute(IndexAction.INSTANCE, getSingleApiInsertRequest()).actionGet();
+//        }
+//    }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testInsertBulkApi() {
-        for (int i=0;i<NUM_REQUESTS_PER_TEST;i++) {
-            esClient.execute(BulkAction.INSTANCE, getBulkApiInsertRequest()).actionGet();
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testInsertBulkApi() {
+//        for (int i=0;i<NUM_REQUESTS_PER_TEST;i++) {
+//            esClient.execute(BulkAction.INSTANCE, getBulkApiInsertRequest()).actionGet();
+//        }
+//    }
 }
