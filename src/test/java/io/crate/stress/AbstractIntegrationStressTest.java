@@ -91,13 +91,13 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
 
     @Before
     public void delegateToPrepareFirst() throws Exception {
-        if (esClient == null) {
-            esClient = TransportClient.builder().settings(Settings.settingsBuilder().put("cluster.name", CLUSTER_NAME)).build();
-            for (CrateTestServer server : testCluster.servers()) {
-                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(InetAddress.getByName(server.crateHost()), server.transportPort());
-                esClient.addTransportAddress(serverAdress);
-            }
-        }
+//        if (esClient == null) {
+//            esClient = TransportClient.builder().settings(Settings.settingsBuilder().put("cluster.name", CLUSTER_NAME)).build();
+//            for (CrateTestServer server : testCluster.servers()) {
+//                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(InetAddress.getByName(server.crateHost()), server.transportPort());
+//                esClient.addTransportAddress(serverAdress);
+//            }
+//        }
         if (firstPrepared.compareAndSet(false, true)) {
             prepareFirst();
             preparedFuture.set(null);

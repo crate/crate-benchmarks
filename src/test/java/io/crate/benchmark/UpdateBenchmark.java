@@ -98,12 +98,12 @@ public class UpdateBenchmark extends BenchmarkBase {
         }
     }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testUpdateApiById() {
-        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-            UpdateResponse response = esClient.execute(UpdateAction.INSTANCE, getApiUpdateByIdRequest()).actionGet();
-            assertEquals(updateId, response.getId());
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testUpdateApiById() {
+//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
+//            UpdateResponse response = esClient.execute(UpdateAction.INSTANCE, getApiUpdateByIdRequest()).actionGet();
+//            assertEquals(updateId, response.getId());
+//        }
+//    }
 }

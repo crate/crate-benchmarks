@@ -99,78 +99,78 @@ public class ESScrollingBenchmark extends BenchmarkBase {
         ensureGreen();
     }
 
-    @Override
-    protected void doGenerateData() throws Exception {
-        if (!dataGenerated) {
+//    @Override
+//    protected void doGenerateData() throws Exception {
+//        if (!dataGenerated) {
+//
+//            logger.info("generating {} documents...", NUMBER_OF_DOCUMENTS);
+//            ExecutorService executor = Executors.newFixedThreadPool(4);
+//            for (int _thread=0; _thread<4; _thread++) {
+//                executor.submit(() -> {
+//                        int numDocsToCreate = NUMBER_OF_DOCUMENTS/4;
+//                        logger.info("Generating {} Documents in Thread {}", numDocsToCreate, Thread.currentThread().getName());
+//                        for (int i=0; i < numDocsToCreate; i+=1000) {
+//                            Object[][] bulkArgs = new Object[1000][];
+//                            try {
+//                                Object[] row = generateRow();
+//                                for (int j=0; j<1000;j++) {
+//                                    bulkArgs[j] = row;
+//                                }
+//                                SQLBulkResponse bulkResponse = execute(
+//                                        "INSERT INTO \"" + TABLE_NAME + "\" (\"areaInSqKm\", continent, \"countryCode\", \"countryName\", population) VALUES (?, ?, ?, ?, ?)",
+//                                        bulkArgs);
+//                                for (SQLBulkResponse.Result result : bulkResponse.results()) {
+//                                    assertThat(result.errorMessage(), is(nullValue()));
+//                                }
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                });
+//            }
+//            executor.shutdown();
+//            executor.awaitTermination(2L, TimeUnit.MINUTES);
+//            executor.shutdownNow();
+//            esClient.admin().indices().prepareFlush(TABLE_NAME).execute().actionGet();
+//            refresh(TABLE_NAME);
+//            dataGenerated = true;
+//            logger.info("{} documents generated.", NUMBER_OF_DOCUMENTS);
+//        }
+//    }
 
-            logger.info("generating {} documents...", NUMBER_OF_DOCUMENTS);
-            ExecutorService executor = Executors.newFixedThreadPool(4);
-            for (int _thread=0; _thread<4; _thread++) {
-                executor.submit(() -> {
-                        int numDocsToCreate = NUMBER_OF_DOCUMENTS/4;
-                        logger.info("Generating {} Documents in Thread {}", numDocsToCreate, Thread.currentThread().getName());
-                        for (int i=0; i < numDocsToCreate; i+=1000) {
-                            Object[][] bulkArgs = new Object[1000][];
-                            try {
-                                Object[] row = generateRow();
-                                for (int j=0; j<1000;j++) {
-                                    bulkArgs[j] = row;
-                                }
-                                SQLBulkResponse bulkResponse = execute(
-                                        "INSERT INTO \"" + TABLE_NAME + "\" (\"areaInSqKm\", continent, \"countryCode\", \"countryName\", population) VALUES (?, ?, ?, ?, ?)",
-                                        bulkArgs);
-                                for (SQLBulkResponse.Result result : bulkResponse.results()) {
-                                    assertThat(result.errorMessage(), is(nullValue()));
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                });
-            }
-            executor.shutdown();
-            executor.awaitTermination(2L, TimeUnit.MINUTES);
-            executor.shutdownNow();
-            esClient.admin().indices().prepareFlush(TABLE_NAME).execute().actionGet();
-            refresh(TABLE_NAME);
-            dataGenerated = true;
-            logger.info("{} documents generated.", NUMBER_OF_DOCUMENTS);
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
+//    @Test
+//    public void testElasticsearchOrderedWithScrollingPerformance() throws Exception{
+//        int totalHits = 0;
+//        SearchResponse response = esClient.prepareSearch(TABLE_NAME).setTypes("default")
+//                                    .addField("continent")
+//                                    .addSort(SortBuilders.fieldSort("continent").missing("_last"))
+//                                    .setScroll("1m")
+//                                    .setSize(PAGE_SIZE)
+//                                    .execute().actionGet();
+//        totalHits += response.getHits().hits().length;
+//        while ( totalHits < NUMBER_OF_DOCUMENTS) {
+//            response = esClient.prepareSearchScroll(response.getScrollId()).setScroll("1m").execute().actionGet();
+//            totalHits += response.getHits().hits().length;
+//        }
+//    }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
-    @Test
-    public void testElasticsearchOrderedWithScrollingPerformance() throws Exception{
-        int totalHits = 0;
-        SearchResponse response = esClient.prepareSearch(TABLE_NAME).setTypes("default")
-                                    .addField("continent")
-                                    .addSort(SortBuilders.fieldSort("continent").missing("_last"))
-                                    .setScroll("1m")
-                                    .setSize(PAGE_SIZE)
-                                    .execute().actionGet();
-        totalHits += response.getHits().hits().length;
-        while ( totalHits < NUMBER_OF_DOCUMENTS) {
-            response = esClient.prepareSearchScroll(response.getScrollId()).setScroll("1m").execute().actionGet();
-            totalHits += response.getHits().hits().length;
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
+//    @Test
+//    public void testElasticsearchOrderedWithoutScrollingPerformance() throws Exception{
+//        esClient.prepareSearch(TABLE_NAME).setTypes("default")
+//                .addField("continent")
+//                .addSort(SortBuilders.fieldSort("continent").missing("_last"))
+//                .setSize(NUMBER_OF_DOCUMENTS)
+//                .execute().actionGet();
+//    }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
-    @Test
-    public void testElasticsearchOrderedWithoutScrollingPerformance() throws Exception{
-        esClient.prepareSearch(TABLE_NAME).setTypes("default")
-                .addField("continent")
-                .addSort(SortBuilders.fieldSort("continent").missing("_last"))
-                .setSize(NUMBER_OF_DOCUMENTS)
-                .execute().actionGet();
-    }
-
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
-    @Test
-    public void testElasticsearchUnorderedWithoutScrollingPerformance() throws Exception{
-        esClient.prepareSearch(TABLE_NAME).setTypes("default")
-                .addField("continent")
-                .setSize(NUMBER_OF_DOCUMENTS)
-                .execute().actionGet();
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
+//    @Test
+//    public void testElasticsearchUnorderedWithoutScrollingPerformance() throws Exception{
+//        esClient.prepareSearch(TABLE_NAME).setTypes("default")
+//                .addField("continent")
+//                .setSize(NUMBER_OF_DOCUMENTS)
+//                .execute().actionGet();
+//    }
 }

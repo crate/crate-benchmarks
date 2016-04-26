@@ -108,18 +108,18 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
         };
     }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testESBulkDelete() {
-        HashMap<String, String> ids = createSampleData();
-        BulkRequestBuilder request = esClient.prepareBulk();
-        for (String id : ids.values()) {
-            DeleteRequest deleteRequest = new DeleteRequest("users", "default", id);
-            request.add(deleteRequest);
-        }
-        request.execute().actionGet();
-        refresh(tableName());
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testESBulkDelete() {
+//        HashMap<String, String> ids = createSampleData();
+//        BulkRequestBuilder request = esClient.prepareBulk();
+//        for (String id : ids.values()) {
+//            DeleteRequest deleteRequest = new DeleteRequest("users", "default", id);
+//            request.add(deleteRequest);
+//        }
+//        request.execute().actionGet();
+//        refresh(tableName());
+//    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test

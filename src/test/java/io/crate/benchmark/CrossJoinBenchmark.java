@@ -81,10 +81,10 @@ public class CrossJoinBenchmark extends BenchmarkBase {
         crateClient.sql("drop table if exists small");
     }
 
-    @Override
-    public boolean indexExists() {
-        return esClient.admin().indices().exists(new IndicesExistsRequest("articles", "colors", "small")).actionGet().isExists();
-    }
+//    @Override
+//    public boolean indexExists() {
+//        return esClient.admin().indices().exists(new IndicesExistsRequest("articles", "colors", "small")).actionGet().isExists();
+//    }
 
     @Override
     public boolean generateData() {

@@ -92,14 +92,14 @@ public class DeleteBenchmark extends BenchmarkBase {
 //                                new TermQueryBuilder("countryCode", getCountryCode())));
 //    }
 
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testDeleteApiById() throws Exception {
-        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-            DeleteResponse response = esClient.execute(DeleteAction.INSTANCE, getDeleteApiByIdRequest()).actionGet();
-            Assert.assertTrue(response.isFound());
-        }
-    }
+//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
+//    @Test
+//    public void testDeleteApiById() throws Exception {
+//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
+//            DeleteResponse response = esClient.execute(DeleteAction.INSTANCE, getDeleteApiByIdRequest()).actionGet();
+//            Assert.assertTrue(response.isFound());
+//        }
+//    }
 
 //    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
 //    @Test

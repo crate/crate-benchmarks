@@ -56,7 +56,7 @@ public class ThreadedStatement extends Statement {
             statement.evaluate();
         } else {
             final CountDownLatch startLatch = new CountDownLatch(count);
-            ExecutorService executorService = Executors.newFixedThreadPool(count, EsExecutors.daemonThreadFactory(Settings.EMPTY, "Threaded"));
+            ExecutorService executorService = Executors.newFixedThreadPool(count, EsExecutors.daemonThreadFactory("Threaded"));
             ListeningExecutorService listeningExecutorService = MoreExecutors.listeningDecorator(executorService);
 
             List<ListenableFuture<?>> futures = new ArrayList<>(count);
