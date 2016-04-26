@@ -28,7 +28,6 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import io.crate.TimestampFormat;
 import io.crate.action.sql.SQLBulkResponse;
-import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Before;
 import org.junit.Test;
@@ -90,7 +89,7 @@ public class PartitionedBulkInsertBenchmark extends BenchmarkBase {
         String partitionValue = uniquePartitions ? String.valueOf(partitionIdx) : partitions[(partitionIdx) % partitions.length];
         return new Object[]{
                     partitionValue,
-                    RandomStringUtils.randomAlphabetic(1),
+                    randomAsciiOfLength(1),
                     TS + partitionIdx,
                     5.0};
     }

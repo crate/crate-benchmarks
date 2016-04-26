@@ -25,10 +25,10 @@ import io.crate.action.sql.SQLResponse;
 import io.crate.concurrent.Threaded;
 import io.crate.shade.org.elasticsearch.action.ActionFuture;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
@@ -41,9 +41,10 @@ public class ConcurrentUpdateStressTest extends AbstractIntegrationStressTest {
                 .fromSysProperties()
                 .clusterName(CLUSTER_NAME)
                 .numberOfNodes(2)
-                .settings(ImmutableSettings.builder()
-                        .put("threadpool.search.queue_size", 3000)
-                        .build())
+                .settings(new HashMap<String, Object>() {{
+                        put("threadpool.search.queue_size", 3000);
+                }}
+                )
                 .build();
     }
 

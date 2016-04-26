@@ -71,7 +71,7 @@ public class ConcurrentCopyFromTest extends AbstractIntegrationStressTest {
     @Repeat(iterations=10)
     @Test
     public void testConcurrentCopyFrom() throws Exception {
-        ThreadPoolExecutor executor = EsExecutors.newFixed(2, 2, EsExecutors.daemonThreadFactory("COPY FROM"));
+        ThreadPoolExecutor executor = EsExecutors.newFixed("copy-from", 2, 2, EsExecutors.daemonThreadFactory("COPY FROM"));
         final Iterator<CrateTestServer> serverIt = testCluster.servers().iterator();
         final String copyFromSource0 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_0.json.gz").getPath();
         final String copyFromSource3 = ConcurrentCopyFromTest.class.getResource("concurrent_copy_from_3.json.gz").getPath();

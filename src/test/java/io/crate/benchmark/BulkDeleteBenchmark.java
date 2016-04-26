@@ -29,11 +29,9 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.action.sql.SQLResponse;
-import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -57,7 +55,9 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
         testCluster = CrateTestCluster
                 .fromSysProperties()
                 .clusterName(CLUSTER_NAME)
-                .settings(ImmutableSettings.builder().put("threadpool.index.queue_size", ROWS).build())
+                .settings(new HashMap<String, Object>() {{
+                    put("threadpool.index.queue_size", ROWS);
+                }})
                 .numberOfNodes(2)
                 .build();
     }
@@ -102,8 +102,8 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
 
     private Object[] getRandomObject() {
         return new Object[]{
-                RandomStringUtils.randomAlphabetic(40),  // id
-                RandomStringUtils.randomAlphabetic(10),  // name
+                randomAsciiOfLength(40),                    // id
+                randomAsciiOfLength(10),                    // name
                 (int) (Math.random() * 100),                // age
         };
     }
@@ -112,8 +112,7 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
     @Test
     public void testESBulkDelete() {
         HashMap<String, String> ids = createSampleData();
-        BulkRequestBuilder request = new BulkRequestBuilder(esClient);
-
+        BulkRequestBuilder request = esClient.prepareBulk();
         for (String id : ids.values()) {
             DeleteRequest deleteRequest = new DeleteRequest("users", "default", id);
             request.add(deleteRequest);

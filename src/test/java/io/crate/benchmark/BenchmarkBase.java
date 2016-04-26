@@ -38,7 +38,7 @@ import io.crate.shade.com.google.common.base.Preconditions;
 import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
 import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
 import io.crate.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
+import io.crate.shade.org.elasticsearch.common.settings.Settings;
 import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.consumer.CrateConsumer;
@@ -51,12 +51,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.net.InetAddress;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -83,9 +79,10 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static CrateTestCluster testCluster = CrateTestCluster
             .fromSysProperties()
             .clusterName(CLUSTER_NAME)
-            .settings(io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings.builder()
-                    .put("index.store.type", "memory")
-                    .build())
+            .settings(new HashMap<String, Object>() {{
+                put("index.store.type","mmapfs");
+                }}
+            )
             .numberOfNodes(2)
             .build();
 
@@ -166,9 +163,9 @@ public abstract class BenchmarkBase extends RandomizedTest {
     @Before
     public void setUp() throws Exception {
         if (esClient == null) {
-            esClient = new TransportClient(ImmutableSettings.builder().put("cluster.name", CLUSTER_NAME).build());
+            esClient = TransportClient.builder().settings(Settings.settingsBuilder().put("cluster.name", CLUSTER_NAME)).build();
             for (CrateTestServer server : testCluster.servers()) {
-                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost(), server.transportPort());
+                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(InetAddress.getByName(server.crateHost()), server.transportPort());
                 esClient.addTransportAddress(serverAdress);
             }
         }
