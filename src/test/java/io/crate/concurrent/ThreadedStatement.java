@@ -25,7 +25,6 @@ import io.crate.shade.com.google.common.util.concurrent.Futures;
 import io.crate.shade.com.google.common.util.concurrent.ListenableFuture;
 import io.crate.shade.com.google.common.util.concurrent.ListeningExecutorService;
 import io.crate.shade.com.google.common.util.concurrent.MoreExecutors;
-import io.crate.shade.org.elasticsearch.common.settings.Settings;
 import io.crate.shade.org.elasticsearch.common.util.concurrent.EsExecutors;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;

@@ -7,12 +7,19 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
+def extractVersion(String url) {
+    url.find(/(\d+).(\d+).(\d+)/)
+}
+
 def extractTag(String url) {
     if (url != null) {
         def matcher = url =~ /([a-f0-9]{7})\.tar\.gz/
-        assert matcher.hasGroup()
-        assert 1 == matcher.groupCount()
-        return matcher[0][1]
+        println(matcher.size())
+        if (matcher.size() == 0) {
+            return extractVersion(url)
+        } else {
+            return matcher[0][1]
+        }
     } else {
         return project.crateVersion
     }
@@ -50,10 +57,6 @@ tasks.withType(Test) {
     }
     testLogging.exceptionFormat = 'full'
     testLogging.showStandardStreams = true
-}
-
-def extractVersion(String url) {
-    url.find(/(\d+).(\d+).(\d+)/)
 }
 
 task stress(type: Test) {
