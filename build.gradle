@@ -14,7 +14,6 @@ def extractVersion(String url) {
 def extractTag(String url) {
     if (url != null) {
         def matcher = url =~ /([a-f0-9]{7})\.tar\.gz/
-        println(matcher.size())
         if (matcher.size() == 0) {
             return extractVersion(url)
         } else {
@@ -35,7 +34,8 @@ dependencies {
     testCompile 'com.carrotsearch:junit-benchmarks:0.7.2'
     testCompile 'com.h2database:h2:1.3.173'
 
-    testCompile 'com.github.crate.crate:crate-client:' + project.tag
+    //testCompile 'com.github.crate.crate:crate-client:' + project.tag
+    testCompile 'com.github.crate.crate:crate-client:6e0d793'
     testCompile 'com.tdunning:t-digest:3.0'
     testCompile 'io.crate:crate-testing:0.4.1'
     testCompile 'com.google.code.gson:gson:2.2.4'
@@ -121,21 +121,7 @@ sourceSets {
     }
 }
 
-def jvmTestFlags = ['-ea']
-
 idea {
-    workspace {
-        iws.withXml { xmlFile ->
-            def runManager = xmlFile.asNode().component.find { it.@name == 'RunManager' }
-
-            // enable assertions for junit tests
-            def junitDefaults = runManager.configuration.find { it.@default == 'true' && it.@type == 'JUnit' }
-            junitDefaults.option.find { it.@name == 'VM_PARAMETERS' }.replaceNode {
-                option(name: 'VM_PARAMETERS', value: jvmTestFlags.join(' '))
-            }
-        }
-    }
-
     project {
         languageLevel = 'JDK_1_8' // \o/
         vcs = 'Git'
