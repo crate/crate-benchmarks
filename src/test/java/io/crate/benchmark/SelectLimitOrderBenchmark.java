@@ -27,9 +27,7 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.action.sql.SQLResponse;
-import io.crate.shade.org.elasticsearch.action.search.SearchAction;
 import io.crate.shade.org.elasticsearch.action.search.SearchRequest;
-import io.crate.shade.org.elasticsearch.action.search.SearchResponse;
 import io.crate.shade.org.elasticsearch.common.xcontent.XContentBuilder;
 import io.crate.shade.org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.Test;
@@ -134,15 +132,6 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
         return stmt;
     }
 
-//    protected void runESBenchmark(Integer limit, Integer offset, boolean orderBy, boolean selectAll) throws Exception {
-//        SearchResponse response = esClient.execute(SearchAction.INSTANCE, getApiSearchRequest(limit, offset, orderBy, selectAll)).actionGet();
-//        assertEquals(
-//                "Did not get all wanted rows (ES)",
-//                limit.longValue(),
-//                response.getHits().hits().length
-//        );
-//    }
-
     protected void runSQLBenchmark(Integer limit, Integer offset, boolean orderBy, boolean selectAll) throws Exception {
         SQLResponse response = execute(getSqlSearchStmt(limit, offset, orderBy, selectAll));
         assertEquals(
@@ -151,16 +140,6 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
                 response.rowCount()
         );
     }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void benchLimit1000000_ES() throws Exception {
-//        Integer limit = 1_000_000;
-//        Integer offset = 0;
-//        boolean orderBy = false;
-//        boolean selectAllFields = false;
-//        runESBenchmark(limit, offset, orderBy, selectAllFields);
-//    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
@@ -172,16 +151,6 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
         runSQLBenchmark(limit, offset, orderBy, selectAllFields);
     }
 
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void benchLimit1000000Order_ES() throws Exception {
-//        Integer limit = 1_000_000;
-//        Integer offset = 0;
-//        boolean orderBy = true;
-//        boolean selectAllFields = false;
-//        runESBenchmark(limit, offset, orderBy, selectAllFields);
-//    }
-
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void benchLimit1000000Order_SQL() throws Exception {
@@ -192,16 +161,6 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
         runSQLBenchmark(limit, offset, orderBy, selectAllFields);
     }
 
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void benchLimit1000000Order_Fetch_ES() throws Exception {
-//        Integer limit = 1_000_000;
-//        Integer offset = 0;
-//        boolean orderBy = true;
-//        boolean selectAllFields = true;
-//        runESBenchmark(limit, offset, orderBy, selectAllFields);
-//    }
-
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void benchLimit1000000Order_Fetch_SQL() throws Exception {
@@ -211,16 +170,6 @@ public class SelectLimitOrderBenchmark extends BenchmarkBase {
         boolean selectAllFields = true;
         runSQLBenchmark(limit, offset, orderBy, selectAllFields);
     }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void benchLimit1Offset1000000Order_ES() throws Exception {
-//        Integer limit = 1;
-//        Integer offset = 1_000_000;
-//        boolean orderBy = true;
-//        boolean selectAllFields = false;
-//        runESBenchmark(limit, offset, orderBy, selectAllFields);
-//    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test

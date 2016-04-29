@@ -25,8 +25,6 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.shade.org.elasticsearch.action.count.CountAction;
-import io.crate.shade.org.elasticsearch.action.count.CountRequest;
 import org.junit.Test;
 
 @AxisRange(min = 0)
@@ -41,13 +39,6 @@ public class CountBenchmark extends BenchmarkBase {
     public boolean importData() {
         return true;
     }
-
-//    @Test
-//    public void testESCount() throws Exception {
-//        for (int i = 0; i < NUM_REQUESTS_PER_TEST; i++) {
-//            esClient.execute(CountAction.INSTANCE, new CountRequest("countries")).actionGet();
-//        }
-//    }
 
     @Test
     public void testSQLCount() throws Exception {
