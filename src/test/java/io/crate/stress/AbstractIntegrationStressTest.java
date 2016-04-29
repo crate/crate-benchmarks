@@ -33,7 +33,6 @@ import io.crate.shade.com.google.common.base.MoreObjects;
 import io.crate.shade.com.google.common.util.concurrent.SettableFuture;
 import io.crate.shade.org.elasticsearch.action.ActionFuture;
 import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
-import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testing.CrateTestCluster;
@@ -90,13 +89,13 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
 
     @Before
     public void delegateToPrepareFirst() throws Exception {
-        if (esClient == null) {
-            esClient = new TransportClient(ImmutableSettings.builder().put("cluster.name", CLUSTER_NAME).build());
-            for (CrateTestServer server : testCluster.servers()) {
-                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost(), server.transportPort());
-                esClient.addTransportAddress(serverAdress);
-            }
-        }
+//        if (esClient == null) {
+//            esClient = TransportClient.builder().settings(Settings.settingsBuilder().put("cluster.name", CLUSTER_NAME)).build();
+//            for (CrateTestServer server : testCluster.servers()) {
+//                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(InetAddress.getByName(server.crateHost()), server.transportPort());
+//                esClient.addTransportAddress(serverAdress);
+//            }
+//        }
         if (firstPrepared.compareAndSet(false, true)) {
             prepareFirst();
             preparedFuture.set(null);

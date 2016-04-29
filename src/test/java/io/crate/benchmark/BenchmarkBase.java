@@ -38,7 +38,6 @@ import io.crate.shade.com.google.common.base.Preconditions;
 import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
 import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
 import io.crate.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.shade.org.elasticsearch.common.settings.ImmutableSettings;
 import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.consumer.CrateConsumer;
@@ -51,12 +50,8 @@ import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.net.InetAddress;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -83,9 +78,10 @@ public abstract class BenchmarkBase extends RandomizedTest {
     public static CrateTestCluster testCluster = CrateTestCluster
             .fromSysProperties()
             .clusterName(CLUSTER_NAME)
-            .settings(io.crate.testserver.shade.org.elasticsearch.common.settings.ImmutableSettings.builder()
-                    .put("index.store.type", "memory")
-                    .build())
+            .settings(new HashMap<String, Object>() {{
+                put("index.store.type","mmapfs");
+                }}
+            )
             .numberOfNodes(2)
             .build();
 
@@ -122,7 +118,7 @@ public abstract class BenchmarkBase extends RandomizedTest {
         return result.toArray(new IResultsConsumer[result.size()]);
     }
 
-    protected TransportClient esClient = null;
+    //protected TransportClient esClient = null;
     protected static CrateClient crateClient;
 
     public final ESLogger logger = Loggers.getLogger(getClass());
@@ -151,8 +147,23 @@ public abstract class BenchmarkBase extends RandomizedTest {
         return crateClient.bulkSql(new SQLBulkRequest(statement, bulkArgs)).actionGet(timeout.getMillis());
     }
 
+    private void waitForZeroCount(String stmt) {
+        for (int i = 1; i < 10; i++) {
+            SQLResponse r = crateClient.sql(stmt).actionGet(5, TimeUnit.SECONDS);
+            if (((Long) r.rows()[0][0]) == 0L) {
+                return;
+            }
+            try {
+                Thread.sleep(i * 100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        throw new RuntimeException("waiting for zero result timed out");
+    }
+
     protected void ensureGreen() {
-        esClient.admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
+        waitForZeroCount("select count(*) from sys.shards where state <> 'STARTED'");
     }
 
     @BeforeClass
@@ -165,13 +176,13 @@ public abstract class BenchmarkBase extends RandomizedTest {
 
     @Before
     public void setUp() throws Exception {
-        if (esClient == null) {
-            esClient = new TransportClient(ImmutableSettings.builder().put("cluster.name", CLUSTER_NAME).build());
-            for (CrateTestServer server : testCluster.servers()) {
-                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(server.crateHost(), server.transportPort());
-                esClient.addTransportAddress(serverAdress);
-            }
-        }
+//        if (esClient == null) {
+//            esClient = TransportClient.builder().settings(Settings.settingsBuilder().put("cluster.name", CLUSTER_NAME)).build();
+//            for (CrateTestServer server : testCluster.servers()) {
+//                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(InetAddress.getByName(server.crateHost()), server.transportPort());
+//                esClient.addTransportAddress(serverAdress);
+//            }
+//        }
         if (!indexExists()) {
             createTable();
             if (importData()) {

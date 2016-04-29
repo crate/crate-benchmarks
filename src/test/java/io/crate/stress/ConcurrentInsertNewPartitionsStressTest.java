@@ -24,7 +24,6 @@ package io.crate.stress;
 import io.crate.TimestampFormat;
 import io.crate.action.sql.SQLBulkResponse;
 import io.crate.concurrent.Threaded;
-import io.crate.shade.org.apache.commons.lang3.RandomStringUtils;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testing.CrateTestCluster;
 import org.junit.Test;
@@ -67,7 +66,7 @@ public class ConcurrentInsertNewPartitionsStressTest extends AbstractIntegration
         int partitionIdx = PARTITION_INDEX.getAndIncrement();
         return new Object[]{
                 String.valueOf(partitionIdx),
-                RandomStringUtils.randomAlphabetic(1),
+                randomAsciiOfLength(1),
                 TS + partitionIdx,
                 5.0};
     }
