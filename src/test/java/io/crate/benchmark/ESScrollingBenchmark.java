@@ -21,39 +21,22 @@
 
 package io.crate.benchmark;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.action.sql.SQLBulkResponse;
-import io.crate.shade.org.elasticsearch.action.search.SearchResponse;
 import io.crate.shade.org.elasticsearch.common.bytes.BytesArray;
 import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
 import io.crate.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.shade.org.elasticsearch.search.sort.SortBuilders;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNull.nullValue;
-import static org.junit.Assert.assertThat;
-
 
 @BenchmarkHistoryChart(filePrefix="benchmark-lucenedoccollector-history", labelWith = LabelType.CUSTOM_KEY)
 @BenchmarkMethodChart(filePrefix = "benchmark-lucenedoccollector")
 public class ESScrollingBenchmark extends BenchmarkBase {
 
-    public static boolean dataGenerated = false;
-    public static final int NUMBER_OF_DOCUMENTS = 100_000;
     public static final int BENCHMARK_ROUNDS = 100;
-    public static final int WARMUP_ROUNDS = 10;
     // should be in-sync with sql->Paging.PAGE_SIZE
-    public static final int PAGE_SIZE = 500_000;
 
     public final static ESLogger logger = Loggers.getLogger(ESScrollingBenchmark.class);
 
@@ -98,79 +81,4 @@ public class ESScrollingBenchmark extends BenchmarkBase {
                 ") clustered into 1 shards with (number_of_replicas=0)", new Object[0]);
         ensureGreen();
     }
-
-//    @Override
-//    protected void doGenerateData() throws Exception {
-//        if (!dataGenerated) {
-//
-//            logger.info("generating {} documents...", NUMBER_OF_DOCUMENTS);
-//            ExecutorService executor = Executors.newFixedThreadPool(4);
-//            for (int _thread=0; _thread<4; _thread++) {
-//                executor.submit(() -> {
-//                        int numDocsToCreate = NUMBER_OF_DOCUMENTS/4;
-//                        logger.info("Generating {} Documents in Thread {}", numDocsToCreate, Thread.currentThread().getName());
-//                        for (int i=0; i < numDocsToCreate; i+=1000) {
-//                            Object[][] bulkArgs = new Object[1000][];
-//                            try {
-//                                Object[] row = generateRow();
-//                                for (int j=0; j<1000;j++) {
-//                                    bulkArgs[j] = row;
-//                                }
-//                                SQLBulkResponse bulkResponse = execute(
-//                                        "INSERT INTO \"" + TABLE_NAME + "\" (\"areaInSqKm\", continent, \"countryCode\", \"countryName\", population) VALUES (?, ?, ?, ?, ?)",
-//                                        bulkArgs);
-//                                for (SQLBulkResponse.Result result : bulkResponse.results()) {
-//                                    assertThat(result.errorMessage(), is(nullValue()));
-//                                }
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                });
-//            }
-//            executor.shutdown();
-//            executor.awaitTermination(2L, TimeUnit.MINUTES);
-//            executor.shutdownNow();
-//            esClient.admin().indices().prepareFlush(TABLE_NAME).execute().actionGet();
-//            refresh(TABLE_NAME);
-//            dataGenerated = true;
-//            logger.info("{} documents generated.", NUMBER_OF_DOCUMENTS);
-//        }
-//    }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
-//    @Test
-//    public void testElasticsearchOrderedWithScrollingPerformance() throws Exception{
-//        int totalHits = 0;
-//        SearchResponse response = esClient.prepareSearch(TABLE_NAME).setTypes("default")
-//                                    .addField("continent")
-//                                    .addSort(SortBuilders.fieldSort("continent").missing("_last"))
-//                                    .setScroll("1m")
-//                                    .setSize(PAGE_SIZE)
-//                                    .execute().actionGet();
-//        totalHits += response.getHits().hits().length;
-//        while ( totalHits < NUMBER_OF_DOCUMENTS) {
-//            response = esClient.prepareSearchScroll(response.getScrollId()).setScroll("1m").execute().actionGet();
-//            totalHits += response.getHits().hits().length;
-//        }
-//    }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
-//    @Test
-//    public void testElasticsearchOrderedWithoutScrollingPerformance() throws Exception{
-//        esClient.prepareSearch(TABLE_NAME).setTypes("default")
-//                .addField("continent")
-//                .addSort(SortBuilders.fieldSort("continent").missing("_last"))
-//                .setSize(NUMBER_OF_DOCUMENTS)
-//                .execute().actionGet();
-//    }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = WARMUP_ROUNDS)
-//    @Test
-//    public void testElasticsearchUnorderedWithoutScrollingPerformance() throws Exception{
-//        esClient.prepareSearch(TABLE_NAME).setTypes("default")
-//                .addField("continent")
-//                .setSize(NUMBER_OF_DOCUMENTS)
-//                .execute().actionGet();
-//    }
 }

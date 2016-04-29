@@ -27,9 +27,7 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.action.sql.SQLResponse;
-import io.crate.shade.org.elasticsearch.action.update.UpdateAction;
 import io.crate.shade.org.elasticsearch.action.update.UpdateRequest;
-import io.crate.shade.org.elasticsearch.action.update.UpdateResponse;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -97,13 +95,4 @@ public class UpdateBenchmark extends BenchmarkBase {
             );
         }
     }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testUpdateApiById() {
-//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-//            UpdateResponse response = esClient.execute(UpdateAction.INSTANCE, getApiUpdateByIdRequest()).actionGet();
-//            assertEquals(updateId, response.getId());
-//        }
-//    }
 }

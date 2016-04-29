@@ -27,15 +27,9 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.action.sql.SQLResponse;
-import io.crate.shade.org.elasticsearch.action.get.GetAction;
 import io.crate.shade.org.elasticsearch.action.get.GetRequest;
-import io.crate.shade.org.elasticsearch.action.get.GetResponse;
-import io.crate.shade.org.elasticsearch.action.get.MultiGetAction;
 import io.crate.shade.org.elasticsearch.action.get.MultiGetRequest;
-import io.crate.shade.org.elasticsearch.action.get.MultiGetResponse;
-import io.crate.shade.org.elasticsearch.action.search.SearchAction;
 import io.crate.shade.org.elasticsearch.action.search.SearchRequest;
-import io.crate.shade.org.elasticsearch.action.search.SearchResponse;
 import io.crate.shade.org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.Assert;
 import org.junit.Before;
@@ -132,17 +126,6 @@ public class SelectBenchmark extends BenchmarkBase {
         return request;
     }
 
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testGetSingleResultApi() {
-//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-//            GetRequest request = getApiGetRequest();
-//            GetResponse response = esClient.execute(GetAction.INSTANCE, request).actionGet();
-//            Assert.assertTrue(String.format(Locale.ENGLISH, "Queried row '%s' does not exist (API). Round: %d", request.id(), apiGetRound), response.isExists());
-//            apiGetRound++;
-//        }
-//    }
-
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testGetSingleResultSql() {
@@ -158,19 +141,6 @@ public class SelectBenchmark extends BenchmarkBase {
         }
     }
 
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testGetMultipleResultsApi() {
-//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-//            SearchResponse response = esClient.execute(SearchAction.INSTANCE, getApiSearchRequest()).actionGet();
-//            Assert.assertEquals(
-//                    "Did not find the two wanted rows (API).",
-//                    2L,
-//                    response.getHits().getTotalHits()
-//            );
-//        }
-//    }
-
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testGetMultipleResultsSql() {
@@ -183,19 +153,6 @@ public class SelectBenchmark extends BenchmarkBase {
             );
         }
     }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testGetMultiGetApi() {
-//        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
-//            MultiGetResponse response = esClient.execute(MultiGetAction.INSTANCE, getMultiGetApiRequest()).actionGet();
-//            Assert.assertEquals(
-//                    "Did not find the three wanted rows (API, MultiGet)",
-//                    3,
-//                    response.getResponses().length
-//            );
-//        }
-//    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test

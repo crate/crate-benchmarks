@@ -148,11 +148,4 @@ public class AnyBenchmark extends BenchmarkBase  {
         SQLResponse response =  execute(SELECT_NOT_ANY_PARAM, new Object[]{ VALUES.subList(0, 500).toArray() });
         assertThat(response.rowCount(), is(10000L));
     }
-
-    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-    @Test
-    public void testSelectNotAny2KParam() throws Exception {
-        SQLResponse response = execute(SELECT_NOT_ANY_PARAM, new Object[]{ VALUES.subList(0, 2000).toArray() });
-        assertThat(response.rowCount(), is(10000L));
-    }
 }

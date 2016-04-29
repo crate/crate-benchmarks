@@ -29,8 +29,6 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.action.sql.SQLResponse;
-import io.crate.shade.org.elasticsearch.action.bulk.BulkRequestBuilder;
-import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
 import io.crate.testing.CrateTestCluster;
 import org.junit.Rule;
 import org.junit.Test;
@@ -107,19 +105,6 @@ public class BulkDeleteBenchmark extends BenchmarkBase {
                 (int) (Math.random() * 100),                // age
         };
     }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testESBulkDelete() {
-//        HashMap<String, String> ids = createSampleData();
-//        BulkRequestBuilder request = esClient.prepareBulk();
-//        for (String id : ids.values()) {
-//            DeleteRequest deleteRequest = new DeleteRequest("users", "default", id);
-//            request.add(deleteRequest);
-//        }
-//        request.execute().actionGet();
-//        refresh(tableName());
-//    }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test

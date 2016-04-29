@@ -26,9 +26,7 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
-import io.crate.shade.org.elasticsearch.action.bulk.BulkAction;
 import io.crate.shade.org.elasticsearch.action.bulk.BulkRequest;
-import io.crate.shade.org.elasticsearch.action.index.IndexAction;
 import io.crate.shade.org.elasticsearch.action.index.IndexRequest;
 import io.crate.shade.org.elasticsearch.common.xcontent.XContentFactory;
 import org.junit.BeforeClass;
@@ -126,20 +124,4 @@ public class InsertBenchmark extends BenchmarkBase {
                     });
         }
     }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testInsertSingleApi() {
-//        for (int i=0;i<NUM_REQUESTS_PER_TEST;i++) {
-//            esClient.execute(IndexAction.INSTANCE, getSingleApiInsertRequest()).actionGet();
-//        }
-//    }
-
-//    @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
-//    @Test
-//    public void testInsertBulkApi() {
-//        for (int i=0;i<NUM_REQUESTS_PER_TEST;i++) {
-//            esClient.execute(BulkAction.INSTANCE, getBulkApiInsertRequest()).actionGet();
-//        }
-//    }
 }

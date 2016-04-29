@@ -35,11 +35,8 @@ import io.crate.client.CrateClient;
 import io.crate.shade.com.google.common.base.Joiner;
 import io.crate.shade.com.google.common.base.MoreObjects;
 import io.crate.shade.com.google.common.base.Preconditions;
-import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
 import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
 import io.crate.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.shade.org.elasticsearch.common.settings.Settings;
-import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.consumer.CrateConsumer;
 import io.crate.testing.CrateTestCluster;
@@ -51,7 +48,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -119,7 +115,6 @@ public abstract class BenchmarkBase extends RandomizedTest {
         return result.toArray(new IResultsConsumer[result.size()]);
     }
 
-    //protected TransportClient esClient = null;
     protected static CrateClient crateClient;
 
     public final ESLogger logger = Loggers.getLogger(getClass());
@@ -177,13 +172,6 @@ public abstract class BenchmarkBase extends RandomizedTest {
 
     @Before
     public void setUp() throws Exception {
-//        if (esClient == null) {
-//            esClient = TransportClient.builder().settings(Settings.settingsBuilder().put("cluster.name", CLUSTER_NAME)).build();
-//            for (CrateTestServer server : testCluster.servers()) {
-//                InetSocketTransportAddress serverAdress = new InetSocketTransportAddress(InetAddress.getByName(server.crateHost()), server.transportPort());
-//                esClient.addTransportAddress(serverAdress);
-//            }
-//        }
         if (!indexExists()) {
             createTable();
             if (importData()) {
