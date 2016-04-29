@@ -27,6 +27,7 @@ import com.carrotsearch.junitbenchmarks.annotation.AxisRange;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
+import io.crate.action.sql.SQLResponse;
 import io.crate.shade.org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -86,6 +87,15 @@ public class CrossJoinBenchmark extends BenchmarkBase {
 //        return esClient.admin().indices().exists(new IndicesExistsRequest("articles", "colors", "small")).actionGet().isExists();
 //    }
 
+    private boolean tableExists(String tableName) {
+        SQLResponse response = execute("select * from information_schema.tables where schema_name=? AND table_name=?",
+                new Object[]{
+                        "doc",
+                        tableName
+                });
+        return response.rowCount() > 0;
+    }
+
     @Override
     public boolean generateData() {
         return true;
@@ -93,12 +103,18 @@ public class CrossJoinBenchmark extends BenchmarkBase {
 
     @Override
     protected void doGenerateData() throws Exception {
-        createSampleData(ARTICLE_INSERT_SQL_STMT, ARTICLE_SIZE);
-        refresh("articles");
-        createSampleData(COLORS_INSERT_SQL_STMT, COLORS_SIZE);
-        refresh("colors");
-        createSampleDataSmall(SMALL_SIZE);
-        refresh("small");
+        if (!tableExists("articles")) {
+            createSampleData(ARTICLE_INSERT_SQL_STMT, ARTICLE_SIZE);
+            refresh("articles");
+        }
+        if (!tableExists("colors")) {
+            createSampleData(COLORS_INSERT_SQL_STMT, COLORS_SIZE);
+            refresh("colors");
+        }
+        if (!tableExists("small")) {
+            createSampleDataSmall(SMALL_SIZE);
+            refresh("small");
+        }
     }
 
     private void createSampleData(String stmt, int rows) {

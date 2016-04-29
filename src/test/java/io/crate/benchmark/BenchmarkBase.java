@@ -38,7 +38,6 @@ import io.crate.shade.com.google.common.base.Preconditions;
 import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
 import io.crate.shade.org.elasticsearch.common.logging.ESLogger;
 import io.crate.shade.org.elasticsearch.common.logging.Loggers;
-import io.crate.shade.org.elasticsearch.common.settings.Settings;
 import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.consumer.CrateConsumer;
