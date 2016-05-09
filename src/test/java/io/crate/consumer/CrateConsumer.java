@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +31,7 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
     private final String testServerHost;
     private final int testServerHttpPort;
     private final HttpClient httpClient;
+    private final Gson gson = new GsonBuilder().create();
 
     public CrateConsumer(String testServerHost, int testServerHttpPort) {
         this.httpClient = HttpClientBuilder.create().build();
@@ -72,12 +74,7 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
                     System.currentTimeMillis(),
                     benchmarkValues(result)
             };
-            Gson gson = new GsonBuilder().create();
-            JsonObject content = new JsonObject();
-            content.add("args", gson.toJsonTree(args));
-            content.addProperty("stmt", CrateConsumerConstants.INSERT_STMT);
-            HttpPost request = new HttpPost(composeURI(getHost(), getPort(CrateConsumerConstants.CRATE_HTTP_PORT)));
-            request.setEntity(new StringEntity(gson.toJson(content)));
+            HttpPost request = prepareCrateHttpRequest(args);
             HttpResponse res = httpClient.execute(request);
             if (res.getStatusLine().getStatusCode() != 200) {
                 LOGGER.error("Failed to store benchmark result");
@@ -89,6 +86,15 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
         } catch (Exception e) {
             LOGGER.warn("Result of benchmark run is not inserted: ", e);
         }
+    }
+
+    private HttpPost prepareCrateHttpRequest(Object[] args) throws UnsupportedEncodingException {
+        JsonObject content = new JsonObject();
+        content.add("args", gson.toJsonTree(args));
+        content.addProperty("stmt", CrateConsumerConstants.INSERT_STMT);
+        HttpPost request = new HttpPost(composeURI(getHost(), getPort(CrateConsumerConstants.CRATE_HTTP_PORT)));
+        request.setEntity(new StringEntity(gson.toJson(content)));
+        return request;
     }
 
     private static Map<String, Object> benchmarkValues(Result result) {

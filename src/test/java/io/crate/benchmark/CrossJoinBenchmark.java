@@ -81,15 +81,6 @@ public class CrossJoinBenchmark extends BenchmarkBase {
         crateClient.sql("drop table if exists small");
     }
 
-    private boolean tableExists(String tableName) {
-        SQLResponse response = execute("select * from information_schema.tables where schema_name=? AND table_name=?",
-                new Object[]{
-                        "doc",
-                        tableName
-                });
-        return response.rowCount() > 0;
-    }
-
     @Override
     public boolean generateData() {
         return true;
@@ -97,15 +88,15 @@ public class CrossJoinBenchmark extends BenchmarkBase {
 
     @Override
     protected void doGenerateData() throws Exception {
-        if (!tableExists("articles")) {
+        if (!indexExists("doc", "articles")) {
             createSampleData(ARTICLE_INSERT_SQL_STMT, ARTICLE_SIZE);
             refresh("articles");
         }
-        if (!tableExists("colors")) {
+        if (!indexExists("doc", "colors")) {
             createSampleData(COLORS_INSERT_SQL_STMT, COLORS_SIZE);
             refresh("colors");
         }
-        if (!tableExists("small")) {
+        if (!indexExists("doc", "small")) {
             createSampleDataSmall(SMALL_SIZE);
             refresh("small");
         }

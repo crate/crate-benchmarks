@@ -266,16 +266,20 @@ public abstract class BenchmarkBase extends RandomizedTest {
         execute(String.format(Locale.ENGLISH, "REFRESH TABLE \"%s\"", table));
     }
 
+    public boolean indexExists(String schemaName, String tableName) {
+        SQLResponse response = execute("select * from information_schema.tables where schema_name=? AND table_name=?",
+                new Object[]{
+                        schemaName,
+                        tableName
+                });
+        return response.rowCount() > 0;
+    }
+
     public boolean indexExists() {
         String[] parts = tableName().split("\\.", 1);
         String schemaName = parts.length == 2 ? parts[0] : "doc";
         String tableName = parts.length == 2 ? parts[1] : parts[0];
-        SQLResponse response = execute("select * from information_schema.tables where schema_name=? AND table_name=?",
-                new Object[]{
-                       schemaName,
-                       tableName
-                });
-        return response.rowCount() > 0;
+        return indexExists(schemaName, tableName);
     }
 
     public boolean importData() {
