@@ -30,6 +30,7 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
     private final String testServerHost;
     private final int testServerHttpPort;
     private final HttpClient httpClient;
+    private final Gson gson = new GsonBuilder().create();
 
     public CrateConsumer(String testServerHost, int testServerHttpPort) {
         this.httpClient = HttpClientBuilder.create().build();
@@ -72,7 +73,6 @@ public final class CrateConsumer extends AutocloseConsumer implements Closeable 
                     System.currentTimeMillis(),
                     benchmarkValues(result)
             };
-            Gson gson = new GsonBuilder().create();
             JsonObject content = new JsonObject();
             content.add("args", gson.toJsonTree(args));
             content.addProperty("stmt", CrateConsumerConstants.INSERT_STMT);
