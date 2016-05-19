@@ -35,6 +35,7 @@ import io.crate.shade.org.elasticsearch.action.deletebyquery.DeleteByQueryReques
 import io.crate.shade.org.elasticsearch.action.support.QuerySourceBuilder;
 import io.crate.shade.org.elasticsearch.index.query.TermQueryBuilder;
 import org.junit.Assert;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -108,9 +109,14 @@ public class DeleteBenchmark extends BenchmarkBase {
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
     @Test
     public void testDeleteApiByQuery() throws Exception {
-        for (int i=0; i<NUM_REQUESTS_PER_TEST; i++) {
+        for (int i = 0; i < NUM_REQUESTS_PER_TEST; i++) {
             esClient.execute(DeleteByQueryAction.INSTANCE, getDeleteApiByQueryRequest()).actionGet();
         }
+    }
+
+    @After
+    public void afterTest() throws  Exception {
+        execute("refresh table countries");
     }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
