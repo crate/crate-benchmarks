@@ -49,7 +49,6 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
         execute("create table \"" + TABLE_NAME + "\" (" +
                 " name string," +
                 " p string) partitioned by (p) with (number_of_replicas=0, refresh_interval = 0)", new Object[0]);
-        ensureGreen();
     }
 
     @Override
@@ -62,6 +61,7 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
         }
         execute("insert into " + TABLE_NAME + " (name, p) values (?, ?)", bulkArgs);
         execute("refresh table " + TABLE_NAME);
+        ensureGreen();
         dataGenerated = true;
     }
 
