@@ -48,7 +48,8 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
     protected void createTable() {
         execute("create table \"" + TABLE_NAME + "\" (" +
                 " name string," +
-                " p string) partitioned by (p) with (number_of_replicas=0, refresh_interval = 0)", new Object[0]);
+                " p string) partitioned by (p) clustered into 1 shards" +
+                " with (number_of_replicas=0, refresh_interval = 0)", new Object[0]);
     }
 
     @Override
