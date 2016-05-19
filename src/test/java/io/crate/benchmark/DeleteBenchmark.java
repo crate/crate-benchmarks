@@ -28,6 +28,7 @@ import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
 import io.crate.action.sql.SQLResponse;
 import io.crate.shade.org.elasticsearch.action.delete.DeleteRequest;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -80,6 +81,11 @@ public class DeleteBenchmark extends BenchmarkBase {
 
     public DeleteRequest getDeleteApiByIdRequest() throws Exception {
         return new DeleteRequest(TABLE_NAME, "default", getDeleteId());
+    }
+
+    @After
+    public void afterTest() throws  Exception {
+        execute("refresh table countries");
     }
 
     @BenchmarkOptions(benchmarkRounds = BENCHMARK_ROUNDS, warmupRounds = 1)
