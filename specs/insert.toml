@@ -1,0 +1,20 @@
+[setup]
+statement_files = ["sql/geonames.sql"]
+
+#[[load_data]]
+#target = "geonames"
+#source = "http://benchmarks.elasticsearch.org.s3.amazonaws.com/corpora/geonames/documents.json.bz2"
+#concurrency = 10
+#bulk_size = 5000
+#num_records = 8647880
+
+[[load_data]]
+target = "geonames"
+source = "http://benchmarks.elasticsearch.org.s3.amazonaws.com/corpora/tiny/documents.json.bz2"
+concurrency = 1
+bulk_size = 1
+num_records = 2000
+
+
+[teardown]
+statements = ["drop table geonames"]

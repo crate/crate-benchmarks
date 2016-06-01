@@ -1,0 +1,52 @@
+[setup]
+statements = [
+    "create table t8 (x int) clustered into 8 shards with (number_of_replicas = 0)",
+    "create table t16 (x int) clustered into 16 shards with (number_of_replicas = 0)",
+    "create table t32 (x int) clustered into 32 shards with (number_of_replicas = 0)",
+    "create table t64 (x int) clustered into 64 shards with (number_of_replicas = 0)",
+    "create table t128 (x int) clustered into 128 shards with (number_of_replicas = 0)"
+]
+
+[[load_data]]
+target = "t8"
+source = "t.json"
+concurrency = 10
+bulk_size = 500
+num_records = 5000000
+
+[[load_data]]
+target = "t16"
+source = "t.json"
+concurrency = 10
+bulk_size = 500
+num_records = 5000000
+
+[[load_data]]
+target = "t32"
+source = "t.json"
+concurrency = 10
+bulk_size = 500
+num_records = 5000000
+
+[[load_data]]
+target = "t64"
+source = "t.json"
+concurrency = 10
+bulk_size = 500
+num_records = 5000000
+
+[[load_data]]
+target = "t128"
+source = "t.json"
+concurrency = 10
+bulk_size = 500
+num_records = 5000000
+
+[teardown]
+statements = [
+    "drop table t8",
+    "drop table t16",
+    "drop table t32",
+    "drop table t64",
+    "drop table t128",
+]
