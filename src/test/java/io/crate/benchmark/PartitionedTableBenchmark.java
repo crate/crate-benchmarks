@@ -33,7 +33,7 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
 
     private static boolean dataGenerated = false;
 
-    private static final Integer NUMBER_OF_PARTITIONS = 500;
+    private static final Integer NUMBER_OF_PARTITIONS = 100;
     private static final Integer NUMBER_OF_DOCS_PER_PARTITION = 1;
 
     public static final int BENCHMARK_ROUNDS = 100;
