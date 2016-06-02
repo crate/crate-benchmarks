@@ -25,6 +25,7 @@ import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkHistoryChart;
 import com.carrotsearch.junitbenchmarks.annotation.BenchmarkMethodChart;
 import com.carrotsearch.junitbenchmarks.annotation.LabelType;
+import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import org.junit.Test;
 
 @BenchmarkHistoryChart(filePrefix="benchmark-partitionedtablebenchmark-history", labelWith = LabelType.CUSTOM_KEY)
@@ -33,7 +34,7 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
 
     private static boolean dataGenerated = false;
 
-    private static final Integer NUMBER_OF_PARTITIONS = 100;
+    private static final Integer NUMBER_OF_PARTITIONS = 500;
     private static final Integer NUMBER_OF_DOCS_PER_PARTITION = 1;
 
     public static final int BENCHMARK_ROUNDS = 100;
@@ -60,7 +61,7 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
                 bulkArgs[i+j] = new Object[]{"Marvin", i};
             }
         }
-        execute("insert into " + TABLE_NAME + " (name, p) values (?, ?)", bulkArgs);
+        execute("insert into " + TABLE_NAME + " (name, p) values (?, ?)", bulkArgs, TimeValue.timeValueMinutes(1L));
         execute("refresh table " + TABLE_NAME);
         ensureGreen();
         dataGenerated = true;
