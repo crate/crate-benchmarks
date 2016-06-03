@@ -19,12 +19,15 @@ def extractTag(String url) {
         } else {
             return matcher[0][1]
         }
-    } else {
+    } else if (project.crateVersion != null) {
         return project.crateVersion
+    } else {
+        throw new GradleException("\"crate.testing.from_version\" or " +
+                "\"crate.testing.from_url\" system property must be provided")
     }
 }
 
-project.ext.crateVersion = System.getProperty('crate.testing.from_version', '0.54.4')
+project.ext.crateVersion = System.getProperty('crate.testing.from_version', null)
 project.ext.crateUrl = System.getProperty('crate.testing.from_url', null)
 project.ext.tag = extractTag(project.crateUrl)
 
