@@ -33,10 +33,8 @@ import io.crate.shade.com.google.common.base.MoreObjects;
 import io.crate.shade.com.google.common.util.concurrent.SettableFuture;
 import io.crate.shade.org.elasticsearch.action.ActionFuture;
 import io.crate.shade.org.elasticsearch.client.transport.TransportClient;
-import io.crate.shade.org.elasticsearch.common.transport.InetSocketTransportAddress;
 import io.crate.shade.org.elasticsearch.common.unit.TimeValue;
 import io.crate.testing.CrateTestCluster;
-import io.crate.testing.CrateTestServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -67,7 +65,6 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
     private final AtomicInteger stillRunning = new AtomicInteger(0);
     private final SettableFuture<Void> cleanUpFuture = SettableFuture.create();
     protected static CrateClient crateClient;
-    protected TransportClient esClient = null;
 
     /**
      * preparation only executed in the first thread that reaches @Before
@@ -145,12 +142,27 @@ public abstract class AbstractIntegrationStressTest extends RandomizedTest {
         return crateClient.bulkSql(new SQLBulkRequest(statement, bulkArgs));
     }
 
+    private void waitForZeroCount(String stmt) {
+        for (int i = 1; i < 10; i++) {
+            SQLResponse r = crateClient.sql(stmt).actionGet(5, TimeUnit.SECONDS);
+            if (((Long) r.rows()[0][0]) == 0L) {
+                return;
+            }
+            try {
+                Thread.sleep(i * 100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        throw new RuntimeException("waiting for zero result timed out");
+    }
+
     protected void ensureGreen() {
-        esClient.admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
+        waitForZeroCount("select count(*) from sys.shards where state <> 'STARTED'");
     }
 
     protected void ensureYellow() {
-        esClient.admin().cluster().prepareHealth().setWaitForYellowStatus().execute().actionGet();
+        waitForZeroCount("select count(*) from sys.shards where \"primary\" = true and state <> 'STARTED'");
     }
 
 }
