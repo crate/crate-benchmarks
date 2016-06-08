@@ -61,8 +61,8 @@ public class PartitionedTableBenchmark extends BenchmarkBase {
             }
         }
         execute("insert into " + TABLE_NAME + " (name, p) values (?, ?)", bulkArgs);
-        execute("refresh table " + TABLE_NAME);
         ensureGreen();
+        execute("refresh table " + TABLE_NAME);
         dataGenerated = true;
     }
 
