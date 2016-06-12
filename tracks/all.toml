@@ -1,0 +1,13 @@
+versions = [
+    "latest-nightly",
+    "0.55.0",
+    "0.54.9"
+]
+
+configurations = [
+    "default.toml"
+]
+
+specs = [
+    "../specs/insert.toml"
+]
