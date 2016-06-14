@@ -143,23 +143,32 @@ public abstract class BenchmarkBase extends RandomizedTest {
         return crateClient.bulkSql(new SQLBulkRequest(statement, bulkArgs)).actionGet(timeout.getMillis());
     }
 
-    private void waitForZeroCount(String stmt) {
-        for (int i = 1; i < 10; i++) {
-            SQLResponse r = crateClient.sql(stmt).actionGet(5, TimeUnit.SECONDS);
+    private void waitForZeroCount(String stmt, long timeout) throws RuntimeException {
+        long timeWaited = 0L;
+        long waitTime = 500L;
+        do {
+            SQLResponse r = crateClient.sql(stmt).actionGet(waitTime, TimeUnit.MILLISECONDS);
             if (((Long) r.rows()[0][0]) == 0L) {
                 return;
             }
             try {
-                Thread.sleep(i * 100);
+                Thread.sleep(waitTime);
+                timeWaited += waitTime;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-        throw new RuntimeException("waiting for zero result timed out");
+
+        } while (timeWaited <= timeout);
+
+        throw new RuntimeException("Waiting for zero result timed out");
+    }
+
+    protected void ensureGreen(long timeout) {
+        waitForZeroCount("select count(*) from sys.shards where state <> 'STARTED'", timeout);
     }
 
     protected void ensureGreen() {
-        waitForZeroCount("select count(*) from sys.shards where state <> 'STARTED'");
+        ensureGreen(5_000L);
     }
 
     @BeforeClass
