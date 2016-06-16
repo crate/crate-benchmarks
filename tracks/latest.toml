@@ -1,0 +1,12 @@
+versions = [
+    "latest-nightly"
+]
+
+configurations = [
+    "default.toml"
+]
+
+specs = [
+    "../specs/**.py",
+    "../specs/**.toml",
+]
