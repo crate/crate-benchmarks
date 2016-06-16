@@ -1,0 +1,11 @@
+aiohttp==0.21.6
+argh==0.26.2
+chardet==2.3.0
+-e git+https://github.com/mfussenegger/cr8.git@12f731ebae9f8fb183405d9164eaf29c479fd994#egg=cr8-master
+crate==0.16.0
+fake-factory==0.5.7
+python-dateutil==2.5.3
+six==1.10.0
+toml==0.9.1
+tqdm==4.7.4
+urllib3==1.16

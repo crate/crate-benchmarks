@@ -41,3 +41,19 @@ Finally
 -------
 
 Have fun!
+
+
+cr8
+===
+
+Some benchmarks / stresstests are run using `cr8
+<https://github.com/mfussenegger/cr8>`_.
+
+To install it execute::
+
+    $ python3 -m venv venv
+    $ venv/bin/python -m pip install -r requirements.txt
+
+Then to run all benchmarks::
+
+    $ venv/bin/cr8 run-track tracks/latest.toml

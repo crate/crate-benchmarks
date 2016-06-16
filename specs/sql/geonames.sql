@@ -1,0 +1,20 @@
+create table geonames (
+    elevation int,
+    name string,
+    geonameid long,
+    feature_class string,
+    feature_code string,
+    longitude double,
+    latitude double,
+    cc2 string,
+    timezone string,
+    dem string,
+    country_code string,
+    admin1_code string,
+    admin2_code string,
+    admin3_code string,
+    admin4_code string,
+    alternatenames string,
+    asciiname string,
+    population long
+) with (column_policy = 'strict', number_of_replicas = 0);
