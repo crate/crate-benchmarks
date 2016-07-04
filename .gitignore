@@ -30,4 +30,4 @@ hs_err_pid*
 /reports/
 out/
 venv/
-notebooks/.ipynb_checkpoints/
+py/notebooks/.ipynb_checkpoints/
