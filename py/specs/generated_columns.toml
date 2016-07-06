@@ -1,0 +1,24 @@
+[setup]
+statement_files = ["sql/generated_columns.sql"]
+
+     [[setup.data_files]]
+        target = "generated_columns"
+        source = "data/generated_columns.json"
+
+statements = [
+    "refresh table generated_columns"
+]
+
+[[queries]]
+statement = "select col_1 + col_2 + col_3 + col_4 + col_5 + col_6 + col_7 + col_8 + col_9 + col_10 + col_11 + col_12 + col_13 + col_14 + col_15 + col_16 + col_17 + col_18 + col_19 + col_20 as sum from generated_columns"
+concurrency = 10
+iterations = 10000
+
+[[queries]]
+statement = "update generated_columns set col_1 = col_1 + 1"
+concurrency = 10
+iterations = 10000
+
+
+[teardown]
+statements = ["drop table generated_columns"]

@@ -1,0 +1,25 @@
+CREATE TABLE IF NOT EXISTS generated_columns (
+  id INTEGER,
+  col_1 INTEGER,
+  col_2 INTEGER,
+  col_3 INTEGER,
+  col_4 INTEGER,
+  col_5 INTEGER,
+  col_6 INTEGER,
+  col_7 INTEGER,
+  col_8 INTEGER,
+  col_9 INTEGER,
+  col_10 INTEGER,
+  col_11 INTEGER,
+  col_12 INTEGER,
+  col_13 INTEGER,
+  col_14 INTEGER,
+  col_15 INTEGER,
+  col_16 INTEGER,
+  col_17 INTEGER,
+  col_18 INTEGER,
+  col_19 INTEGER,
+  col_20 INTEGER,
+  col_sum LONG GENERATED ALWAYS AS (((((((((((((((((((col_1 + col_2) + col_3) + col_4) + col_5) + col_6) + col_7) + col_8) + col_9) + col_10) + col_11) + col_12) + col_13) + col_14) + col_15) + col_16) + col_17) + col_18) + col_19) + col_20)
+)
+CLUSTERED BY (id) INTO 3 SHARDS;
