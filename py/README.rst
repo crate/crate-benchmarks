@@ -15,6 +15,10 @@ To install it execute::
     $ python3.5 -m venv venv
     $ venv/bin/python -m pip install -r requirements.txt
 
+If you want to visualize and analyze the results execute::
+
+    $ venv/bin/python -m pip install -r requirements-viz.txt
+
 To run all benchmarks::
 
     $ venv/bin/cr8 run-track tracks/latest.toml [ -r result-host ]
