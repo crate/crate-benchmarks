@@ -2,7 +2,7 @@ aiohttp==0.21.6
 argh==0.26.2
 backports.shutil-get-terminal-size==1.0.0
 chardet==2.3.0
--e git+https://github.com/mfussenegger/cr8.git@aaf04cd9d07183588c1b5085a0411eb96ca6530c#egg=cr8
+cr8==0.6.1
 crate==0.16.1
 cycler==0.10.0
 decorator==4.0.10
