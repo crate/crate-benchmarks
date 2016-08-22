@@ -1,0 +1,14 @@
+debug = true
+crate_hosts = [
+  "localhost:4200",
+]
+
+[groups]
+# grouping of statements
+# the key is used in the URL of the API to filter results by statements
+# example usage:
+# group_name = [
+#   "SELECT * FROM sys.nodes",
+#   "SELECT * FROM information_schema.sql_features",
+#   "SELECT * FROM information_schema.columns",
+# ]

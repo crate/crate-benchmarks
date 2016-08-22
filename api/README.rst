@@ -35,44 +35,66 @@ REST Endpoint::
   -> GET /result/<benchmark-group>?[&from=<isotime>&to=<isotime>]
   [{...}, {...}, ...] # Crate data format
 
-The API call will result in this query::
+The API call will result in this query:
 
-  SELECT benchmark_group as "group",
-         method,
-         build_timestamp as "timestamp",
-         build_version as "version",
-         benchmark_values['round_avg'] as "avg",
-         benchmark_values['round_stddev'] as "stddev"
-  FROM benchmark.history
-  WHERE benchmark_group = ?
-    AND build_timestamp >= ?
-    AND build_timestamp <= ?
-  ORDER BY build_timestamp, method
+.. code-block:: sql
+
+  SELECT ? as "group",
+    version_info['number'] as "version",
+    version_info['timestamp'] as "version",
+    runtime_stats['min'] as "min",
+    runtime_stats['median'] as "median",
+    runtime_stats['max'] as "max",
+    runtime_stats['stdev'] as "stdev",
+    runtime_stats['variance'] as "variance",
+    statement
+  FROM "benchmark"."history"
+  WHERE statement = ANY(?)
+    AND version_info['build_timestamp'] >= ?
+    AND version_info['build_timestamp'] <= ?
+  ORDER BY version, statement
 
 Table Schema
 ============
 
-::
+The table schema is defined by the `cr8`_ tool.
+
+.. code-block:: sql
 
   CREATE TABLE IF NOT EXISTS "benchmark"."history" (
-    "bench_run_timestamp" TIMESTAMP,
-    "benchmark_group" STRING,
-    "benchmark_values" OBJECT (STRICT) AS (
-      "benchmark_rounds" LONG,
-      "benchmark_time_total" TIMESTAMP,
-      "gc_avg" DOUBLE,
-      "gc_invocations" LONG,
-      "gc_stddev" DOUBLE,
-      "gc_time" TIMESTAMP,
-      "round_avg" DOUBLE,
-      "round_stddev" DOUBLE,
-      "warmup_rounds" LONG,
-      "warmup_time_total" TIMESTAMP
-    ),
-    "build_timestamp" TIMESTAMP,
-    "build_version" STRING,
-    "method" STRING
+      version_info OBJECT (STRICT) AS (
+          number STRING,
+          hash STRING
+      ),
+      statement STRING,
+      started TIMESTAMP,
+      ended TIMESTAMP,
+      concurrency INTEGER,
+      bulk_size INTEGER,
+      runtime_stats OBJECT (STRICT) AS (
+          avg DOUBLE,
+          min DOUBLE,
+          max DOUBLE,
+          mean DOUBLE,
+          median DOUBLE,
+          percentile OBJECT AS (
+              "50" DOUBLE,
+              "75" DOUBLE,
+              "90" DOUBLE,
+              "99" DOUBLE,
+              "99_9" DOUBLE
+          ),
+          n INTEGER,
+          variance DOUBLE,
+          stdev DOUBLE,
+          hist ARRAY(OBJECT (STRICT) AS (
+              bin DOUBLE,
+              num INTEGER
+          ))
+      )
+  ) CLUSTERED INTO 8 SHARDS WITH (
+      number_of_replicas = '1-3',
+      column_policy = 'strict'
   )
-
 
 .. _Flask: http://flask.pocoo.org

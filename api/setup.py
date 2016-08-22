@@ -1,12 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# vi: set fileencoding=utf-8
+# -*- coding: utf-8; -*-
 
 from setuptools import setup, find_packages
 
 requirements = [
     'flask',
     'flask-restful',
-    'flask-cors'
+    'flask-cors',
+    'crate',
+    'toml',
 ]
 
 setup(
@@ -16,9 +18,10 @@ setup(
     packages=find_packages('src'),
     description='Crate Benchmark API',
     install_requires=requirements,
+    namespace_packages=['crate'],
     entry_points={
         'console_scripts': [
-            'app = application:run'
+            'app = crate.benchapi.cli:run'
         ]
     }
 )
