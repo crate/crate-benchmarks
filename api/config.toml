@@ -1,0 +1,47 @@
+debug = false
+crate_hosts = [
+  "crate1:4200",
+  "crate2:4200",
+  "crate3:4200",
+]
+
+[groups]
+single_ops = [
+    "insert_single.toml",
+    "update_single.py",
+    "delete_single.py",
+    "upsert_single.py",
+]
+bulk_ops = [
+    "insert_bulk.py",
+    "update_bulk.py",
+    "delete_bulk.py",
+    "upsert_bulk.py",
+]
+in_numeric = [
+    "in_numeric.toml",
+]
+in_string = [
+    "in_string.toml",
+]
+system = [
+    "information_schema.py",
+    "sys_shards.toml",
+]
+array = [
+    "any.py",
+]
+aggregations = [
+    "count.toml",
+    "group_by.toml",
+]
+joins = [
+    "joins.toml",
+]
+partitions = [
+    "create_partitions.py",
+    "partitioned_bulk_insert.py",
+]
+generated_cols = [
+    "generated_columns.toml",
+]

@@ -1,0 +1,11 @@
+[setup]
+statements = [
+    "create table t_shards (id int, name string, value float) clustered into 1000 shards with (number_of_replicas=0)",
+]
+
+[[queries]]
+statement = "select * from sys.shards order by schema_name, table_name"
+iterations = 50000
+
+[teardown]
+statements = ["drop table t_shards"]

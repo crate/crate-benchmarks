@@ -1,0 +1,14 @@
+[setup]
+statement_files = ["sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00001*' with (compression = 'gzip')",
+    "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00002*' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+[[queries]]
+statement = '''select "sourceIP" from uservisits where "sourceIP" like '%.%.%.%' limit 10'''
+iterations = 300
+
+[teardown]
+statements = ["drop table uservisits"]

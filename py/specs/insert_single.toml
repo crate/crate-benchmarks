@@ -1,0 +1,13 @@
+[setup]
+statement_files = ["sql/crate_types.sql"]
+
+[[load_data]]
+target = "crate_types"
+source = "data/crate_types.json"
+
+bulk_size = 1
+concurrency = 1
+num_records = 10000
+
+[teardown]
+statements = ["drop table crate_types"]
