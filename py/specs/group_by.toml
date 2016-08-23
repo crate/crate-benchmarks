@@ -22,11 +22,11 @@ statement = '''select avg("adRevenue") from uservisits group by "cCode"'''
 iterations = 100
 
 [[queries]]
-statment = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
+statement = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
 iterations = 100
 
 [[queries]]
-statment = '''select arbitrary("searchWord") from uservisits group by "cCode"'''
+statement = '''select arbitrary("searchWord") from uservisits group by "cCode"'''
 iterations = 100
 
 [teardown]
