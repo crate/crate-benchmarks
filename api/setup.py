@@ -21,7 +21,8 @@ setup(
     namespace_packages=['crate'],
     entry_points={
         'console_scripts': [
-            'app = crate.benchapi.cli:run'
+            'app = crate.benchapi.cli:run',
+            'bench = crate.benchapi.scripts:main',
         ]
     }
 )

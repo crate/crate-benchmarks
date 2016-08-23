@@ -1,8 +1,8 @@
-CREATE TABLE IF NOT EXISTS "benchmark"."history" (
+CREATE TABLE IF NOT EXISTS "doc"."benchmarks" (
     version_info OBJECT (STRICT) AS (
         number STRING,
         hash STRING,
-        timestamp TIMESTAMP
+        date TIMESTAMP
     ),
     statement STRING,
     started TIMESTAMP,
@@ -25,12 +25,9 @@ CREATE TABLE IF NOT EXISTS "benchmark"."history" (
         n INTEGER,
         variance DOUBLE,
         stdev DOUBLE,
-        hist ARRAY(OBJECT (STRICT) AS (
-            bin DOUBLE,
-            num INTEGER
-        ))
+        samples ARRAY(DOUBLE)
     )
-) CLUSTERED INTO 8 SHARDS WITH (
-    number_of_replicas = '1-3',
+) CLUSTERED INTO 6 SHARDS WITH (
+    number_of_replicas = '0-2',
     column_policy = 'strict'
 );

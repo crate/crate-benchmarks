@@ -47,7 +47,7 @@ class CrateResource(Resource):
 
 class Result(CrateResource):
     """
-    Resource for benchmark.history
+    Resource for doc.benchmarks
     Supported method: GET
     """
 
@@ -96,7 +96,7 @@ class Result(CrateResource):
                            runtime_stats['stdev'] as "stdev",
                            runtime_stats['variance'] as "variance",
                            statement
-                    FROM "benchmark"."history"
+                    FROM "doc"."benchmarks"
                     {}
                     ORDER BY version, statement
                     """.format(" ".join(where_clause))
