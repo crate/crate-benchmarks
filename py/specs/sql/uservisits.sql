@@ -1,5 +1,5 @@
 create table uservisits (
-    "sourceIP" string,
+    "sourceIP" string primary key,
     "destinationURL" string,
     "visitDate" timestamp,
     "adRevenue" float,
