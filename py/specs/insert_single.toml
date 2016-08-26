@@ -1,13 +1,13 @@
 [setup]
-statement_files = ["sql/countries.sql"]
+statement_files = ["sql/crate_types.sql"]
 
 [[load_data]]
-target = "countries"
-source = "data/countries.json"
+target = "crate_types"
+source = "data/crate_types.json"
 
 bulk_size = 1
 concurrency = 1
-num_records = 1000
+num_records = 10000
 
 [teardown]
-statements = ["drop table countries"]
+statements = ["drop table crate_types"]

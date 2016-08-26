@@ -13,6 +13,7 @@ specs = [
     "../specs/like.toml",
     "../specs/joins.toml",
     "../specs/insert_single.toml",
+    "../specs/insert_bulk.py",
     "../specs/generated_columns.toml",
     "../specs/create_partitions.py",
 ]
