@@ -7,6 +7,12 @@ configurations = [
 ]
 
 specs = [
-    "../specs/**.py",
-    "../specs/**.toml",
+    "../specs/any.py",
+    "../specs/count.toml",
+    "../specs/group_by.toml",
+    "../specs/like.toml",
+    "../specs/joins.toml",
+    "../specs/insert_single.toml",
+    "../specs/generated_columns.toml",
+    "../specs/create_partitions.py",
 ]
