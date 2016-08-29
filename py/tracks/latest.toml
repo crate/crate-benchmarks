@@ -23,4 +23,5 @@ specs = [
     "../specs/information_schema.py",
     "../specs/update_single.py",
     "../specs/update_bulk.py",
+    "../specs/partitioned_bulk_insert.py"
 ]
