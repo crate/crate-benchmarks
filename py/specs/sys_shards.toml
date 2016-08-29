@@ -1,0 +1,13 @@
+[setup]
+statement_files = ["sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 's3://crate.amplab/data/tiny/uservisits/part-*' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+[[queries]]
+statement = "select * from sys.shards order by schema_name, table_name"
+iterations=50000
+
+[teardown]
+statements = ["drop table uservisits"]
