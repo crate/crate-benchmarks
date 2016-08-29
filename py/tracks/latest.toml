@@ -9,6 +9,7 @@ configurations = [
 specs = [
     "../specs/any.py",
     "../specs/in_numeric.toml",
+    "../specs/in_string.toml",
     "../specs/count.toml",
     "../specs/group_by.toml",
     "../specs/like.toml",
