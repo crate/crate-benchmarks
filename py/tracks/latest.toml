@@ -16,6 +16,7 @@ specs = [
     "../specs/joins.toml",
     "../specs/insert_single.toml",
     "../specs/insert_bulk.py",
+    "../specs/delete_single.py",
     "../specs/generated_columns.toml",
     "../specs/create_partitions.py",
     "../specs/information_schema.py",
