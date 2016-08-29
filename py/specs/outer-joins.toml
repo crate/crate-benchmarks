@@ -1,0 +1,29 @@
+[setup]
+statement_files = ["sql/employees.sql", "sql/offices.sql"]
+
+[[setup.data_files]]
+        target = "employees"
+        source = "data/employees.json"
+
+[[setup.data_files]]
+        target = "offices"
+        source = "data/offices.json"
+
+statements = [
+    "refresh table employees, offices"
+]
+
+[[queries]]
+statement = "select e.name as employee, o.name as office from employees e left join offices o on e.office_id = e.id"
+iterations = 50
+
+[[queries]]
+statement = "select e.name as employee, o.name as office from employees e right join offices o on e.office_id = e.id"
+iterations = 50
+
+[[queries]]
+statement = "select e.name as employee, o.name as office from employees e full join offices o on e.office_id = e.id"
+iterations = 50
+
+[teardown]
+statements = ["drop table employees", "drop table articles"]
