@@ -21,4 +21,6 @@ specs = [
     "../specs/generated_columns.toml",
     "../specs/create_partitions.py",
     "../specs/information_schema.py",
+    "../specs/update_single.py",
+    "../specs/update_bulk.py",
 ]
