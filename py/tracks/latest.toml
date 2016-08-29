@@ -18,4 +18,5 @@ specs = [
     "../specs/insert_bulk.py",
     "../specs/generated_columns.toml",
     "../specs/create_partitions.py",
+    "../specs/information_schema.py",
 ]
