@@ -62,7 +62,7 @@ class Result(CrateResource):
 
         if group and group in mapping:
             params.append(group)
-            where_clause.append("WHERE statement = ANY(?)")
+            where_clause.append("WHERE meta['name'] = ANY(?)")
             params.append(mapping[group])
         else:
             return self.error('No or invalid benchmark group specified')
@@ -88,20 +88,24 @@ class Result(CrateResource):
             return self.error('Timespan is limited to 365 days', status=400)
 
         sql_query = """
-                    SELECT ? as "group",
-                           version_info['number'] as "version",
-                           runtime_stats['min'] as "min",
-                           runtime_stats['median'] as "median",
-                           runtime_stats['max'] as "max",
-                           runtime_stats['stdev'] as "stdev",
-                           runtime_stats['variance'] as "variance",
+                    SELECT ? as benchmark_group,
+                           meta['name'] as spec_name,
+                           version_info['number'] as build_version,
+                           version_info['date'] as build_timestamp,
+                           runtime_stats['min'] as min,
+                           runtime_stats['median'] as median,
+                           runtime_stats['max'] as max,
+                           runtime_stats['stdev'] as stdev,
+                           runtime_stats['variance'] as variance,
                            statement
-                    FROM "doc"."benchmarks"
+                    FROM doc.benchmarks
                     {}
-                    ORDER BY version, statement
+                    ORDER BY build_timestamp, spec_name, statement
                     """.format(" ".join(where_clause))
 
         try:
+            app.logger.debug(sql_query)
+            app.logger.debug(params)
             self.cursor.execute(sql_query, tuple(params))
         except ProgrammingError as e:
             return self.error(e.error_trace, 500)
