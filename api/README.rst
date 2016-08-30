@@ -5,32 +5,55 @@ Crate Benchmark API
 Installation
 ============
 
-The `Flask`_ application is bootstrapped using buildout::
+The `Flask`_ application is bootstrapped using virtualenv::
 
-  python3.4 bootstrap.py
-  bin/buildout -N
-
-Then run the application using the ``bin/app`` command::
-
-  bin/crate --help
-  usage: app [-h] [--http-port HTTP_PORT] [--http-host HTTP_HOST]
-             [--crate-hosts CRATE_HOSTS] [--debug]
-
-  optional arguments:
-    -h, --help            show this help message and exit
-    --http-port HTTP_PORT
-                          HTTP port
-    --http-host HTTP_HOST
-                          HTTP host
-    --crate-hosts CRATE_HOSTS
-                          Crate hosts
-    --debug               Start HTTP server in debug mode
-
+  python3.4 -m venv env
+  source env/bin/activate
+  pip install --upgrade pip
+  pip install -e .
 
 Usage
 =====
 
-REST Endpoint::
+There are 2 commands: ``server`` and ``add-timestamp``::
+
+  > bench-api --help
+  usage: bench-api [-h] --conf CONF {server,add-timestamp} ...
+
+  positional arguments:
+    {server,add-timestamp}
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    --conf CONF           Path to config.tomUsage
+
+server
+------
+
+Run API that reads benchmark result data from Crate cluster::
+
+  > bench-api -conf config.toml server
+
+For help::
+
+  > bench-api server --help
+
+
+add-timestamp
+-------------
+
+Resolve timestamp of Github commit hash and store it in doc.benchmarks table::
+
+  > bench-api --conf config.toml add-timestamp
+
+For help::
+
+  > bench-api add-timestamp --help
+
+REST Endpoint
+=============
+
+::
 
   -> GET /result/<benchmark-group>?[&from=<isotime>&to=<isotime>]
   [{...}, {...}, ...] # Crate data format
