@@ -4,10 +4,10 @@
 from setuptools import setup, find_packages
 
 requirements = [
-    'flask',
-    'flask-restful',
-    'flask-cors',
-    'crate',
+    'flask==0.10.1',
+    'flask-restful==0.3.5',
+    'flask-cors==3.0.0',
+    'crate==0.16.3',
     'toml',
 ]
 

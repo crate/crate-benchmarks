@@ -33,6 +33,7 @@ venv/
 py/notebooks/.ipynb_checkpoints/
 
 # Python stuff
+env/
 bin/
 parts/
 __pycache__/
