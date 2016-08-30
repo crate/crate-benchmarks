@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS "doc"."benchmarks" (
     ended TIMESTAMP,
     concurrency INTEGER,
     bulk_size INTEGER,
+    meta OBJECT AS (
+      name STRING
+    ),
     runtime_stats OBJECT (STRICT) AS (
         avg DOUBLE,
         min DOUBLE,
