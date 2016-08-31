@@ -7,24 +7,28 @@ import argparse
 import contextlib
 from datetime import datetime
 from urllib.request import urlopen
+from urllib.error import HTTPError
 from flask.ext.restful import Api
 from .application import app, Result
 from crate.client import connect
 
 
-def _update_commit_date(cursor, row):
-    url = 'https://api.github.com/repos/crate/crate/commits/' + row[0]
+def _fetch_commit_date(commit_hash):
+    url = 'https://api.github.com/repos/crate/crate/commits/' + commit_hash
     with contextlib.closing(urlopen(url)) as resp:
         data = json.loads(resp.read().decode('utf-8'))
         date_str = data['commit']['author']['date']
         assert date_str
-        commit_date = datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ').date()
-        print('Updating hash {} with date {}'.format(row[0], commit_date))
-        cursor.execute('''
-            UPDATE benchmarks
-            SET version_info['date'] = ?
-            WHERE version_info['hash'] = ?
-        ''', (commit_date, row[0], ))
+        return datetime.strptime(date_str, '%Y-%m-%dT%H:%M:%SZ').date()
+
+
+def _update_commit_date(cursor, commit_hash, commit_date):
+    print('Updating hash {} with date {}'.format(commit_hash, commit_date))
+    cursor.execute('''
+        UPDATE benchmarks
+        SET version_info['date'] = ?
+        WHERE version_info['hash'] = ?
+    ''', (commit_date, commit_hash, ))
 
 
 def add_timestamp(ns, config={}):
@@ -39,7 +43,11 @@ def add_timestamp(ns, config={}):
             WHERE version_info['date'] IS NULL
         ''')
         for row in cur.fetchall():
-            _update_commit_date(cur, row)
+            try:
+                commit_date = _fetch_commit_date(row[0])
+                _update_commit_date(cur, row[0], commit_date)
+            except HTTPError:
+                print('Failed to update commit date for hash {}'.format(row[0]))
 
 
 def run_server(ns, config={}):
