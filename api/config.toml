@@ -20,6 +20,9 @@ update = [
     "update_single.py",
     "update_bulk.py",
 ]
+upsert = [
+    "upsert.py",
+]
 system = [
     "create_partitions.py",
     "information_schema.py",
@@ -57,4 +60,5 @@ all = [
     "sys_shards.toml",
     "update_single.py",
     "update_bulk.py",
+    "upsert.py",
 ]
