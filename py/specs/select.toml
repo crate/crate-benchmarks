@@ -1,0 +1,45 @@
+[setup]
+statement_files = ["sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-0000*' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+
+[[queries]]
+# GET
+statement = "select * from uservisits where \"sourceIP\" = '25.193.131.52'"
+iterations = 5000
+
+[[queries]]
+# MULTI_GET
+statement = """select * from uservisits where
+\"sourceIP\" = '162.122.2.75' or
+\"sourceIP\" = '25.193.131.52' or
+\"sourceIP\" = '138.43.129.246' or
+\"sourceIP\" = '180.121.127.93' or
+\"sourceIP\" = '55.104.52.130' or
+\"sourceIP\" = '97.146.166.179' or
+\"sourceIP\" = '166.53.95.120' or
+\"sourceIP\" = '211.65.2.20' or
+\"sourceIP\" = '40.65.238.81' or
+\"sourceIP\" = '113.247.109.52' or
+\"sourceIP\" = '100.8.41.251' or
+\"sourceIP\" = '99.204.192.162' or
+\"sourceIP\" = '182.165.186.253' or
+\"sourceIP\" = '180.199.220.52' or
+\"sourceIP\" = '38.9.148.224' or
+\"sourceIP\" = '251.127.173.45' or
+\"sourceIP\" = '214.48.17.113' or
+\"sourceIP\" = '174.208.34.96' or
+\"sourceIP\" = '49.53.176.22' or
+\"sourceIP\" = '5.189.189.64'"""
+iterations = 5000
+
+[[queries]]
+# High Offset
+statement = "select * from uservisits order by \"cCode\" limit 10 offset 1000000"
+iterations = 10
+
+[teardown]
+statements = ["drop table uservisits"]

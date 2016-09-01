@@ -31,3 +31,12 @@ hs_err_pid*
 out/
 venv/
 py/notebooks/.ipynb_checkpoints/
+
+# Python stuff
+env/
+bin/
+parts/
+__pycache__/
+*.egg-info/
+develop-eggs/
+.installed.cfg

@@ -10,6 +10,16 @@ statements = [
 statement = "select * from articles inner join colors on articles.id = colors.id order by articles.id limit 1000"
 iterations = 50
 
+[[queries]]
+# QAF
+statement = "select articles.name as article, colors.name as color from articles, colors order by article, color limit 10000"
+iterations = 50
+
+[[queries]]
+# QTF
+statement = "select * from articles CROSS JOIN colors limit 1 offset 10000"
+iterations = 50
+
 
 [teardown]
 statements = ["drop table articles", "drop table colors"]
