@@ -1,12 +1,12 @@
 [setup]
 statement_files = ["sql/uservisits.sql"]
-statements = ["copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-*' with (compression = 'gzip')",
+statements = ["copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-0000*' with (compression = 'gzip')",
 "refresh table uservisits"
 ]
 
 [[queries]]
 statement = "select * from uservisits where \"sourceIP\" in (?,?,?,?,?,?,?,?,?,?)"
-args = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'] 
+args = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 concurrency = 1
 iterations = 3000
 
