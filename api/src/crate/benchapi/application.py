@@ -70,7 +70,7 @@ class Result(CrateResource):
         if param_from:
             try:
                 time_from = datetime.fromtimestamp(mktime(strptime(param_from, '%Y-%m-%d')))
-                where_clause.append("AND version_info['timestamp'] >= ?")
+                where_clause.append("AND version_info['date'] >= ?")
                 params.append(param_from)
             except ValueError as err:
                 return self.error('Wrong date-time format in "from" parameter: {}'.format(err))
@@ -78,7 +78,7 @@ class Result(CrateResource):
         if param_to:
             try:
                 time_to = datetime.fromtimestamp(mktime(strptime(param_to, '%Y-%m-%d')))
-                where_clause.append("AND version_info['timestamp'] <= ?")
+                where_clause.append("AND version_info['date'] <= ?")
                 params.append(param_to)
             except ValueError as err:
                 return self.error('Wrong date-time format in "to" parameter: {}'.format(err))
