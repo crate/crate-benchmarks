@@ -32,7 +32,7 @@ server
 
 Run API that reads benchmark result data from Crate cluster::
 
-  > bench-api -conf config.toml server
+  > bench-api --conf config.toml server
 
 For help::
 
