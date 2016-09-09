@@ -25,7 +25,6 @@ class CrateResource(Resource):
 
     def __del__(self):
         self.cursor.close()
-        self.connection.close()
 
     @property
     def connection(self):
