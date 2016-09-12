@@ -1,6 +1,8 @@
-debug = true
+debug = false
 crate_hosts = [
-  "localhost:4200",
+  "crate1:4200",
+  "crate2:4200",
+  "crate3:4200",
 ]
 
 [groups]
@@ -24,7 +26,6 @@ upsert = [
     "upsert.py",
 ]
 system = [
-    "create_partitions.py",
     "information_schema.py",
     "sys_shards.toml",
 ]

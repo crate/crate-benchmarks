@@ -31,8 +31,8 @@ spec = Spec(
     queries=[
         {
             'statement': 'delete from t_delete_single where id = ?',
-            'args': ArgsGenerator(n=5),
-            'iterations': 100000,
+            'args': ArgsGenerator(n=10),
+            'iterations': 20000,
         },
     ]
 )

@@ -1,8 +1,7 @@
 [setup]
-statement_files = ["sql/uservisits.sql"]
 statements = [
-    "copy uservisits from 's3://crate.amplab/data/tiny/uservisits/part-*' with (compression = 'gzip')",
-    "refresh table uservisits"
+    "create table t_shards (id int, name string, value float) clustered into 1000 shards with (number_of_replicas=0)",
+    "insert into t_shards (id, name, value) values (1, 'foo', 0.5), (2, 'bar', 1.0), (3, 'foobar', 1.5), (4, 'baz', 2.0)",
 ]
 
 [[queries]]
@@ -10,4 +9,4 @@ statement = "select * from sys.shards order by schema_name, table_name"
 iterations = 50000
 
 [teardown]
-statements = ["drop table uservisits"]
+statements = ["drop table t_shards"]

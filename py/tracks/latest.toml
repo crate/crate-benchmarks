@@ -1,28 +1,29 @@
 versions = [
-    "latest-nightly"
+    "latest-nightly",
 ]
 
 configurations = [
-    "default.toml"
+    "default.toml",
 ]
 
 specs = [
-    "../specs/any.py",
-    "../specs/in_numeric.toml",
-    "../specs/in_string.toml",
-    "../specs/count.toml",
-    "../specs/group_by.toml",
-    "../specs/like.toml",
-    "../specs/joins.toml",
     "../specs/insert_single.toml",
     "../specs/insert_bulk.py",
     "../specs/delete_single.py",
     "../specs/delete_bulk.py",
+    "../specs/in_numeric.toml",
+    "../specs/in_string.toml",
+    "../specs/any.py",
+    "../specs/count.toml",
+    "../specs/group_by.toml",
+    "../specs/like.toml",
     "../specs/generated_columns.toml",
     "../specs/create_partitions.py",
     "../specs/information_schema.py",
+    "../specs/sys_shards.py",
     "../specs/update_single.py",
     "../specs/update_bulk.py",
     "../specs/partitioned_bulk_insert.py",
     "../specs/upsert.py",
+    #"../specs/joins.toml",
 ]
