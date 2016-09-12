@@ -10,5 +10,5 @@ create table uservisits (
    "duration" int
 ) with (
     number_of_replicas = 0,
-    refresh_interval = 0,
+    refresh_interval = 0
 );
