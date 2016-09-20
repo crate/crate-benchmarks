@@ -6,24 +6,24 @@ crate_hosts = [
 ]
 
 [groups]
-sequence = [
-    "in_numeric.toml",
-    "in_string.toml",
-]
-delete = [
-    "delete_single.py",
-    "delete_bulk.py",
-]
-insert = [
+single_ops = [
     "insert_single.toml",
-    "insert_bulk.py",
-]
-update = [
     "update_single.py",
+    "delete_single.py",
+]
+bulk_ops = [
+    "insert_bulk.py",
     "update_bulk.py",
+    "delete_bulk.py",
 ]
 upsert = [
     "upsert.py",
+]
+in_numeric = [
+    "in_numeric.toml",
+]
+in_string = [
+    "in_string.toml",
 ]
 system = [
     "information_schema.py",
@@ -42,24 +42,4 @@ joins = [
 partitions = [
     "generated_columns.toml",
     "create_partitions.py",
-]
-all = [
-    "any.py",
-    "in_numeric.toml",
-    "in_string.toml",
-    "count.toml",
-    "group_by.toml",
-    "like.toml",
-    "joins.toml",
-    "insert_single.toml",
-    "insert_bulk.py",
-    "delete_single.py",
-    "delete_bulk.py",
-    "generated_columns.toml",
-    "create_partitions.py",
-    "information_schema.py",
-    "sys_shards.toml",
-    "update_single.py",
-    "update_bulk.py",
-    "upsert.py",
 ]
