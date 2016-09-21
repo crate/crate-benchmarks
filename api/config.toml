@@ -39,6 +39,9 @@ joins = [
     "joins.toml",
 ]
 partitions = [
-    "generated_columns.toml",
     "create_partitions.py",
+    "partitioned_bulk_insert.py",
+]
+generated_cols = [
+    "generated_columns.toml",
 ]
