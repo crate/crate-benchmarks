@@ -1,16 +1,4 @@
 
-class ArgsGenerator:
-
-    def __init__(self, start, n=1):
-        self.count = start
-        self.n = n
-
-    def __call__(self):
-        x = self.count
-        self.count += self.n
-        return [x, "crate", 1]
-
-
 class BulkArgsGenerator:
 
     def __init__(self, bulk_size):
@@ -38,21 +26,7 @@ spec = Spec(
             'statement': """insert into articles (id, name, price) values ($1, $2, $3)
                             on duplicate key update
                             name = $2, price = $3""",
-            'args': [1, "crate", 1],
-            'iterations': 1000,
-        },
-        {
-            'statement': """insert into articles (id, name, price) values ($1, $2, $3)
-                            on duplicate key update
-                            name = $2, price = $3""",
-            'args': ArgsGenerator(start=1000000, n=1),
-            'iterations': 1000,
-        },
-        {
-            'statement': """insert into articles (id, name, price) values (?, ?, ?)
-                            on duplicate key update
-                            price = VALUES(price) + price""",
-            'args': [1, "crate", 1],
+            'bulk_args': BulkArgsGenerator(1000),
             'iterations': 1000,
         },
         {

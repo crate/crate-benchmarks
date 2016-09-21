@@ -24,6 +24,7 @@ specs = [
     "../specs/update_single.py",
     "../specs/update_bulk.py",
     "../specs/partitioned_bulk_insert.py",
-    "../specs/upsert.py",
+    "../specs/upsert_single.py",
+    "../specs/upsert_bulk.py",
     #"../specs/joins.toml",
 ]

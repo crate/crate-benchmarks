@@ -10,14 +10,13 @@ single_ops = [
     "insert_single.toml",
     "update_single.py",
     "delete_single.py",
+    "upsert_single.py",
 ]
 bulk_ops = [
     "insert_bulk.py",
     "update_bulk.py",
     "delete_bulk.py",
-]
-upsert = [
-    "upsert.py",
+    "upsert_bulk.py",
 ]
 in_numeric = [
     "in_numeric.toml",
