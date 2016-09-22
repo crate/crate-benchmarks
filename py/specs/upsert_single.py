@@ -1,8 +1,8 @@
 
 class ArgsGenerator:
 
-    def __init__(self, start, n=1):
-        self.count = start
+    def __init__(self, n=1):
+        self.count = 0
         self.n = n
 
     def __call__(self):
