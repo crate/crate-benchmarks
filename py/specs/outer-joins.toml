@@ -15,15 +15,15 @@ statements = [
 
 [[queries]]
 statement = "select e.name as employee, o.name as office from employees e left join offices o on e.office_id = e.id"
-iterations = 50
+iterations = 250
 
 [[queries]]
 statement = "select e.name as employee, o.name as office from employees e right join offices o on e.office_id = e.id"
-iterations = 50
+iterations = 250
 
 [[queries]]
 statement = "select e.name as employee, o.name as office from employees e full join offices o on e.office_id = e.id"
-iterations = 50
+iterations = 250
 
 [teardown]
-statements = ["drop table employees", "drop table articles"]
+statements = ["drop table employees", "drop table offices"]
