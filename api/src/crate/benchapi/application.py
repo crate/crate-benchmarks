@@ -4,7 +4,7 @@
 import json
 import toml
 from time import mktime
-from datetime import datetime, strptime
+from datetime import datetime
 from flask import Flask, g as app_globals, make_response, jsonify, request
 from flask.ext.restful import Resource
 from flask.ext.cors import CORS
