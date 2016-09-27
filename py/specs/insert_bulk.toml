@@ -5,9 +5,9 @@ statement_files = ["sql/id_int_value_str.sql"]
 target = "id_int_value_str"
 source = "data/id_int_value_str.json"
 
-bulk_size = 1
+bulk_size = 1000
 concurrency = 1
-num_records = 100000
+num_records = 1000000
 
 [teardown]
 statements = ["drop table id_int_value_str"]

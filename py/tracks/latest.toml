@@ -8,7 +8,7 @@ configurations = [
 
 specs = [
     "../specs/insert_single.toml",
-    "../specs/insert_bulk.py",
+    "../specs/insert_bulk.toml",
     "../specs/delete_single.py",
     "../specs/delete_bulk.py",
     "../specs/in_numeric.toml",

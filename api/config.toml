@@ -13,7 +13,7 @@ single_ops = [
     "upsert_single.py",
 ]
 bulk_ops = [
-    "insert_bulk.py",
+    "insert_bulk.toml",
     "update_bulk.py",
     "delete_bulk.py",
     "upsert_bulk.py",
