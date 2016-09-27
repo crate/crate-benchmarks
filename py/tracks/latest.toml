@@ -26,5 +26,6 @@ specs = [
     "../specs/partitioned_bulk_insert.py",
     "../specs/upsert_single.py",
     "../specs/upsert_bulk.py",
-    #"../specs/joins.toml",
+    "../specs/joins.toml",
+    "../specs/outer-joins.toml",
 ]
