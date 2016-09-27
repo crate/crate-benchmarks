@@ -37,6 +37,7 @@ aggregations = [
 ]
 joins = [
     "joins.toml",
+    "outer-joins.toml",
 ]
 partitions = [
     "create_partitions.py",
