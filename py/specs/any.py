@@ -1,10 +1,8 @@
 create_table_stmt = """
     create table t_any (
-      id integer primary key,
-      value string
-    ) with (
-      number_of_replicas=0
-    )
+        id integer primary key,
+        value string
+    ) with (number_of_replicas=0)
 """
 
 drop_table_stmt = """
