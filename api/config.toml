@@ -7,7 +7,7 @@ crate_hosts = [
 
 [groups]
 single_ops = [
-    "insert_single.toml",
+    "insert_single.py",
     "update_single.py",
     "delete_single.py",
     "upsert_single.py",

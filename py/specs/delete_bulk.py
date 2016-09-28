@@ -32,8 +32,8 @@ spec = Spec(
     queries=[
         {
             'statement': 'delete from t_delete_bulk where id = ?',
-            'bulk_args': BulkArgsGenerator(200),
-            'iterations': 1000,
+            'bulk_args': BulkArgsGenerator(100),
+            'iterations': 2000,
         },
     ]
 )
