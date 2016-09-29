@@ -12,20 +12,23 @@ class ArgsGenerator:
 spec = Spec(
     setup=Instructions(
         statements=[
-            """create table t_update_single (id integer primary key, value string)
-               with (number_of_replicas=0)"""
+            """create table id_int_value_str(
+                id integer primary key, 
+                value string
+            ) with (number_of_replicas=0)
+            """
         ],
         data_files=[
             {
                 'source': 'data/id_int_value_str.json',
-                'target': 't_update_single',
+                'target': 'id_int_value_str',
             }
         ]
     ),
-    teardown=Instructions(statements=["drop table t_update_single"]),
+    teardown=Instructions(statements=["drop table id_int_value_str"]),
     queries=[
         {
-            'statement': 'update t_update_single set value = ? where id = ?',
+            'statement': 'update id_int_value_str set value = ? where id = ?',
             'args': ArgsGenerator(),
             'iterations': 100000,
         },
