@@ -14,25 +14,29 @@ class ArgsGenerator:
 spec = Spec(
     setup=Instructions(
         statements=[
-            'create table t_delete_single (id integer primary key, value string) with (number_of_replicas=0)',
+            """CREATE TABLE id_int_value_str (
+                id INTEGER PRIMARY KEY, 
+                value STRING
+            ) with (number_of_replicas=0)
+            """,
         ],
         data_files=[
             {
                 'source': 'data/id_int_value_str.json',
-                'target': 't_delete_single',
+                'target': 'id_int_value_str',
             }
         ]
     ),
     teardown=Instructions(
         statements=[
-            'drop table t_delete_single',
+            'drop table id_int_value_str',
         ]
     ),
     queries=[
         {
-            'statement': 'delete from t_delete_single where id = ?',
+            'statement': 'delete from id_int_value_str where id = ?',
             'args': ArgsGenerator(n=10),
-            'iterations': 20000,
+            'iterations': 40000,
         },
     ]
 )
