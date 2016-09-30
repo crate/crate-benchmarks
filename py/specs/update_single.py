@@ -12,9 +12,9 @@ class ArgsGenerator:
 spec = Spec(
     setup=Instructions(
         statements=[
-            """create table id_int_value_str(
-                id integer primary key, 
-                value string
+            """CREATE TABLE id_int_value_str(
+                id INTEGER PRIMARY KEY, 
+                value STRING
             ) with (number_of_replicas=0)
             """
         ],
