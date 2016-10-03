@@ -120,4 +120,14 @@ The table schema is defined by the `cr8`_ tool.
       column_policy = 'strict'
   )
 
+
+Public Benchmark Service (systemd)
+==================================
+
+The public benchmark service is deployed and running as a systemd-service on
+``bench-upstream.srv1.azure.fir.io`` and can be started like::
+
+  > sudo systemctl start benchmark-crate-io.service
+
+
 .. _Flask: http://flask.pocoo.org
