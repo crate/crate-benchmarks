@@ -89,6 +89,7 @@ class Result(CrateResource):
         sql_query = """
                     SELECT ? as benchmark_group,
                            meta['name'] as spec_name,
+                           version_info as version,
                            version_info['number'] as build_version,
                            version_info['date'] as build_timestamp,
                            runtime_stats['min'] as min,
@@ -99,7 +100,7 @@ class Result(CrateResource):
                            statement
                     FROM doc.benchmarks
                     {}
-                    ORDER BY build_timestamp, spec_name, statement
+                    ORDER BY build_timestamp, build_version, spec_name, statement
                     """.format(" ".join(where_clause))
 
         try:
