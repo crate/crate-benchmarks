@@ -13,14 +13,6 @@ This folder contains benchmarks which use `cr8`_.
 
 See the README in the py folder for more details.
 
-java
-====
-
-This folder contains tests which use the Crate Java client.
-These tests are considered legacy.
-
-See the README in the java folder for more details.
-
 api
 ===
 
