@@ -1,0 +1,22 @@
+[setup]
+statement_files = ["sql/articles.sql", "sql/colors.sql"]
+statements = [
+    "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
+    "copy colors from 's3://crate-stresstest-data/join-sample-data/colors_*' with (compression = 'gzip')",
+    "refresh table articles, colors"
+]
+
+[[queries]]
+statement = "select id, name from articles union all select id, name from colors limit 100000"
+iterations = 250
+
+[[queries]]
+statement = "select id, name from articles union all select id, name from colors order by 1, 2 limit 100000"
+iterations = 250
+
+[[queries]]
+statement = "select id, name from articles union all select id, name from colors union all select id, name from articles union all select id,name from colors order by id, name limit 400000"
+iterations = 250
+
+[teardown]
+statements = ["drop table articles", "drop table colors"]
