@@ -6,17 +6,25 @@ configurations = [
     "default.toml",
 ]
 
-specs = [
+[specs]
+fixtures = [
+    "../specs/group_by.toml"
+]
+queries = [
+    "../specs/group_by.toml",
+    "../specs/like.toml",
+    "../specs/queries.toml",
+    "../specs/select.toml",
+    "../specs/in_string.toml",
+    "../specs/in_numeric.toml",
+]
+full = [
     "../specs/insert_single.py",
     "../specs/insert_bulk.toml",
     "../specs/delete_single.py",
     "../specs/delete_bulk.py",
-    "../specs/in_numeric.toml",
-    "../specs/in_string.toml",
     "../specs/any.py",
     "../specs/count.toml",
-    "../specs/group_by.toml",
-    "../specs/like.toml",
     "../specs/generated_columns.toml",
     "../specs/create_partitions.py",
     "../specs/information_schema.py",
