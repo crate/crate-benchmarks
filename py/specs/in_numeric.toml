@@ -4,6 +4,8 @@ statements = [
     "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00001*' with (compression = 'gzip')",
     "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00002*' with (compression = 'gzip')",
     "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00004*' with (compression = 'gzip')",
+    "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00004*' with (compression = 'gzip')",
+    "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00005*' with (compression = 'gzip')",
     "refresh table uservisits",
 ]
 
