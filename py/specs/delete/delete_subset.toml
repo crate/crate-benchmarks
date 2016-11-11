@@ -1,0 +1,18 @@
+[setup]
+statements = ["create table t (x int)"]
+
+    [[setup.data_files]]
+    target = "t"
+    source = "../data/t_0.json"
+    bulk_size = 10000
+    num_records = 5000000
+
+
+[[queries]]
+statement = "delete from t where x < 300"
+iterations = 1
+concurrency = 1
+
+
+[teardown]
+statements = ["drop table t"]
