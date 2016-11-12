@@ -1,15 +1,14 @@
 [setup]
-statements = ["create table t (x int)"]
+statements = ["create table t (id int, value string)"]
 
     [[setup.data_files]]
     target = "t"
-    source = "../data/t_0.json"
+    source = "../data/id_int_value_str.json"
     bulk_size = 10000
-    num_records = 5000000
 
 
 [[queries]]
-statement = "delete from t where x < 300"
+statement = "delete from t where id < 300"
 iterations = 1
 concurrency = 1
 

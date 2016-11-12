@@ -36,4 +36,8 @@ full = [
     "../specs/upsert_bulk.py",
     "../specs/joins.toml",
     "../specs/outer-joins.toml",
+    "../specs/delete/*.py",
+    "../specs/delete/*.toml",
+    "../specs/select/*.py",
+    "../specs/select/*.toml",
 ]
