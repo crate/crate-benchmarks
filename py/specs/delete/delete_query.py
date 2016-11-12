@@ -3,21 +3,21 @@ from functools import partial
 
 spec = Spec(
     setup=Instructions(
-        statements=['create table t (x int)'],
+        # no pk to use delete by query
+        statements=['create table t (id int, value string)'],
         data_files=[
             {
-                'source': '../data/t_0.json',
+                'source': '../data/id_int_value_str.json',
                 'target': 't',
                 'bulk_size': 10000,
-                'num_records': 5000000
             }
         ]
     ),
     teardown=Instructions(statements=['drop table t']),
     queries=[
         {
-            'statement': 'delete from t where x = ?',
-            'args': lambda: [random.randint(a=0, b=9999)],
+            'statement': 'delete from t where id = ?',
+            'args': lambda: [random.randint(a=0, b=999999)],
             'iterations': 5000,
             'concurrency': 100
         }
