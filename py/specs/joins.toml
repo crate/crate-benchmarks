@@ -20,6 +20,11 @@ iterations = 50
 statement = "select * from articles CROSS JOIN colors limit 1 offset 10000"
 iterations = 50
 
+[[queries]]
+# colors.id = -1 -> no match -> join condition can't match
+statement = "select * from articles inner join colors on articles.id = colors.id where colors.id = -1"
+iterations = 50
+
 
 [teardown]
 statements = ["drop table articles", "drop table colors"]
