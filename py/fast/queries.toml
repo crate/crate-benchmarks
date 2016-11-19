@@ -1,0 +1,17 @@
+[setup]
+statement_files = ["../specs/sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 's3://crate.amplab/data/tiny/uservisits/part-*' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+[[queries]]
+statement = "select * from uservisits limit 10"
+iterations = 1000
+
+[[queries]]
+statement = '''select extract(day from "visitDate"), count(*) from uservisits group by 1 order by 2 desc limit 20'''
+iterations = 500
+
+[teardown]
+statements = ["drop table uservisits"]
