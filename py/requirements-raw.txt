@@ -1,3 +1,5 @@
 jupyter
 matplotlib
 cr8
+scipy
+termcolor
