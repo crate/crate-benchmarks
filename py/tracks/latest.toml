@@ -13,6 +13,7 @@ fixtures = [
 queries = [
     "../specs/group_by.toml",
     "../specs/like.toml",
+    "../specs/regex.toml",
     "../specs/queries.toml",
     "../specs/select.toml",
     "../specs/in_string.toml",
