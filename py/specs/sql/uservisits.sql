@@ -7,7 +7,9 @@ CREATE TABLE uservisits (
    "cCode" STRING,
    "lCode" STRING,
    "searchWord" STRING,
-   "duration" INTEGER
+   "duration" INTEGER,
+   INDEX uagent_plain USING PLAIN("UserAgent")
+   -- ^^ used for regex matching ^^ --
 ) WITH (
     number_of_replicas = 0,
     refresh_interval = 0
