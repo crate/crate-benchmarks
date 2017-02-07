@@ -1,5 +1,5 @@
 [env]
-"CRATE_HEAP_SIZE" = "10g"
+"CRATE_HEAP_SIZE" = "4g"
 
 [settings]
 "bootstrap.mlockall" = true
