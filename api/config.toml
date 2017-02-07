@@ -1,8 +1,8 @@
 debug = false
 crate_hosts = [
-  "crate1:4200",
-  "crate2:4200",
-  "crate3:4200",
+  "crate01.b.fir.io:4200",
+  "crate02.b.fir.io:4200",
+  "crate03.b.fir.io:4200",
 ]
 
 [groups]
