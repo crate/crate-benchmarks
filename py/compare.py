@@ -44,7 +44,7 @@ class Diff:
 def compare_results(results_v1, results_v2):
     print('')
     print('')
-    print('# Results')
+    print('# Results (server side duration in ms)')
     v1 = results_v1[0].version_info
     v2 = results_v2[0].version_info
     print(f"V1: {v1['number']}-{v1['hash']}")
@@ -56,13 +56,15 @@ def compare_results(results_v1, results_v2):
     for k, result_v1 in results_v1.items():
         result_v2 = results_v2[k]
         diff = Diff(result_v1, result_v2)
-        print(k)
+        print(f'Q: {k[0]}')
+        print(f'C: {k[1]}')
         print(f'  {diff.mean_diff:3.2f}% mean difference. {diff.significance}')
         print('             V1  →     V2')
         print(f"  mean:  {diff.r1['mean']:7.3f} → {diff.r2['mean']:7.3f}")
         print(f"  stdev: {diff.r1['stdev']:7.3f} → {diff.r2['stdev']:7.3f}")
         print(f"  max:   {diff.r1['max']:7.3f} → {diff.r2['max']:7.3f}")
         print(f"  min:   {diff.r1['min']:7.3f} → {diff.r2['min']:7.3f}")
+        print('')
 
 
 def _run_spec(version, spec, result_hosts):
