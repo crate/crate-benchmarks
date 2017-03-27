@@ -21,6 +21,7 @@ queries = [
     "../specs/in_numeric.toml",
 ]
 full = [
+    "../specs/select/sys_select.toml",
     "../specs/insert_single.py",
     "../specs/insert_bulk.toml",
     "../specs/delete_single.py",
