@@ -1,0 +1,11 @@
+# Gives a good indication of our parser/analyzer/planner/execution-setup-overhead 
+
+[[queries]]
+statement = "select name from sys.cluster"
+iterations = 65000
+concurrency = 1
+
+[[queries]]
+statement = "select name from sys.cluster"
+iterations = 65000
+concurrency = 15
