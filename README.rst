@@ -1,25 +1,35 @@
-Crate Stresstests
-=================
+==================
+CrateDB Benchmarks
+==================
 
-This repository contains Crate Stresstests and Benchmarks.
+A collection of CrateDB_ benchmarks.
 
-Those tests and benchmarks do not seek exact, reproducable results. They are
-mostly used to compare performance between two different crate versions.
+These benchmarks do not produce exact, reproducable results. Benchmark results
+are mostly used to compare performance between two different CrateDB versions.
 
-py
-==
+Current benchmarks:
 
-This folder contains benchmarks which use `cr8`_.
+- The py_ folder contains a set of ``spec`` and ``track`` files for use with
+  cr8_.
 
-See the README in the py folder for more details.
+- The api_ folder contains a Flask_ application that reads CrateDB benchmark
+  results from Microsoft Azure.
 
-api
-===
+Help
+====
 
-This folder contains the API (Flask application) to access benchmark results
-stored in the Crate production cluster on Microsoft Azure.
+Looking for more help?
 
-See the README in the api folder for more details.
+- Check `StackOverflow`_ for common problems
+- Chat with us on `Slack`_
+- Get `paid support`_
 
-
+.. _api: api
 .. _cr8: https://github.com/mfussenegger/cr8
+.. _Crate.io: http://crate.io/
+.. _CrateDB: https://github.com/crate/crate
+.. _Flask: http://flask.pocoo.org/
+.. _paid support: https://crate.io/pricing/
+.. _py: py
+.. _Slack: https://crate.io/docs/support/slackin/
+.. _StackOverflow: https://stackoverflow.com/tags/crate
