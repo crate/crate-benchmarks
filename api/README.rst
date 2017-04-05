@@ -1,86 +1,74 @@
-===================
-Crate Benchmark API
-===================
+=============
+Benchmark API
+=============
 
-Installation
-============
+A Flask_ application that reads CrateDB benchmark results from Microsoft Azure.
 
-The `Flask`_ application is bootstrapped using virtualenv::
+Setup
+=====
 
-  python3.4 -m venv env
-  source env/bin/activate
-  pip install --upgrade pip
-  pip install -e .
+Bootstrap the application like so::
+
+    $ python3.4 -m venv env
+    $ source env/bin/activate
+    $ pip install --upgrade pip
+    $ pip install -e .
 
 Usage
 =====
 
-There are 2 commands: ``server`` and ``add-timestamp``::
+The ``bench-api`` CLI tool has two commands: ``server`` and ``add-timestamp``.
 
-  > bench-api --help
-  usage: bench-api [-h] --conf CONF {server,add-timestamp} ...
+To read data from the CrateDB cluster, use the ``server`` command::
 
-  positional arguments:
-    {server,add-timestamp}
+    $ bench-api --conf config.toml server
 
-  optional arguments:
-    -h, --help            show this help message and exit
-    --conf CONF           Path to config.tomUsage
+For help, run::
 
-server
-------
+    $ bench-api server --help
 
-Run API that reads benchmark result data from Crate cluster::
+To resolve the timestamp of a GitHub commit hash and store it in
+``doc.benchmarks`` table, run::
 
-  > bench-api --conf config.toml server
+    $ bench-api --conf config.toml add-timestamp
 
-For help::
+For help, run::
 
-  > bench-api server --help
-
-
-add-timestamp
--------------
-
-Resolve timestamp of Github commit hash and store it in doc.benchmarks table::
-
-  > bench-api --conf config.toml add-timestamp
-
-For help::
-
-  > bench-api add-timestamp --help
+    $ bench-api add-timestamp --help
 
 REST Endpoint
 =============
 
-::
+This app exposes the following REST endpoint:
 
-  -> GET /result/<benchmark-group>?[&from=<isotime>&to=<isotime>]
-  [{...}, {...}, ...] # Crate data format
+    /result/<BENCHMARK_GROUP>?[&from=<FROM_ISOTIME>&to=<TO_ISOTIME>]
 
-The API call will result in this query:
+This results in the following query:
 
 .. code-block:: sql
 
-  SELECT ? as "group",
-    version_info['number'] as "version",
-    version_info['timestamp'] as "version",
-    runtime_stats['min'] as "min",
-    runtime_stats['median'] as "median",
-    runtime_stats['max'] as "max",
-    runtime_stats['stdev'] as "stdev",
-    runtime_stats['variance'] as "variance",
-    statement
-  FROM "benchmark"."history"
-  WHERE statement = ANY(?)
-    AND version_info['build_timestamp'] >= ?
-    AND version_info['build_timestamp'] <= ?
-  ORDER BY version, statement
+      SELECT ? as "group",
+             version_info['number'] as "version",
+             version_info['timestamp'] as "version",
+             runtime_stats['min'] as "min",
+             runtime_stats['median'] as "median",
+             runtime_stats['max'] as "max",
+             runtime_stats['stdev'] as "stdev",
+             runtime_stats['variance'] as "variance",
+             statement
+        FROM "benchmark"."history"
+       WHERE statement = ANY(?)
+         AND version_info['build_timestamp'] >= ?
+         AND version_info['build_timestamp'] <= ?
+    ORDER BY version, statement
+
+Here, ``<BENCHMARK_GROUP>``, ``<FROM_ISOTIME>``, and ``<TO_ISOTIME>`` from the
+URL are substituted into the query where the ``?`` characters appear.
 
 Table Schema
 ============
 
-The table schema is defined by the `cr8`_ tool.
+The ``benchmark.history`` table schema is defined as:
 
 .. code-block:: sql
 
@@ -121,13 +109,14 @@ The table schema is defined by the `cr8`_ tool.
   )
 
 
-Public Benchmark Service (systemd)
-==================================
+Public Benchmark Service
+========================
 
-The public benchmark service is deployed and running as a systemd-service on
-``bench-upstream.srv1.azure.fir.io`` and can be started like::
+The public benchmark service runs as a systemd service on
+``bench-upstream.srv1.azure.fir.io``.c
 
-  > sudo systemctl start benchmark-crate-io.service
+You can start the service like so::
 
+    $ sudo systemctl start benchmark-crate-io.service
 
 .. _Flask: http://flask.pocoo.org

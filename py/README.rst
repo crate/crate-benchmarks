@@ -1,48 +1,42 @@
-==========
-Benchmarks
-==========
+=================
+Python Benchmarks
+=================
 
-This is a collection of ``spec`` and ``track`` files for use with `cr8
-<https://github.com/mfussenegger/cr8>`_.
-
-Please refer to the cr8 readme for more detailed usage information.
+A collection of ``spec`` and ``track`` files for use with cr8_.
 
 Usage
 =====
 
-To install it execute::
+To install, run::
 
     $ python3.6 -m venv venv
     $ venv/bin/python -m pip install -r requirements.txt
 
-To run all benchmarks::
+To run all benchmarks, do::
 
     $ venv/bin/cr8 run-track tracks/latest.toml [ -r result-host ]
 
+Visualization and Analysis
+==========================
 
-Visualization & analysis
-========================
-
-To visualize and analyze the results use a jupyter notebook::
+To visualize and analyze the results, use a jupyter_ notebook::
 
     $ jupyter notebook
 
-Examples are in the ``notebooks`` folder.
-
+Examples are in the notebooks_ folder.
 
 Scripts
 =======
 
-This folder contains additional scripts to simplify common tasks:
+Scripts to simply common tasks:
 
-compare.py
-----------
+- compare.py_: compare a spec against two different versions of CrateDB.
 
-Can be used to quickly launch two different versions and run a spec against
-both to compare them.
+- find_regressions.py_: read benchmark results from a table and compare them for
+  regressions.
 
-find_regressions.py
---------------------
-
-Script that will read benchmark results from a table and compare them, printing
-out significant regressions.
+.. _compare.py: compare.py
+.. _cr8: https://github.com/mfussenegger/cr8
+.. _find_regressions.py: find_regressions.py
+.. _jupyter: https://jupyter.org/
+.. _notebooks: notebooks
