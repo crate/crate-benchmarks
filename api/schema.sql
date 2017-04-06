@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS "doc"."benchmarks" (
         min DOUBLE,
         max DOUBLE,
         mean DOUBLE,
+        error_margin DOUBLE,
         median DOUBLE,
         percentile OBJECT AS (
             "50" DOUBLE,
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS "doc"."benchmarks" (
         stdev DOUBLE,
         samples ARRAY(DOUBLE)
     )
-) CLUSTERED INTO 6 SHARDS WITH (
-    number_of_replicas = '0-2',
+) CLUSTERED INTO 8 SHARDS WITH (
+    number_of_replicas = '1-3',
     column_policy = 'strict'
 );

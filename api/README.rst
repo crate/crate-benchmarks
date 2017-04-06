@@ -48,19 +48,21 @@ This results in the following query:
 .. code-block:: sql
 
       SELECT ? as "group",
-             version_info['number'] as "version",
-             version_info['timestamp'] as "version",
-             runtime_stats['min'] as "min",
-             runtime_stats['median'] as "median",
-             runtime_stats['max'] as "max",
-             runtime_stats['stdev'] as "stdev",
-             runtime_stats['variance'] as "variance",
+             meta['name'] as spec_name,
+             version_info as version,
+             version_info['number'] as build_version,
+             version_info['date'] as build_timestamp,
+             runtime_stats['min'] as min,
+             runtime_stats['median'] as median,
+             runtime_stats['max'] as max,
+             runtime_stats['stdev'] as stdev,
+             runtime_stats['variance'] as variance,
              statement
-        FROM "benchmark"."history"
-       WHERE statement = ANY(?)
-         AND version_info['build_timestamp'] >= ?
-         AND version_info['build_timestamp'] <= ?
-    ORDER BY version, statement
+        FROM doc.benchmarks
+       WHERE meta['name'] = ANY(?)
+         AND version_info['date'] >= ?
+         AND version_info['date'] <= ?
+    ORDER BY build_timestamp, build_version, spec_name, statement
 
 Here, ``<BENCHMARK_GROUP>``, ``<FROM_ISOTIME>``, and ``<TO_ISOTIME>`` from the
 URL are substituted into the query where the ``?`` characters appear.
@@ -72,21 +74,26 @@ The ``benchmark.history`` table schema is defined as:
 
 .. code-block:: sql
 
-  CREATE TABLE IF NOT EXISTS "benchmark"."history" (
+  CREATE TABLE IF NOT EXISTS "doc"."benchmarks" (
       version_info OBJECT (STRICT) AS (
           number STRING,
-          hash STRING
+          hash STRING,
+          date TIMESTAMP
       ),
       statement STRING,
       started TIMESTAMP,
       ended TIMESTAMP,
       concurrency INTEGER,
       bulk_size INTEGER,
+      meta OBJECT AS (
+        name STRING
+      ),
       runtime_stats OBJECT (STRICT) AS (
           avg DOUBLE,
           min DOUBLE,
           max DOUBLE,
           mean DOUBLE,
+          error_margin DOUBLE,
           median DOUBLE,
           percentile OBJECT AS (
               "50" DOUBLE,
@@ -98,10 +105,7 @@ The ``benchmark.history`` table schema is defined as:
           n INTEGER,
           variance DOUBLE,
           stdev DOUBLE,
-          hist ARRAY(OBJECT (STRICT) AS (
-              bin DOUBLE,
-              num INTEGER
-          ))
+          samples ARRAY(DOUBLE)
       )
   ) CLUSTERED INTO 8 SHARDS WITH (
       number_of_replicas = '1-3',
