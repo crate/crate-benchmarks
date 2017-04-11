@@ -2,7 +2,7 @@
 "CRATE_HEAP_SIZE" = "4g"
 
 [settings]
-"bootstrap.mlockall" = true
+"bootstrap.memory_lock" = true
 "cluster.name" = "cr8"
 "node.name" = "bench1"
 "stats.enabled" = true
