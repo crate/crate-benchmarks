@@ -1,0 +1,37 @@
+[setup]
+statement_files = ["../sql/articles.sql", "../sql/colors.sql"]
+statements = [
+    "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
+    "copy colors from 's3://crate-stresstest-data/join-sample-data/colors_*' with (compression = 'gzip')",
+    "refresh table articles, colors"
+]
+
+
+[[queries]]
+statement = '''
+select 
+    price,
+    count(*)
+from 
+    articles,
+    colors
+where
+    articles.id = colors.id
+    and colors.name like 'T%' 
+group by
+    price
+order by 
+    price desc
+limit 30
+'''
+iterations = 20
+min_version = '1.2.0'
+
+
+[[queries]]
+statement = "select count(*) from articles inner join colors on articles.id = colors.id where colors.name like 'T%'"
+iterations = 20
+
+
+[teardown]
+statements = ["drop table articles", "drop table colors"]
