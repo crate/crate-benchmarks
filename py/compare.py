@@ -8,6 +8,7 @@ compare the results
 
 import argparse
 import json
+from functools import partial
 from uuid import uuid4
 from scipy import stats
 
@@ -67,22 +68,39 @@ def compare_results(results_v1, results_v2):
         print('')
 
 
-def _run_spec(version, spec, result_hosts):
+def _run_spec(version, spec, result_hosts, env):
     crate_dir = get_crate(version)
     settings = {
         'cluster.name': str(uuid4())
     }
     results = []
-    with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings) as n:
+    with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
         n.start()
         log.result = results.append
         do_run_spec(spec, n.http_url, log, result_hosts, None)
     return results
 
 
-def run_compare(v1, v2, spec, result_hosts):
-    results_v1 = _run_spec(v1, spec, result_hosts)
-    results_v2 = _run_spec(v2, spec, result_hosts)
+def _get_best_of(r1, r2):
+    if len(r1) != len(r2):
+        raise ValueError("Both results, r1 and r2, must have the same size")
+    best_of = []
+    for i in range(len(r1)):
+        if r2[i].runtime_stats['mean'] < r1[i].runtime_stats['mean']:
+            best_of.append(r2[i])
+        else:
+            best_of.append(r1[i])
+    return best_of
+
+
+def run_compare(v1, v2, spec, result_hosts, forks, env):
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env)
+    results_v1 = run_v1()
+    results_v2 = run_v2()
+    for i in range(forks - 1):
+        results_v1 = _get_best_of(results_v1, run_v1())
+        results_v2 = _get_best_of(results_v2, run_v2())
     compare_results(results_v1, results_v2)
 
 
@@ -100,9 +118,24 @@ def main():
     )
     p.add_argument('--spec', help='path to spec file', required=True)
     p.add_argument('--result-hosts', type=str)
+    p.add_argument('--forks', type=int, default=5,
+                   help='Number of times the nodes are launched and the spec re-run')
+    p.add_argument('--env', action='append',
+                   help='Environment variable for crate nodes')
     args = p.parse_args()
+    if args.env:
+        env = dict(i.split('=') for i in args.env)
+    else:
+        env = {}
     try:
-        run_compare(args.v1, args.v2, args.spec, args.result_hosts)
+        run_compare(
+            args.v1,
+            args.v2,
+            args.spec,
+            args.result_hosts,
+            forks=max(1, args.forks),
+            env=env
+        )
     except KeyboardInterrupt:
         print('Exiting..')
 
