@@ -68,11 +68,9 @@ def compare_results(results_v1, results_v2):
         print('')
 
 
-def _run_spec(version, spec, result_hosts, env):
+def _run_spec(version, spec, result_hosts, env, settings):
     crate_dir = get_crate(version)
-    settings = {
-        'cluster.name': str(uuid4())
-    }
+    settings.setdefault('cluster.name', str(uuid4()))
     results = []
     with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
         n.start()
@@ -93,9 +91,9 @@ def _get_best_of(r1, r2):
     return best_of
 
 
-def run_compare(v1, v2, spec, result_hosts, forks, env):
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env)
+def run_compare(v1, v2, spec, result_hosts, forks, env, settings):
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env, settings)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env, settings)
     results_v1 = run_v1()
     results_v2 = run_v2()
     for i in range(forks - 1):
@@ -121,12 +119,18 @@ def main():
     p.add_argument('--forks', type=int, default=5,
                    help='Number of times the nodes are launched and the spec re-run')
     p.add_argument('--env', action='append',
-                   help='Environment variable for crate nodes')
+                   help='Environment variable for crate nodes. E.g. --env CRATE_HEAP_SIZE=2g')
+    p.add_argument('-s', '--setting', action='append',
+                   help='Crate setting. E.g. -s path.data=/tmp/c1/')
     args = p.parse_args()
     if args.env:
         env = dict(i.split('=') for i in args.env)
     else:
         env = {}
+    if args.setting:
+        settings = dict(i.split('=') for i in args.setting)
+    else:
+        settings = {}
     try:
         run_compare(
             args.v1,
@@ -134,7 +138,8 @@ def main():
             args.spec,
             args.result_hosts,
             forks=max(1, args.forks),
-            env=env
+            env=env,
+            settings=settings
         )
     except KeyboardInterrupt:
         print('Exiting..')
