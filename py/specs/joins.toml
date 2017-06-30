@@ -12,7 +12,7 @@ iterations = 50
 
 [[queries]]
 # QAF
-statement = "select articles.name as article, colors.name as color from articles, colors order by article, color limit 10000"
+statement = "select articles.name as article from articles, colors order by article limit 10000"
 iterations = 2560
 
 [[queries]]
