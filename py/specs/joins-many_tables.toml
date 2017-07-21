@@ -1,0 +1,40 @@
+[setup]
+statement_files = ["sql/10tables.sql"]
+
+# No OrderBy
+[[queries]]
+statement = '''SELECT *
+               FROM t1,t2,t3,t4,t5,t6,t7,t8,t9,t10
+              WHERE a7=9
+                AND a6=b1
+                AND b6=a5
+                AND b8=a1
+                AND a9=b2
+                AND a2=b5
+                AND b3=a7
+                AND a10=b9
+                AND a3=b10
+                AND b4=a8'''
+iterations = 10000
+
+# With OrderBy
+[[queries]]
+statement = '''SELECT *
+               FROM t1,t2,t3,t4,t5,t6,t7,t8,t9,t10
+              WHERE a7=9
+                AND a6=b1
+                AND b6=a5
+                AND b8=a1
+                AND a9=b2
+                AND a2=b5
+                AND b3=a7
+                AND a10=b9
+                AND a3=b10
+                AND b4=a8
+              ORDER BY a4, a6, a8'''
+iterations = 10000
+
+
+[teardown]
+statements = ["drop table t1", "drop table t2", "drop table t3", "drop table t4", "drop table t5",
+              "drop table t6", "drop table t7", "drop table t8", "drop table t9", "drop table t10"]

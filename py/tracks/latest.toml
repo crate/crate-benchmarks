@@ -38,6 +38,7 @@ full = [
     "../specs/upsert_single.py",
     "../specs/upsert_bulk.py",
     "../specs/joins.toml",
+    "../specs/joins-many_tables.toml",
     "../specs/select/joins_aggregations.toml",
     "../specs/outer-joins.toml",
     "../specs/delete/*.py",
