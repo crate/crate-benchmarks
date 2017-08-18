@@ -1,0 +1,18 @@
+[setup]
+statement_files = ["sql/articles.sql", "sql/colors.sql"]
+statements = [
+    "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
+    "copy colors from 's3://crate-stresstest-data/join-sample-data/colors_*' with (compression = 'gzip')",
+    "refresh table articles, colors"
+]
+
+[[queries]]
+statement = "select * from articles where id in (select id from colors where coolness > 0) limit 10000"
+iterations = 100
+
+[[queries]]
+statement = "select * from articles where id not in (select id from colors where coolness > 0) limit 10000"
+iterations = 100
+
+[teardown]
+statements = ["drop table articles", "drop table colors"]

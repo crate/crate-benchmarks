@@ -45,4 +45,5 @@ full = [
     "../specs/delete/*.toml",
     "../specs/select/*.py",
     "../specs/select/*.toml",
+    "../specs/in_subquery.toml"
 ]
