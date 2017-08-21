@@ -96,9 +96,13 @@ def run_compare(v1, v2, spec, result_hosts, forks, env, settings):
     run_v2 = partial(_run_spec, v2, spec, result_hosts, env, settings)
     results_v1 = run_v1()
     results_v2 = run_v2()
-    for i in range(forks - 1):
-        results_v1 = _get_best_of(results_v1, run_v1())
-        results_v2 = _get_best_of(results_v2, run_v2())
+    try:
+        for i in range(forks - 1):
+            results_v1 = _get_best_of(results_v1, run_v1())
+            results_v2 = _get_best_of(results_v2, run_v2())
+    except KeyboardInterrupt:
+        print("Interrupt! Will skip remaining forks")
+        pass  # skip remaining forks, but use available results
     compare_results(results_v1, results_v2)
 
 
