@@ -7,7 +7,7 @@ requirements = [
     'flask==0.10.1',
     'flask-restful==0.3.5',
     'flask-cors==3.0.0',
-    'crate==0.16.3',
+    'crate>=0.20.1',
     'toml',
 ]
 
