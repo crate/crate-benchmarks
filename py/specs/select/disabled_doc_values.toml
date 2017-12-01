@@ -1,0 +1,25 @@
+[setup]
+statement_files = ["sql/uservisits_no_doc_values.sql"]
+statements = [
+    "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00001*' with (compression = 'gzip')",
+    "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00002*' with (compression = 'gzip')",
+    "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00003*' with (compression = 'gzip')",
+    "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00004*' with (compression = 'gzip')",
+    "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00005*' with (compression = 'gzip')",
+    "refresh table uservisits_no_doc_values"
+]
+
+[[queries]]
+statement = '''select avg("adRevenue") from uservisits_no_doc_values'''
+iterations = 500
+
+[[queries]]
+statement = '''select "cCode", count(*) from uservisits_no_doc_values group by "cCode"'''
+iterations = 100
+
+[[queries]]
+statement = '''select * from uservisits_no_doc_values order by "adRevenue" limit 10'''
+iterations = 1000
+
+[teardown]
+statements = ["drop table uservisits_no_doc_values"]
