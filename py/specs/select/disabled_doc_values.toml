@@ -1,5 +1,5 @@
 [setup]
-statement_files = ["sql/uservisits_no_doc_values.sql"]
+statement_files = ["../sql/uservisits_no_doc_values.sql"]
 statements = [
     "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00001*' with (compression = 'gzip')",
     "copy uservisits_no_doc_values from 's3://crate.amplab/data/1node/uservisits/part-00002*' with (compression = 'gzip')",
