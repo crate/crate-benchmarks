@@ -10,8 +10,8 @@ statements = [
 ]
 
 [[queries]]
-statement = '''select avg("adRevenue") from uservisits_no_doc_values'''
-iterations = 500
+statement = '''select count("cCode") from uservisits_no_doc_values'''
+iterations = 50
 
 [[queries]]
 statement = '''select "cCode", count(*) from uservisits_no_doc_values group by "cCode"'''

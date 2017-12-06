@@ -2,7 +2,7 @@ CREATE TABLE uservisits_no_doc_values (
    "sourceIP" STRING PRIMARY KEY,
    "destinationURL" STRING,
    "visitDate" TIMESTAMP,
-   "adRevenue" FLOAT STORAGE WITH (columnstore = false),
+   "adRevenue" FLOAT,
    "UserAgent" STRING INDEX USING FULLTEXT,
    "cCode" STRING STORAGE WITH (columnstore = false),
    "lCode" STRING,
