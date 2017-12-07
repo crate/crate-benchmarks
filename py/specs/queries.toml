@@ -44,18 +44,6 @@ iterations = 1000
 concurrency = 20
 
 [[queries]]
-statement = "select count(*) from uservisits"
-iterations = 1000
-
-[[queries]]
-statement = '''select count("cCode") from uservisits'''
-iterations = 1000
-
-[[queries]]
-statement = '''select count("sourceIP") from uservisits'''
-iterations = 1000
-
-[[queries]]
 statement = '''select "cCode", count(*) from uservisits group by 1 order by 2 desc limit 20'''
 iterations = 500
 
