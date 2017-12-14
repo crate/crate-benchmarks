@@ -1,5 +1,5 @@
 [setup]
-statement_files = ["sql/uservisits.sql"]
+statement_files = ["../sql/uservisits.sql"]
 statements = [
     "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-0000*' with (compression = 'gzip')",
     "refresh table uservisits"
@@ -11,6 +11,10 @@ iterations = 200
 
 [[queries]]
 statement = '''select count("cCode") from uservisits'''
+iterations = 50
+
+[[queries]]
+statement = '''select count(distinct "cCode") from uservisits'''
 iterations = 50
 
 [teardown]
