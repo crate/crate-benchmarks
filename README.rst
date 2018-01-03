@@ -12,10 +12,11 @@ Current benchmarks:
 - The py_ folder contains a set of ``spec`` and ``track`` files for use with
   cr8_.
 
-.. note:
+.. note::
 
    Some benchmarks are not covering every single case but are more intended to
-   be compared against others to see differences when certain features are enabled/disabled.
+   be compared against others to see differences when certain features are
+   enabled/disabled.
 
 Help
 ====
