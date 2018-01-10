@@ -1,5 +1,33 @@
 [setup]
-statement_files = ["sql/employees.sql", "sql/offices.sql"]
+statement_files = [
+    "sql/sakila/actor.sql",
+    "sql/sakila/film_actor.sql",
+    "sql/sakila/film.sql",
+    "sql/sakila/film_category.sql",
+    "sql/sakila/category.sql",
+    "sql/employees.sql",
+    "sql/offices.sql"
+]
+
+[[setup.data_files]]
+        target = "actor"
+        source = "sql/sakila/actor.json"
+
+[[setup.data_files]]
+        target = "film_actor"
+        source = "sql/sakila/film_actor.json"
+
+[[setup.data_files]]
+        target = "film"
+        source = "sql/sakila/film.json"
+
+[[setup.data_files]]
+        target = "film_category"
+        source = "sql/sakila/film_category.json"
+
+[[setup.data_files]]
+        target = "category"
+        source = "sql/sakila/category.json"
 
 [[setup.data_files]]
         target = "employees"
@@ -10,20 +38,46 @@ statement_files = ["sql/employees.sql", "sql/offices.sql"]
         source = "data/offices.json"
 
 statements = [
-    "refresh table employees, offices"
+    "refresh table actor, film_actor, film, film_category, category, employees, offices"
 ]
 
 [[queries]]
-statement = "select e.name as employee, o.name as office from employees e left join offices o on e.office_id = e.id"
+statement = """SELECT 
+    film.film_id AS FID,
+    film.title AS title,
+    film.description AS description,
+    category.name AS category,
+    film.rental_rate AS price,
+    film.length AS length,
+    film.rating AS rating
+FROM 
+    category 
+    LEFT JOIN film_category ON category.category_id = film_category.category_id 
+    LEFT JOIN film ON film_category.film_id = film.film_id
+    JOIN film_actor ON film.film_id = film_actor.film_id
+    JOIN actor ON film_actor.actor_id = actor.actor_id;
+"""
+iterations = 500
+
+[[queries]]
+statement = "select e.name as employee, o.name as office from employees e left join offices o on e.office_id = e.id limit 50000"
 iterations = 250
 
 [[queries]]
-statement = "select e.name as employee, o.name as office from employees e right join offices o on e.office_id = e.id"
+statement = "select e.name as employee, o.name as office from employees e right join offices o on e.office_id = e.id limit 50000"
 iterations = 250
 
 [[queries]]
-statement = "select e.name as employee, o.name as office from employees e full join offices o on e.office_id = e.id"
+statement = "select e.name as employee, o.name as office from employees e full join offices o on e.office_id = e.id limit 50000"
 iterations = 250
 
 [teardown]
-statements = ["drop table employees", "drop table offices"]
+statements = [
+    "drop table actor",
+    "drop table film_actor",
+    "drop table film",
+    "drop table film_category",
+    "drop table category",
+    "drop table employees",
+    "drop table offices",
+]
