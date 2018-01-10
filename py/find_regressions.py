@@ -16,25 +16,40 @@ better alternatives.
 import argparse
 import math
 import sys
+from pprint import pprint
+from typing import NamedTuple
 from termcolor import colored
 from itertools import groupby
-from collections import namedtuple
 from datetime import datetime, timedelta
 from crate.client import connect
 from scipy import stats
 
-Diff = namedtuple('Diff', (
-    'key',
-    'prev_version',
-    'new_version',
-    'prev_p50',
-    'new_p50',
-    'diff'
-))
 
-Row = namedtuple(
-    'Row',
-    ('stmt', 'version', 'concurrency', 'ended', 'samples', 'percentile50'))
+class Key(NamedTuple):
+    concurrency: int
+    stmt: str
+    bulk_size: int
+    meta_name: str
+
+
+class Diff(NamedTuple):
+    key: Key
+    prev_version: str
+    new_version: str
+    prev_p50: float
+    new_p50: float
+    diff: float
+
+
+class Row(NamedTuple):
+    stmt: str
+    version: str
+    concurrency: int
+    bulk_size: int
+    meta_name: str
+    ended: int
+    samples: int
+    percentile50: float
 
 
 def _fetch_results(c):
@@ -45,6 +60,8 @@ select
     statement,
     version_info['number'] || '-' || substr(version_info['hash'], 0, 9) as version,
     concurrency,
+    bulk_size,
+    meta['name'] as meta_name,
     ended,
     runtime_stats['samples'],
     runtime_stats['percentile']['50'] as p50
@@ -55,6 +72,8 @@ where
 order by
     statement,
     concurrency,
+    bulk_size,
+    meta['name'],
     version_info['number'],
     version_info['hash'],
     ended desc
@@ -74,14 +93,16 @@ def find_diffs(results):
         list of diffs
 
     >>> find_diffs([
-    ...     Row('select name', '0.56.0', 1, 12345789000, [11, 12, 20], 11),
-    ...     Row('select name', '0.57.0', 1, 12345789000, [10, 10, 20], 10),
-    ...     Row('select name', '0.58.0', 1, 12345789000, [25, 25, 35], 25),
+    ...     Row('select name', '0.56.0', 1, 1, 'dummy.toml', 12345789000, [11, 12, 20], 11),
+    ...     Row('select name', '0.57.0', 1, 1, 'dummy.toml', 12345789000, [10, 10, 20], 10),
+    ...     Row('select name', '0.58.0', 1, 1, 'dummy.toml', 12345789000, [25, 25, 35], 25),
     ... ])
-    [Diff(key=(1, 'select name'), prev_version='0.57.0', new_version='0.58.0', prev_p50=10, new_p50=25, diff=150.0)]
+    [Diff(key=Key(concurrency=1, stmt='select name', bulk_size=1, meta_name='dummy.toml'), prev_version='0.57.0', new_version='0.58.0', prev_p50=10, new_p50=25, diff=150.0)]
     """
     diffs = []
-    for stmt_c, group in groupby(results, lambda r: (r.stmt, r.concurrency)):
+    for stmt_c, group in groupby(
+            results,
+            lambda r: (r.stmt, r.concurrency, r.bulk_size, r.meta_name)):
         prev = None
         for g in group:
             if not prev or prev.version == g.version:
@@ -101,7 +122,7 @@ def find_diffs(results):
             diff = (new_p50 - prev_p50) * 100 / prev_p50
             if abs(tscore) >= critical_value:
                 diffs.append(Diff(
-                    (g.concurrency, g.stmt.strip()),
+                    Key(g.concurrency, g.stmt.strip(), g.bulk_size, g.meta_name),
                     prev.version,
                     g.version,
                     prev_p50,
