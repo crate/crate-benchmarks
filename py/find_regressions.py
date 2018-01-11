@@ -16,7 +16,6 @@ better alternatives.
 import argparse
 import math
 import sys
-from pprint import pprint
 from typing import NamedTuple
 from termcolor import colored
 from itertools import groupby
@@ -50,6 +49,19 @@ class Row(NamedTuple):
     ended: int
     samples: int
     percentile50: float
+
+
+UNSTABLE_PREDICATES = [
+    # fluctuates between 8 and 18 ms
+    lambda d: (d.key.stmt.startswith('insert into articles') and d.diff < 200),
+
+    # fluctuates between 7 and 14 ms
+    lambda d: (d.key.stmt.startswith('insert into id_int_value_str') and d.diff < 100),
+
+    lambda d: (
+        d.key.stmt == 'select extract(day from "visitDate"), count(*) from uservisits group by 1 order by 2 desc limit 20' and
+        d.diff < 20),
+]
 
 
 def _fetch_results(c):
@@ -156,14 +168,24 @@ def print_diffs(diffs):
             print('')
 
 
+def is_stable(diff):
+    """Return True if the benchmark in question is expected to be stable"""
+    for is_unstable in UNSTABLE_PREDICATES:
+        if is_unstable(diff):
+            return False
+    return True
+
+
 def find_regressions(hosts):
     with connect(hosts) as conn:
         c = conn.cursor()
         results = _fetch_results(c)
         diffs = find_diffs(results)
         if diffs:
-            print_diffs(diffs)
-            sys.exit(1)
+            stable_regressions = list(filter(is_stable, diffs))
+            print_diffs(stable_regressions)
+            if any(filter(lambda d: d.diff > 10, stable_regressions)):
+                sys.exit(1)
 
 
 def main():
