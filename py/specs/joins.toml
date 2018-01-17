@@ -3,7 +3,9 @@ statement_files = ["sql/articles.sql", "sql/colors.sql"]
 statements = [
     "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
     "copy colors from 's3://crate-stresstest-data/join-sample-data/colors_*' with (compression = 'gzip')",
-    "refresh table articles, colors"
+    "refresh table articles, colors",
+    "optimize table colors with (max_num_segments = 1)",
+    "optimize table articles with (max_num_segments = 1)",
 ]
 
 [[queries]]
