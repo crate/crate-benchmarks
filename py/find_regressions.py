@@ -58,9 +58,49 @@ UNSTABLE_PREDICATES = [
     # fluctuates between 7 and 14 ms
     lambda d: (d.key.stmt.startswith('insert into id_int_value_str') and d.diff < 100),
 
+    # fluctuates up to 35% if chart history is taken into account
     lambda d: (
         d.key.stmt == 'select extract(day from "visitDate"), count(*) from uservisits group by 1 order by 2 desc limit 20' and
-        d.diff < 20),
+        d.diff < 35),
+
+    # fluctuates up to 100%
+    # declared unstable by taking chart history and mean runtimes of only 0.5 - 1.0 ms into account
+    lambda d: (d.key.stmt.startswith('select _uid from t') and d.diff < 100),
+
+    # fluctuates up to 30%
+    # declared unstable by taking chart history and low mean runtime (0.5 - 5 ms) into account
+    lambda d: (
+        d.key.stmt.startswith('select * from uservisits limit') and
+        d.key.concurrency == 1 and
+        d.diff < 30),
+
+    # fluctuates up to 40%
+    # declared unstable by taking chart history into account
+    lambda d: (
+        d.key.stmt.startswith('select * from uservisits order by "adRevenue"') and
+        d.diff < 40),
+
+    # fluctuates up to 40%
+    # declared unstable by taking chart history and mean runtimes of only 0.5 - 1.5 ms into account
+    lambda d: (d.key.stmt.startswith('select count(*) from uservisits') and d.diff < 40),
+
+    # fluctuates up to 50%
+    # declared unstable by taking chart history and low mean runtime (1.5 - 2.5 ms) into account
+    lambda d: (
+        d.key.stmt.startswith('select * from articles CROSS JOIN colors limit 1 offset 10000') and
+        d.diff < 50),
+
+    # fluctuates up to 30%
+    # declared unstable by taking chart history into account
+    # unstable for     != any(?)    = any(?)
+    lambda d: (d.key.stmt.startswith('select * from t_any where value') and d.diff < 30),
+
+    # fluctuates up to 50%
+    # declared unstable by taking chart history into account
+    # TODO: find out why NOT IN () fluctuates much stronger than IN ()
+    lambda d: (
+        d.key.stmt.startswith('select * from articles where id not in (select id from colors where coolness > 0)') and
+        d.diff < 50),
 ]
 
 
@@ -94,7 +134,7 @@ order by
 
 
 # critical value for a confidence level of 99% - assuming a normal distribution
-# See also: http://stattrek.com/statistics/dictionary.aspx?definition=critical_value 
+# See also: http://stattrek.com/statistics/dictionary.aspx?definition=critical_value
 critical_value = stats.norm.ppf([0.99])[0]
 
 
@@ -157,9 +197,9 @@ def print_diffs(diffs):
         for g in group:
             values = g._asdict()
             diff_fmt = '{0:5.1f}'
-            if g.diff > 10:
+            if g.diff > 15:
                 diff_fmt = colored(diff_fmt, 'red', attrs=['bold'])
-            elif g.diff > 5:
+            elif g.diff > 10:
                 diff_fmt = colored(diff_fmt, 'red')
             values['diff'] = diff_fmt.format(g.diff)
 
@@ -184,7 +224,7 @@ def find_regressions(hosts):
         if diffs:
             stable_regressions = list(filter(is_stable, diffs))
             print_diffs(stable_regressions)
-            if any(filter(lambda d: d.diff > 10, stable_regressions)):
+            if any(filter(lambda d: d.diff > 15, stable_regressions)):
                 sys.exit(1)
 
 

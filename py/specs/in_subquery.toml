@@ -8,11 +8,11 @@ statements = [
 
 [[queries]]
 statement = "select * from articles where id in (select id from colors where coolness > 0) limit 10000"
-iterations = 100
+iterations = 200
 
 [[queries]]
 statement = "select * from articles where id not in (select id from colors where coolness > 0) limit 10000"
-iterations = 100
+iterations = 200
 
 [teardown]
 statements = ["drop table articles", "drop table colors"]

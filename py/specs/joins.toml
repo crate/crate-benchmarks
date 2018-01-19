@@ -10,7 +10,7 @@ statements = [
 
 [[queries]]
 statement = "select * from articles inner join colors on articles.id = colors.id order by articles.id limit 1000"
-iterations = 50
+iterations = 200
 
 [[queries]]
 # QAF
@@ -20,12 +20,12 @@ iterations = 2560
 [[queries]]
 # QTF
 statement = "select * from articles CROSS JOIN colors limit 1 offset 10000"
-iterations = 50
+iterations = 200
 
 [[queries]]
 # colors.id = -1 -> no match -> join condition can't match
 statement = "select * from articles inner join colors on articles.id = colors.id where colors.id = -1"
-iterations = 50
+iterations = 150
 
 
 [teardown]
