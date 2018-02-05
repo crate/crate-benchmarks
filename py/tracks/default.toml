@@ -6,6 +6,5 @@
 "cluster.name" = "cr8"
 "node.name" = "bench1"
 "stats.enabled" = true
-"indices.store.throttle.max_bytes_per_sec" = "100mb"
 "logger._root" = "ERROR"
 "logger.http" = "INFO"
