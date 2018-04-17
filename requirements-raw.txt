@@ -3,3 +3,4 @@ matplotlib
 cr8
 scipy
 termcolor
+numpy
