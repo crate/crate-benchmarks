@@ -1,0 +1,30 @@
+[setup]
+statements = [
+    "CREATE TABLE t1(id1 int, id2 int) with (number_of_replicas=0)",
+    "CREATE TABLE t2(id1 int, id2 int) with (number_of_replicas=0)",
+]
+
+[[setup.data_files]]
+        target = "t1"
+        source = "data/t1.json"
+
+[[setup.data_files]]
+        target = "t2"
+        source = "data/t2.json"
+
+statements = [
+    "refresh table t1, 2"
+]
+
+## All rows from t1 and t2 match
+[[queries]]
+statement = "select t1.id1, t2.id1 from t1 inner join t2 on t1.id1=t2.id1 limit 2000"
+iterations = 10000
+
+## 1/5 of the rows of t1 match with t2
+[[queries]]
+statement = "select t1.id1, t2.id1 from t1 inner join t2 on t1.id1=t2.id1 and t1.id2=t2.id2 limit 2000"
+iterations = 10000
+
+[teardown]
+statements = ["drop table t1", "drop table t2"]
