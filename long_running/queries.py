@@ -37,6 +37,12 @@ def get_queries():
             'concurrency': 50,
             'duration': 2 * 60 * 60
         },
+        {
+            'statement': ('SELECT name, count(*) FROM long_running_test '
+                          'GROUP BY name ORDER BY 2 DESC LIMIT 500'),
+            'concurrency': 25,
+            'duration': 1 * 60 * 60
+        }
     )
 
 
