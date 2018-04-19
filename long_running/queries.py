@@ -24,18 +24,18 @@ def get_queries():
             'statement': 'INSERT INTO long_running_test (id, name, ts) VALUES (?, ?, ?)',
             'args': gen_args(),
             'concurrency': 50,
-            'iterations': int(1e7)
+            'duration': 4 * 60 * 60
         },
         {
             'statement': 'SELECT * FROM long_running_test ORDER BY ts DESC LIMIT 50',
             'concurrency': 50,
-            'iterations': int(1e7)
+            'duration': 1 * 60 * 60
         },
         {
             'statement': 'INSERT INTO long_running_test (id, name, ts) VALUES (?, ?, ?)',
             'bulk_args': gen_bulk_args(),
             'concurrency': 50,
-            'iterations': int(1e5)
+            'duration': 2 * 60 * 60
         },
     )
 
