@@ -27,6 +27,12 @@ def get_queries():
             'duration': 4 * 60 * 60
         },
         {
+            'statement': 'INSERT INTO lrt.t2 (id, name, ts) VALUES (?, ?, ?)',
+            'args': gen_args(),
+            'concurrency': 50,
+            'iterations': 5000
+        },
+        {
             'statement': 'SELECT * FROM lrt.t1 ORDER BY ts DESC LIMIT 50',
             'concurrency': 50,
             'duration': 1 * 60 * 60
@@ -36,6 +42,15 @@ def get_queries():
             'bulk_args': gen_bulk_args(),
             'concurrency': 50,
             'duration': 2 * 60 * 60
+        },
+        {
+            'statement': ('SELECT lrt.t1.dev, lrt.t2.name '
+                          'FROM lrt.t1 INNER JOIN lrt.t2 ON lrt.t1.dev = lrt.t2.dev'
+                          'WHERE lrt.t1.dev = CAST(random() * 127 AS BYTE) '
+                          'ORDER BY lrt.t2.name '
+                          'LIMIT 100'),
+            'concurrency': 25,
+            'duration': 1 * 60 * 60
         },
         {
             'statement': ('SELECT name, count(*) FROM lrt.t1 '
@@ -53,10 +68,20 @@ spec = Spec(
                 id STRING PRIMARY KEY,
                 name STRING,
                 hour AS date_format('%Y-%m-%d_%H', ts) PRIMARY KEY,
-                ts TIMESTAMP
-            ) CLUSTERED INTO 5 SHARDS PARTITIONED BY (hour)"""
+                ts TIMESTAMP,
+                dev AS CAST(random() * 127 AS BYTE)
+            ) CLUSTERED INTO 5 SHARDS PARTITIONED BY (hour)""",
+            """CREATE TABLE lrt.t2 (
+                id STRING PRIMARY KEY,
+                name STRING,
+                ts TIMESTAMP,
+                dev AS CAST(random() * 127 AS BYTE)
+            ) CLUSTERED INTO 5 SHARDS""",
         ]
     ),
-    teardown=Instructions(statements=["DROP TABLE lrt.t1"]),
+    teardown=Instructions(statements=[
+        "DROP TABLE lrt.t1",
+        "DROP TABLE lrt.t2",
+    ]),
     queries=get_queries()
 )
