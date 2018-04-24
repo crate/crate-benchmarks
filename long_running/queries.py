@@ -21,24 +21,24 @@ def gen_bulk_args():
 def get_queries():
     return (
         {
-            'statement': 'INSERT INTO long_running_test (id, name, ts) VALUES (?, ?, ?)',
+            'statement': 'INSERT INTO lrt.t1 (id, name, ts) VALUES (?, ?, ?)',
             'args': gen_args(),
             'concurrency': 50,
             'duration': 4 * 60 * 60
         },
         {
-            'statement': 'SELECT * FROM long_running_test ORDER BY ts DESC LIMIT 50',
+            'statement': 'SELECT * FROM lrt.t1 ORDER BY ts DESC LIMIT 50',
             'concurrency': 50,
             'duration': 1 * 60 * 60
         },
         {
-            'statement': 'INSERT INTO long_running_test (id, name, ts) VALUES (?, ?, ?)',
+            'statement': 'INSERT INTO lrt.t1 (id, name, ts) VALUES (?, ?, ?)',
             'bulk_args': gen_bulk_args(),
             'concurrency': 50,
             'duration': 2 * 60 * 60
         },
         {
-            'statement': ('SELECT name, count(*) FROM long_running_test '
+            'statement': ('SELECT name, count(*) FROM lrt.t1 '
                           'GROUP BY name ORDER BY 2 DESC LIMIT 500'),
             'concurrency': 25,
             'duration': 1 * 60 * 60
@@ -49,14 +49,14 @@ def get_queries():
 spec = Spec(
     setup=Instructions(
         statements=[
-            """CREATE TABLE long_running_test (
-                id string primary key,
-                name string,
-                hour as date_format('%Y-%m-%d_%H', ts) primary key,
-                ts timestamp
+            """CREATE TABLE lrt.t1 (
+                id STRING PRIMARY KEY,
+                name STRING,
+                hour AS date_format('%Y-%m-%d_%H', ts) PRIMARY KEY,
+                ts TIMESTAMP
             ) CLUSTERED INTO 5 SHARDS PARTITIONED BY (hour)"""
         ]
     ),
-    teardown=Instructions(statements=["DROP TABLE long_running_test"]),
+    teardown=Instructions(statements=["DROP TABLE lrt.t1"]),
     queries=get_queries()
 )
