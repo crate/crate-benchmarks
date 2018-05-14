@@ -74,36 +74,35 @@ CREATE TABLE benchmarks.query_tests (
 
 
 def rnd_expr(data_faker, columns):
-    column = random.choice(list(columns.keys()))
-    data_type = columns[column]
-    inner_type, *dims = data_type.split('_array')
-    operators = OPERATORS_BY_TYPE.get(inner_type)
-    if not operators:
-        return None
+    operators = None
+    while not operators:
+        column = random.choice(list(columns.keys()))
+        data_type = columns[column]
+        inner_type, *dims = data_type.split('_array')
+        operators = OPERATORS_BY_TYPE.get(inner_type)
     op = random.choice(operators)
     provider = data_faker.provider_for_column(column, inner_type)
     val = provider()
     if inner_type in ('string', 'ip'):
         val = f"'{val}'"
     if dims:
-        return f'{val} {op} ANY ("{column}")'
+        expr = f'{val} {op} ANY ("{column}")'
     else:
-        return f'"{column}" {op} {val}'
+        expr = f'"{column}" {op} {val}'
+    if random.randint(0, 10) == 1:
+        return f'NOT {expr}'
+    else:
+        return expr
 
 
 def generate_query(data_faker, columns, schema, table):
     expr_range = range(random.randint(1, 5))
     expressions = []
     for expr in (rnd_expr(data_faker, columns) for _ in expr_range):
-        if not expr:
-            continue
         if expressions:
             expressions.append(random.choice(CONJUNCTIONS))
         expressions.append(expr)
-    if expressions:
-        filter_ = ' '.join(expressions)
-    else:
-        filter_ = '1 = 1'
+    filter_ = ' '.join(expressions)
     return f'SELECT count(*) FROM "{schema}"."{table}" WHERE {filter_};'
 
 
