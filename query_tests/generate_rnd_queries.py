@@ -4,13 +4,19 @@
 Script that will print randomly generated queries on stdout forever
 
 Example usage:
-     python generate_rnd_queries.py | head -n 5 | cr8 timeit -r 10 -w 0
+    cr8 run-spec generate_rnd_queries.py localhost:4200
+
+or:
+
+    cr8 run-spec generate_rnd_queries.py localhost:4200 --action setup
+    python generate_rnd_queries.py | head -n 5 | cr8 timeit -r 10 -w 0
 """
 
 import random
 from argparse import ArgumentParser, RawTextHelpFormatter
 from cr8.insert_fake_data import DataFaker
 from cr8.misc import parse_table
+from cr8.bench_spec import Spec, Instructions
 from crate.client import connect
 
 
@@ -35,6 +41,36 @@ OPERATORS_BY_TYPE = {
     'string': OP_SYMBOLS,
     'boolean': OP_SYMBOLS,
 }
+
+CREATE_TABLE = '''
+CREATE TABLE benchmarks.query_tests (
+  id string primary key,
+  sboolean boolean,
+  sbyte byte,
+  sshort short,
+  sinteger integer,
+  slong long,
+  sfloat float,
+  sdouble double,
+  sstring string,
+  sip ip,
+  stimestamp timestamp,
+  sgeo_point geo_point,
+  sgeo_shape geo_shape,
+  aboolean array(boolean),
+  abyte array(byte),
+  ashort array(short),
+  ainteger array(integer),
+  along array(long),
+  afloat array(float),
+  adouble array(double),
+  astring array(string),
+  aip array(ip),
+  atimestamp array(timestamp),
+  ageo_point array(geo_point),
+  ageo_shape array(geo_shape)
+) CLUSTERED INTO 2 SHARDS WITH (number_of_replicas = 0)
+'''
 
 
 def rnd_expr(data_faker, columns):
@@ -76,6 +112,16 @@ def generate_queries(data_faker, columns, schema, table):
         yield generate_query(data_faker, columns, schema, table)
 
 
+def queries_for_spec(columns):
+    data_faker = DataFaker()
+    queries = generate_queries(data_faker, columns, 'benchmarks', 'query_tests')
+    for query in queries:
+        yield {
+            'statement': query,
+            'iterations': 50
+        }
+
+
 def get_columns(cursor, schema, table):
     """ Return a dict with column types by column name """
     cursor.execute('''
@@ -110,6 +156,41 @@ def main():
         data_faker = DataFaker()
         for query in generate_queries(data_faker, columns, schema, table):
             print(query)
+
+
+spec = Spec(
+    setup=Instructions(statements=[CREATE_TABLE]),
+    teardown=Instructions(statements=[
+        "DROP TABLE benchmarks.query_tests",
+    ]),
+    queries=queries_for_spec(columns={
+        'id': 'string',
+        'sboolean': 'boolean',
+        'sbyte': 'byte',
+        'sshort': 'short',
+        'sinteger': 'integer',
+        'slong': 'long',
+        'sfloat': 'float',
+        'sdouble': 'double',
+        'sstring': 'string',
+        'sip': 'ip',
+        'stimestamp': 'timestamp',
+        'sgeo_point': 'geo_point',
+        'sgeo_shape': 'geo_shape',
+        'aboolean': 'boolean_array',
+        'abyte': 'byte_array',
+        'ashort': 'short_array',
+        'ainteger': 'integer_array',
+        'along': 'long_array',
+        'afloat': 'float_array',
+        'adouble': 'double_array',
+        'astring': 'string_array',
+        'aip': 'ip_array',
+        'atimestamp': 'timestamp_array',
+        'ageo_point': 'geo_point_array',
+        'ageo_shape': 'geo_shape_array',
+    })
+)
 
 
 if __name__ == "__main__":
