@@ -86,11 +86,15 @@ def rnd_expr(data_faker, columns):
     val = provider()
     if inner_type in ('string', 'ip'):
         val = f"'{val}'"
-    if dims:
-        expr = f'{val} {op} ANY ("{column}")'
+
+    if random.randint(1, 20) == 1:
+        expr = f'{column} IS NULL'
     else:
-        expr = f'"{column}" {op} {val}'
-    if random.randint(0, 10) == 1:
+        if dims:
+            expr = f'{val} {op} ANY ("{column}")'
+        else:
+            expr = f'"{column}" {op} {val}'
+    if random.randint(1, 10) == 1:
         return f'NOT {expr}'
     else:
         return expr
