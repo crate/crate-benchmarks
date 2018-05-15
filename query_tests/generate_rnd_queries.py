@@ -20,6 +20,21 @@ from cr8.bench_spec import Spec, Instructions
 from crate.client import connect
 
 
+def within(data_faker, column, provider):
+    arg2 = provider()
+    return f"WITHIN({column}, '{arg2}')"
+
+
+def distance(data_faker, column, provider):
+    other_point = provider()
+    dist = data_faker.fake.random_int(min=1, max=4000)
+    return f"DISTANCE({column}, {other_point}) < {dist}"
+
+
+def every(x):
+    return random.randint(1, x) == 1
+
+
 CONJUNCTIONS = ('AND', 'OR')
 OP_SYMBOLS = (
     '=',
@@ -40,6 +55,10 @@ OPERATORS_BY_TYPE = {
     'ip': OP_SYMBOLS,
     'string': OP_SYMBOLS,
     'boolean': OP_SYMBOLS,
+}
+SCALARS_BY_TYPE = {
+    'geo_shape': (within,),
+    'geo_point': (distance,),
 }
 
 CREATE_TABLE = '''
@@ -74,27 +93,36 @@ CREATE TABLE benchmarks.query_tests (
 IMPORT_DATA = "COPY benchmarks.query_tests FROM 's3://crate-stresstest-data/query-tests/*.json'"
 
 
-def rnd_expr(data_faker, columns):
-    operators = None
-    while not operators:
-        column = random.choice(list(columns.keys()))
-        data_type = columns[column]
-        inner_type, *dims = data_type.split('_array')
-        operators = OPERATORS_BY_TYPE.get(inner_type)
-    op = random.choice(operators)
-    provider = data_faker.provider_for_column(column, inner_type)
+def expr_with_operator(column, provider, inner_type, dimensions):
     val = provider()
     if inner_type in ('string', 'ip'):
         val = f"'{val}'"
-
-    if random.randint(1, 20) == 1:
-        expr = f'{column} IS NULL'
+    operators = OPERATORS_BY_TYPE.get(inner_type)
+    if not operators or every(20):
+        return f'{column} IS NULL'
     else:
-        if dims:
-            expr = f'{val} {op} ANY ("{column}")'
+        op = random.choice(operators)
+        if dimensions:
+            return f'{val} {op} ANY ("{column}")'
         else:
-            expr = f'"{column}" {op} {val}'
-    if random.randint(1, 10) == 1:
+            return f'"{column}" {op} {val}'
+
+
+def rnd_expr(data_faker, columns):
+    inner_type = None
+    while not inner_type:
+        column = random.choice(list(columns.keys()))
+        data_type = columns[column]
+        inner_type, *dimensions = data_type.split('_array')
+    provider = data_faker.provider_for_column(column, inner_type)
+    use_scalar = every(15)
+    scalars = SCALARS_BY_TYPE.get(data_type, [])
+    scalar = scalars and random.choice(scalars)
+    if use_scalar and scalar:
+        expr = scalar(data_faker, column, provider)
+    else:
+        expr = expr_with_operator(column, provider, inner_type, dimensions)
+    if every(10):
         return f'NOT {expr}'
     else:
         return expr
