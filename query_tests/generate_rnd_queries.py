@@ -71,6 +71,7 @@ CREATE TABLE benchmarks.query_tests (
   ageo_shape array(geo_shape)
 ) CLUSTERED INTO 2 SHARDS WITH (number_of_replicas = 0)
 '''
+IMPORT_DATA = "COPY benchmarks.query_tests FROM 's3://crate-stresstest-data/query-tests/*.json'"
 
 
 def rnd_expr(data_faker, columns):
@@ -158,7 +159,7 @@ def main():
 
 
 spec = Spec(
-    setup=Instructions(statements=[CREATE_TABLE]),
+    setup=Instructions(statements=[CREATE_TABLE, IMPORT_DATA]),
     teardown=Instructions(statements=[
         "DROP TABLE benchmarks.query_tests",
     ]),
