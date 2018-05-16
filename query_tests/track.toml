@@ -1,0 +1,10 @@
+versions = [
+  "latest-nightly",
+]
+
+configurations = [
+  "./2g.toml"
+]
+
+[specs]
+full = ["./generate_rnd_queries.py"]
