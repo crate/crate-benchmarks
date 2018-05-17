@@ -103,6 +103,11 @@ def geohash(data_faker, column, provider):
 # Numbers functions
 
 
+def any(data_faker, column, provider):
+    gen_array = random.sample(range(0, 10), 6)
+    return f"{column} = ANY({gen_array})"
+
+
 def abs(data_faker, column, provider):
     return generate_one_param_function_clause('ABS', column, provider)
 
@@ -268,7 +273,7 @@ SCALARS_BY_TYPE = {
     'geo_shape': (within, intersects,),
     'geo_point': (distance, latitude, longitude, geohash,),
     'number': (abs, ceil, floor, ln, log, power, crate_random, round, sqrt, sin,
-               asin, cos, acos, tan, atan,),
+               asin, cos, acos, tan, atan, any,),
     'string': (concat, format, substr, char_length, bit_length, octet_length,
                lower, upper, sha1, md5, match,),
     'timestamp': (date_trunc, date_format,),
