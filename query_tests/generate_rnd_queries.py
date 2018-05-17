@@ -97,7 +97,8 @@ def longitude(data_faker, column, provider):
 
 
 def geohash(data_faker, column, provider):
-    return generate_one_param_function_clause('GEOHASH', column, provider)
+    other_point = provider()
+    return f"GEOHASH({column}) != GEOHASH({other_point})"
 
 # Numbers functions
 
