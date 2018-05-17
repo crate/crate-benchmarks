@@ -1,2 +1,7 @@
 [env]
 "CRATE_HEAP_SIZE" = "2g"
+
+[settings]
+"path.logs" = "./crate-logs/"
+"path.data" = "./crate-data/"
+"discovery.type" = "single-node"
