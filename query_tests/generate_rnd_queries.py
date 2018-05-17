@@ -212,7 +212,7 @@ def md5(data_faker, column, provider):
 def match(data_faker, column, provider):
     match_value = provider()
     match_type = random.choice(MATCH_TYPES)
-    return f"MATCH({column}, match_value) USING {match_type}"
+    return f"MATCH({column}, '{match_value}') USING {match_type}"
 
 
 # Date/Time functions
