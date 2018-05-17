@@ -207,6 +207,13 @@ def sha1(data_faker, column, provider):
 def md5(data_faker, column, provider):
     return generate_one_param_function_clause('MD5', column, provider)
 
+
+def match(data_faker, column, provider):
+    match_value = provider()
+    match_type = random.choice(MATCH_TYPES)
+    return f"MATCH({column}, match_value) USING {match_type}"
+
+
 # Date/Time functions
 
 
@@ -262,9 +269,16 @@ SCALARS_BY_TYPE = {
     'number': (abs, ceil, floor, ln, log, power, crate_random, round, sqrt, sin,
                asin, cos, acos, tan, atan,),
     'string': (concat, format, substr, char_length, bit_length, octet_length,
-               lower, upper, sha1, md5,),
+               lower, upper, sha1, md5, match,),
     'timestamp': (date_trunc, date_format,),
 }
+MATCH_TYPES = (
+    'best_fields',
+    'most_fields',
+    'cross_fields',
+    'phrase',
+    'phrase_prefix'
+)
 
 CREATE_TABLE = '''
 CREATE TABLE benchmarks.query_tests (
