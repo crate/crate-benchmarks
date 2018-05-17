@@ -321,15 +321,15 @@ def rnd_expr(data_faker, columns):
         inner_type, *dimensions = data_type.split('_array')
     provider = data_faker.provider_for_column(column, inner_type)
     use_scalar = every(15)
-    if type_is_number(data_type):
-        scalars = SCALARS_BY_TYPE.get('number', [])
-    else:
-        scalars = SCALARS_BY_TYPE.get(data_type, [])
-    scalar = scalars and random.choice(scalars)
-    if use_scalar and scalar:
-        expr = scalar(data_faker, column, provider)
-    else:
-        expr = expr_with_operator(column, provider, inner_type, dimensions)
+    #if type_is_number(data_type):
+    #    scalars = SCALARS_BY_TYPE.get('number', [])
+    #else:
+    #    scalars = SCALARS_BY_TYPE.get(data_type, [])
+    #scalar = scalars and random.choice(scalars)
+    #if use_scalar and scalar:
+    #    expr = scalar(data_faker, column, provider)
+    #else:
+    expr = expr_with_operator(column, provider, inner_type, dimensions)
     if every(10):
         return f'NOT {expr}'
     else:
@@ -399,7 +399,12 @@ def main():
 
 
 spec = Spec(
-    setup=Instructions(statements=[CREATE_TABLE, IMPORT_DATA]),
+    setup=Instructions(statements=[
+        CREATE_TABLE,
+        IMPORT_DATA,
+        "refresh table benchmarks.query_tests",
+        "optimize table benchmarks.query_tests"
+    ]),
     teardown=Instructions(statements=[
         "DROP TABLE benchmarks.query_tests",
     ]),
