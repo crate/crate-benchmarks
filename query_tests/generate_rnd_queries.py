@@ -223,7 +223,7 @@ def date_trunc(data_faker, column, provider):
 
 
 def date_format(data_faker, column, provider):
-    return generate_one_param_function_clause('DATE_FORMAT', column, provider)
+    return f"DATE_FORMAT('%e', {column}) != 13"
 
 
 def every(x):
