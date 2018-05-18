@@ -220,6 +220,10 @@ def match(data_faker, column, provider):
     return f"MATCH({column}, '{match_value}') USING {match_type}"
 
 
+def regexp_matches(data_faker, column, provider):
+    compare_to = provider()
+    return f"REGEXP_MATCHES({column}, '(a(.+)z)') = ['{compare_to}']"
+
 # Date/Time functions
 
 
@@ -275,7 +279,7 @@ SCALARS_BY_TYPE = {
     'number': (abs, ceil, floor, ln, log, power, crate_random, round, sqrt, sin,
                asin, cos, acos, tan, atan, any,),
     'string': (concat, format, substr, char_length, bit_length, octet_length,
-               lower, upper, sha1, md5, match,),
+               lower, upper, sha1, md5, match, regexp_matches,),
     'timestamp': (date_trunc, date_format,),
 }
 MATCH_TYPES = (
