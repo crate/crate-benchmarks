@@ -125,7 +125,7 @@ def ln(data_faker, column, provider):
 
 
 def log(data_faker, column, provider):
-    return generate_one_param_function_clause('LOG', column, provider)
+    return generate_one_param_function_clause('LOG', column, provider, True)
 
 
 def power(data_faker, column, provider):
