@@ -243,14 +243,24 @@ def type_is_number(type):
     return type in NUMBER_TYPES
 
 
+def operator_expresion_generator(op):
+    def gen(column, val, dimensions, quote_val=False):
+        if quote_val:
+            val = f"'{val}'"
+        if dimensions:
+            return f'{val} {op} ANY ("{column}")'
+        return f'"{column}" {op} {val}'
+    return gen
+
+
 CONJUNCTIONS = ('AND', 'OR')
 OP_SYMBOLS = (
-    '=',
-    '!=',
-    '>',
-    '>=',
-    '<',
-    '<=',
+    (operator_expresion_generator('=')),
+    (operator_expresion_generator('!=')),
+    (operator_expresion_generator('>')),
+    (operator_expresion_generator('>=')),
+    (operator_expresion_generator('<')),
+    (operator_expresion_generator('<=')),
 )
 NUMBER_TYPES = (
     'byte',
@@ -260,6 +270,46 @@ NUMBER_TYPES = (
     'float',
     'double',
 )
+
+
+def regex_generator(op):
+    def gen(column, val, dimensions, quote_val=False):
+        if dimensions:
+            # regex operations are not supported with arrays so use an equality
+            # expression with ANY instead
+            val = f"'{val}'"
+            return f'{val} = ANY ("{column}")'
+        regexp_val = f"'.*{val}.*'"
+        return f'"{column}" {op} {regexp_val}'
+    return gen
+
+
+LIKE_WILDCARDS = (
+        '',
+        '%',
+        '_',
+)
+
+
+def like_generator(op):
+    def gen(column, val, dimensions, quote_val=False):
+        if dimensions:
+            # LIKE is not supported with arrays so use an equality expression
+            # with ANY instead
+            val = f"'{val}'"
+            return f'{val} = ANY ("{column}")'
+        prefix = random.choice(LIKE_WILDCARDS)
+        suffix = random.choice(LIKE_WILDCARDS)
+        like_val = f"'{prefix}{val}{suffix}'"
+        return f'"{column}" {op} {like_val}'
+    return gen
+
+
+ADDITIONAL_STRING_OPERATORS = (
+        (regex_generator('~')),
+        (like_generator('LIKE')),
+)
+
 OPERATORS_BY_TYPE = {
     'byte': OP_SYMBOLS,
     'short': OP_SYMBOLS,
@@ -269,7 +319,7 @@ OPERATORS_BY_TYPE = {
     'double': OP_SYMBOLS,
     'timestamp': OP_SYMBOLS,
     'ip': OP_SYMBOLS,
-    'string': OP_SYMBOLS,
+    'string': OP_SYMBOLS + ADDITIONAL_STRING_OPERATORS,
     'boolean': OP_SYMBOLS,
 }
 SCALARS_BY_TYPE = {
@@ -324,17 +374,13 @@ IMPORT_DATA = "COPY benchmarks.query_tests FROM 's3://crate-stresstest-data/quer
 
 def expr_with_operator(column, provider, inner_type, dimensions):
     val = provider()
-    if inner_type in ('string', 'ip'):
-        val = f"'{val}'"
     operators = OPERATORS_BY_TYPE.get(inner_type)
     if not operators or every(20):
         return f'{column} IS NULL'
     else:
         op = random.choice(operators)
-        if dimensions:
-            return f'{val} {op} ANY ("{column}")'
-        else:
-            return f'"{column}" {op} {val}'
+        expr = op(column, val, dimensions, inner_type in ('string', 'ip'))
+        return expr
 
 
 def rnd_expr(data_faker, columns):
