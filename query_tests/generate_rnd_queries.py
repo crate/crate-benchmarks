@@ -13,6 +13,7 @@ or:
 """
 
 import random
+import time
 from argparse import ArgumentParser, RawTextHelpFormatter
 from cr8.insert_fake_data import DataFaker
 from cr8.misc import parse_table
@@ -417,8 +418,9 @@ def generate_query(data_faker, columns, schema, table):
     return f'SELECT count(*) FROM "{schema}"."{table}" WHERE {filter_};'
 
 
-def generate_queries(data_faker, columns, schema, table):
-    while True:
+def generate_queries(data_faker, columns, schema, table, duration):
+    start = time.time()
+    while (time.time() - start < duration):
         yield generate_query(data_faker, columns, schema, table)
 
 
@@ -454,6 +456,9 @@ def parse_args():
         '--hosts', metavar='HOSTS', type=str, default='localhost:4200')
     p.add_argument(
         '--table', metavar='TABLE', type=str, default='benchmarks.query_tests')
+    p.add_argument(
+        '--duration', metavar='DURATION', type=int, help='duration in seconds',
+        default=28800)
     return p.parse_args()
 
 
@@ -464,7 +469,7 @@ def main():
         cursor = conn.cursor()
         columns = get_columns(cursor, schema, table)
         data_faker = DataFaker()
-        for query in generate_queries(data_faker, columns, schema, table):
+        for query in generate_queries(data_faker, columns, schema, table, args.duration):
             print(query)
 
 
