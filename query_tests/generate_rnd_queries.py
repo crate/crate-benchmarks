@@ -426,7 +426,8 @@ def generate_queries(data_faker, columns, schema, table, duration):
 
 def queries_for_spec(columns):
     data_faker = DataFaker()
-    queries = generate_queries(data_faker, columns, 'benchmarks', 'query_tests')
+    queries = generate_queries(
+        data_faker, columns, 'benchmarks', 'query_tests', duration=8 * 60 * 60)
     for query in queries:
         yield {
             'statement': query,
