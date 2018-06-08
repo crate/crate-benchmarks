@@ -14,6 +14,7 @@ or:
 
 import random
 import time
+from functools import partial
 from argparse import ArgumentParser, RawTextHelpFormatter
 from cr8.insert_fake_data import DataFaker
 from cr8.misc import parse_table
@@ -73,7 +74,7 @@ def array_difference(data_faker, column, provider):
 
 def within(data_faker, column, provider):
     arg2 = provider()
-    return f"WITHIN({column}, '{arg2}')"
+    return f"WITHIN({column}, {arg2})"
 
 
 def distance(data_faker, column, provider):
@@ -218,12 +219,12 @@ def md5(data_faker, column, provider):
 def match(data_faker, column, provider):
     match_value = provider()
     match_type = random.choice(MATCH_TYPES)
-    return f"MATCH({column}, '{match_value}') USING {match_type}"
+    return f"MATCH({column}, {match_value}) USING {match_type}"
 
 
 def regexp_matches(data_faker, column, provider):
     compare_to = provider()
-    return f"REGEXP_MATCHES({column}, '(a(.+)z)') = ['{compare_to}']"
+    return f"REGEXP_MATCHES({column}, '(a(.+)z)') = [{compare_to}]"
 
 # Date/Time functions
 
@@ -245,9 +246,7 @@ def type_is_number(type):
 
 
 def operator_expresion_generator(op):
-    def gen(column, val, dimensions, quote_val=False):
-        if quote_val:
-            val = f"'{val}'"
+    def gen(column, val, dimensions):
         if dimensions:
             return f'{val} {op} ANY ("{column}")'
         return f'"{column}" {op} {val}'
@@ -278,8 +277,8 @@ def regex_generator(op):
         if dimensions:
             # regex operations are not supported with arrays so use an equality
             # expression with ANY instead
-            val = f"'{val}'"
             return f'{val} = ANY ("{column}")'
+        val = val.strip("'")  # strings are pre-quoted
         regexp_val = f"'.*{val}.*'"
         return f'"{column}" {op} {regexp_val}'
     return gen
@@ -297,10 +296,10 @@ def like_generator(op):
         if dimensions:
             # LIKE is not supported with arrays so use an equality expression
             # with ANY instead
-            val = f"'{val}'"
             return f'{val} = ANY ("{column}")'
         prefix = random.choice(LIKE_WILDCARDS)
         suffix = random.choice(LIKE_WILDCARDS)
+        val = val.strip("'")  # strings are pre-quoted
         like_val = f"'{prefix}{val}{suffix}'"
         return f'"{column}" {op} {like_val}'
     return gen
@@ -371,6 +370,7 @@ CREATE TABLE benchmarks.query_tests (
 ) CLUSTERED INTO 2 SHARDS WITH (number_of_replicas = 0, refresh_interval = 0)
 '''
 IMPORT_DATA = "COPY benchmarks.query_tests FROM 's3://crate-stresstest-data/query-tests/*.json'"
+TYPE_REQUIRES_QUOTES = ('string', 'ip', 'geo_shape')
 
 
 def expr_with_operator(column, provider, inner_type, dimensions):
@@ -380,8 +380,12 @@ def expr_with_operator(column, provider, inner_type, dimensions):
         return f'{column} IS NULL'
     else:
         op = random.choice(operators)
-        expr = op(column, val, dimensions, inner_type in ('string', 'ip'))
+        expr = op(column, val, dimensions)
         return expr
+
+
+def add_quotes(f):
+    return f"'{f()}'"
 
 
 def rnd_expr(data_faker, columns):
@@ -391,6 +395,8 @@ def rnd_expr(data_faker, columns):
         data_type = columns[column]
         inner_type, *dimensions = data_type.split('_array')
     provider = data_faker.provider_for_column(column, inner_type)
+    if inner_type in TYPE_REQUIRES_QUOTES:
+        provider = partial(add_quotes, provider)
     use_scalar = every(15)
     if type_is_number(data_type):
         scalars = SCALARS_BY_TYPE.get('number', [])
