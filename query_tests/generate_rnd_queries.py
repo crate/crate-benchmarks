@@ -286,9 +286,9 @@ def regex_generator(op):
 
 
 LIKE_WILDCARDS = (
-        '',
-        '%',
-        '_',
+    '',
+    '%',
+    '_',
 )
 
 
@@ -307,8 +307,8 @@ def like_generator(op):
 
 
 ADDITIONAL_STRING_OPERATORS = (
-        (regex_generator('~')),
-        (like_generator('LIKE')),
+    (regex_generator('~')),
+    (like_generator('LIKE')),
 )
 
 OPERATORS_BY_TYPE = {
