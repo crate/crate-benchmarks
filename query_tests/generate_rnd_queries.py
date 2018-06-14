@@ -433,7 +433,7 @@ def generate_queries(data_faker, columns, schema, table, duration):
 def queries_for_spec(columns):
     data_faker = DataFaker()
     queries = generate_queries(
-        data_faker, columns, 'benchmarks', 'query_tests', duration=8 * 60 * 60)
+        data_faker, columns, 'benchmarks', 'query_tests', duration=5 * 60 * 60)
     for query in queries:
         yield {
             'statement': query,
@@ -465,7 +465,7 @@ def parse_args():
         '--table', metavar='TABLE', type=str, default='benchmarks.query_tests')
     p.add_argument(
         '--duration', metavar='DURATION', type=int, help='duration in seconds',
-        default=28800)
+        default=18000)
     return p.parse_args()
 
 
