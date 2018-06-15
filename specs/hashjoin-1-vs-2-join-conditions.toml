@@ -13,7 +13,7 @@ statements = [
         source = "data/t2.json"
 
 statements = [
-    "refresh table t1, 2"
+    "refresh table t1, t2"
 ]
 
 ## All rows from t1 and t2 match
