@@ -48,4 +48,6 @@ full = [
     "../specs/in_subquery.toml",
     "../specs/union.toml",
     "../specs/select/disabled_doc_values.toml",
+    "../specs/ignore3vl.toml",
+
 ]

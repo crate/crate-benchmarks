@@ -1,0 +1,27 @@
+[setup]
+statements = [
+    "create table t(a array(integer))",
+    "copy t from 's3://crate.benchmark.data/table_int_array.json.gz' with (compression = 'gzip')",
+    "refresh table t"
+]
+
+# 250k out of 1m rows match
+[[queries]]
+statement = "select count(*) from t where not 101 = any(a)"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t where not ignore3vl(101 = any(a))"
+iterations = 500
+
+# No rows match
+[[queries]]
+statement = "select count(*) from t where not 50 = any(a)"
+iterations = 500
+
+[[queries]]
+statement = "select count(*) from t where not ignore3vl(50 = any(a))"
+iterations = 2000
+
+[teardown]
+statements = ["drop table t"]
