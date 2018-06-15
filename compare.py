@@ -30,7 +30,9 @@ class Diff:
     def __init__(self, r1, r2):
         self.r1 = r1 = r1.runtime_stats
         self.r2 = r2 = r2.runtime_stats
-        ind = stats.ttest_ind(r1['samples'], r2['samples'])
+        r1_samples = r1.get('samples', [r1['mean']])
+        r2_samples = r2.get('samples', [r2['mean']])
+        ind = stats.ttest_ind(r1_samples, r2_samples)
         tscore = ind.statistic
         self.mean_diff = perc_diff(r1['mean'], r2['mean'])
         if abs(tscore) >= CRITICAL_VALUE:
@@ -60,9 +62,9 @@ def compare_results(results_v1, results_v2):
         print(f'Q: {k[0]}')
         print(f'C: {k[1]}')
         print(f'  {diff.mean_diff:3.2f}% mean difference. {diff.significance}')
-        print('             V1  →     V2')
+        print('             V1    →   V2')
         print(f"  mean:  {diff.r1['mean']:7.3f} → {diff.r2['mean']:7.3f}")
-        print(f"  stdev: {diff.r1['stdev']:7.3f} → {diff.r2['stdev']:7.3f}")
+        print(f"  stdev: {diff.r1.get('stdev', 0):7.3f} → {diff.r2.get('stdev', 0):7.3f}")
         print(f"  max:   {diff.r1['max']:7.3f} → {diff.r2['max']:7.3f}")
         print(f"  min:   {diff.r1['min']:7.3f} → {diff.r2['min']:7.3f}")
         print('')
