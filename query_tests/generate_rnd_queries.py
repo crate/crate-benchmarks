@@ -408,7 +408,10 @@ def rnd_expr(data_faker, columns):
     else:
         expr = expr_with_operator(column, provider, inner_type, dimensions)
     if every(10):
-        return f'NOT {expr}'
+        if every(2):
+            return f'NOT {expr}'
+        else:
+            return f'NOT ignore3vl({expr})'
     else:
         return expr
 
