@@ -1,0 +1,14 @@
+[setup]
+statements = [
+    "create table array_access (a array(long))",
+    "copy array_access from 's3://crate.benchmark.data/table_long_array_access.json.gz' with (compression = 'gzip')",
+    "refresh table array_access"
+]
+
+# 1 out of 1m rows match
+[[queries]]
+statement = "select a from array_access where a[1] = 101"
+iterations = 10
+
+[teardown]
+statements = ["drop table array_access"]
