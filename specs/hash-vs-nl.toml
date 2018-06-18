@@ -1,0 +1,32 @@
+[setup]
+statements = [
+	"CREATE TABLE t1(id1 int, id2 int) with (number_of_replicas=0)",
+	"CREATE TABLE t2(id1 int, id2 int) with (number_of_replicas=0)",
+]
+
+[[setup.data_files]]
+	target = "t1"
+	source = "data/t1_1m.json"
+
+[[setup.data_files]]
+	target = "t2"
+	source = "data/t2_1m.json"
+statements = [
+	"refresh table t1, 2"
+]
+
+[[queries]]
+statement = "select count(*) from t1 inner join t2 on t1.id1=t2.id1"
+iterations = 100
+
+[[queries]]
+statement = "select count(*) from t1 inner join t2 on t1.id1=t2.id1 and t1.id2=t2.id2"
+iterations = 100
+
+[[queries]]
+statement = "select t1.id1, t2.id1 from t1 inner join t2 on t1.id1=t2.id1 order by t1.id1 limit 100000" 
+iterations = 50
+
+[teardown]
+statements = ["drop table t1", "drop table t2"]
+
