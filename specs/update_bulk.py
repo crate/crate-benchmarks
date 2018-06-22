@@ -13,7 +13,7 @@ class BulkArgsGenerator:
 spec = Spec(
     setup=Instructions(
         statements=[
-            """create table t_update_bulk (id integer primary key, value string)
+            """create table t_update_bulk (id integer, value string)
                with (number_of_replicas=0)"""
         ],
         data_files=[

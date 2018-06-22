@@ -26,6 +26,11 @@ statement = '''select avg("adRevenue") from uservisits group by "cCode"'''
 iterations = 100
 
 [[queries]]
+statement = '''select avg("adRevenue") from uservisits group by "cCode"'''
+concurrency = 25
+iterations = 100
+
+[[queries]]
 statement = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
 iterations = 100
 
