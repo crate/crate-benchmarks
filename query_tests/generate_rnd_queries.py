@@ -40,7 +40,7 @@ def generate_arc_function_clause(function_name, column, provider):
     """
 
     compare_to = provider()
-    return f"{function_name}({column}/({column} + random())) != {compare_to}"
+    return f"{function_name}(round({column}/({column} + random()))) != {compare_to}"
 
 
 def generate_two_param_function_clause(function_name,
