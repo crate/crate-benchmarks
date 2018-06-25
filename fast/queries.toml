@@ -6,11 +6,18 @@ statements = [
 ]
 
 [[queries]]
+statement = "select 1"
+concurrency = 25
+iterations = 1000
+
+[[queries]]
 statement = "select * from uservisits limit 10"
+concurrency = 25
 iterations = 1000
 
 [[queries]]
 statement = '''select extract(day from "visitDate"), count(*) from uservisits group by 1 order by 2 desc limit 20'''
+concurrency = 5
 iterations = 500
 
 [teardown]
