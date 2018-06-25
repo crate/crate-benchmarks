@@ -28,7 +28,7 @@ def generate_one_param_function_clause(function_name,
                                        abs_column=False):
     compare_to = provider()
     if abs_column is True:
-        return f"{function_name}(abs({column})) != {compare_to}"
+        return f"{function_name}(abs({column}/{column} + 1)) != {compare_to}"
     else:
         return f"{function_name}({column}) != {compare_to}"
 
