@@ -28,9 +28,19 @@ def generate_one_param_function_clause(function_name,
                                        abs_column=False):
     compare_to = provider()
     if abs_column is True:
-        return f"{function_name}(abs({column}/({column} + 1))) != {compare_to}"
+        return generate_function_with_positive_first_param(function_name, column, compare_to)
     else:
         return f"{function_name}({column}) != {compare_to}"
+
+
+def generate_function_with_positive_first_param(function_name, column, compare_to, second_arg=None):
+    """ Some functions only work for positive values (eg sqrt, log).
+    This generates the function call that makes sure its argument is positive.
+    """
+    if second_arg is None:
+        return f"({column}>0 AND {function_name}(abs(({column}-{column}) + ({column}/{column}))) != {compare_to})"
+    else:
+        return f"({column}>0 AND {function_name}(abs(({column}-{column}) + ({column}/{column})),{second_arg}) != {compare_to})"
 
 
 def generate_arc_function_clause(function_name, column, provider):
@@ -50,7 +60,7 @@ def generate_two_param_function_clause(function_name,
     second_arg = provider()
     compare_to = provider()
     if abs_column is True:
-        return f"{function_name}(abs({column}/({column} + 1)), {second_arg}) != {compare_to}"
+        return generate_function_with_positive_first_param(function_name, column, compare_to, second_arg)
     else:
         return f"{function_name}({column}, {second_arg}) != {compare_to}"
 
@@ -112,7 +122,7 @@ def any(data_faker, column, provider):
 
 def abs(data_faker, column, provider):
     compare_to = provider()
-    return f"abs({column}/({column} + 1)) != {compare_to}"
+    return f"({column}>0 AND abs(({column}-{column}) + ({column}/{column})) != {compare_to})"
 
 def ceil(data_faker, column, provider):
     return generate_one_param_function_clause('CEIL', column, provider)
