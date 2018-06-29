@@ -53,10 +53,10 @@ UNSTABLE_PREDICATES = [
 ]
 
 
-def _fetch_results(c):
+def _fetch_results(c, table):
     twenty_days_ago = (datetime.today() - timedelta(days=20))
     twenty_days_ago = int(twenty_days_ago.timestamp() * 1000)
-    c.execute('''
+    c.execute(f'''
 select
     statement,
     version_info['number'] || '-' || substr(version_info['hash'], 0, 9) as version,
@@ -68,7 +68,7 @@ select
     runtime_stats['min'] as minimum,
     runtime_stats['percentile']['50'] as p50
 from
-    benchmarks
+    {table}
 where
     ended >= ?
 order by
@@ -151,10 +151,10 @@ def is_stable(diff):
     return True
 
 
-def find_regressions(hosts):
+def find_regressions(hosts, table):
     with connect(hosts) as conn:
         c = conn.cursor()
-        results = _fetch_results(c)
+        results = _fetch_results(c, table)
         diffs = find_diffs(results)
         if diffs:
             stable_regressions = list(filter(is_stable, diffs))
@@ -166,8 +166,9 @@ def find_regressions(hosts):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument('--hosts', type=str, default='localhost:4200')
+    p.add_argument('--table', type=str, default='benchmarks')
     args = p.parse_args()
-    find_regressions(hosts=args.hosts)
+    find_regressions(hosts=args.hosts, table=args.table)
 
 
 if __name__ == "__main__":
