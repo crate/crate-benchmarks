@@ -16,21 +16,21 @@ spec = Spec(
     setup=Instructions(
         statement_files=["sql/articles.sql"],
         statements=[
-            "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
-            "refresh table articles"
+            "copy articles_bulk_insert from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
+            "refresh table articles_bulk_insert"
         ]
     ),
-    teardown=Instructions(statements=["drop table articles"]),
+    teardown=Instructions(statements=["drop table articles_bulk_insert"]),
     queries=[
         {
-            'statement': """insert into articles (id, name, price) values ($1, $2, $3)
+            'statement': """insert into articles_bulk_insert (id, name, price) values ($1, $2, $3)
                             on duplicate key update
                             name = $2, price = $3""",
             'bulk_args': BulkArgsGenerator(1000),
             'iterations': 1000,
         },
         {
-            'statement': """insert into articles (id, name, price) values (?, ?, ?)
+            'statement': """insert into articles_insert (id, name, price) values (?, ?, ?)
                             on duplicate key update
                             price = VALUES(price) + price""",
             'bulk_args': BulkArgsGenerator(1000),
