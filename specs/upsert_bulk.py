@@ -14,7 +14,7 @@ class BulkArgsGenerator:
 
 spec = Spec(
     setup=Instructions(
-        statement_files=["sql/articles.sql"],
+        statement_files=["sql/articles_bulk_insert.sql"],
         statements=[
             "copy articles_bulk_insert from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
             "refresh table articles_bulk_insert"
@@ -30,7 +30,7 @@ spec = Spec(
             'iterations': 1000,
         },
         {
-            'statement': """insert into articles_insert (id, name, price) values (?, ?, ?)
+            'statement': """insert into articles_bulk_insert (id, name, price) values (?, ?, ?)
                             on duplicate key update
                             price = VALUES(price) + price""",
             'bulk_args': BulkArgsGenerator(1000),
