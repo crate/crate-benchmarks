@@ -124,6 +124,7 @@ def abs(data_faker, column, provider):
     compare_to = provider()
     return f"({column}>0 AND abs(({column}-{column}) + ({column}/{column})) != {compare_to})"
 
+
 def ceil(data_faker, column, provider):
     compare_to = data_faker.provider_for_column("byte", "byte")()
     return f"({column}!=0 AND CEIL({column}/{column}) != {compare_to})"
@@ -407,7 +408,11 @@ def rnd_expr(data_faker, columns):
         column = random.choice(list(columns.keys()))
         data_type = columns[column]
         inner_type, *dimensions = data_type.split('_array')
-    provider = data_faker.provider_for_column(column, inner_type)
+    if inner_type == 'timestamp':
+        def provider():
+            return data_faker.fake.unix_time() * 1000
+    else:
+        provider = data_faker.provider_for_column(column, inner_type)
     if inner_type in TYPE_REQUIRES_QUOTES:
         provider = partial(add_quotes, provider)
     use_scalar = every(15)
