@@ -11,26 +11,22 @@ statements = [
 
 [[queries]]
 statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
+concurrency = 15
 iterations = 100
 
 [[queries]]
 statement = '''select min("adRevenue") from uservisits group by "cCode"'''
-iterations = 100
-
-[[queries]]
-statement = '''select max("adRevenue") from uservisits group by "cCode"'''
+concurrency = 15
 iterations = 100
 
 [[queries]]
 statement = '''select avg("adRevenue") from uservisits group by "cCode"'''
+concurrency = 15
 iterations = 100
 
 [[queries]]
 statement = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
-iterations = 100
-
-[[queries]]
-statement = '''select arbitrary("searchWord") from uservisits group by "cCode"'''
+concurrency = 5
 iterations = 100
 
 [teardown]
