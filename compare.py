@@ -77,7 +77,13 @@ def _run_spec(version, spec, result_hosts, env, settings):
     with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
         n.start()
         log.result = results.append
-        do_run_spec(spec, n.http_url, log, result_hosts, None)
+        do_run_spec(
+            spec=spec,
+            benchmark_hosts=n.http_url,
+            log=log,
+            result_hosts=result_hosts,
+            sample_mode='reservoir'
+        )
     return results
 
 
