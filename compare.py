@@ -35,6 +35,7 @@ class Diff:
         ind = stats.ttest_ind(r1_samples, r2_samples)
         tscore = ind.statistic
         self.mean_diff = perc_diff(r1['mean'], r2['mean'])
+        self.median_diff = perc_diff(r1['percentile']['50'], r2['percentile']['50'])
         if abs(tscore) >= CRITICAL_VALUE:
             self.significance = 'Likely significant'
         else:
@@ -61,12 +62,15 @@ def compare_results(results_v1, results_v2):
         diff = Diff(result_v1, result_v2)
         print(f'Q: {k[0]}')
         print(f'C: {k[1]}')
-        print(f'  {diff.mean_diff:3.2f}% mean difference. {diff.significance}')
-        print('             V1    →   V2')
-        print(f"  mean:  {diff.r1['mean']:7.3f} → {diff.r2['mean']:7.3f}")
-        print(f"  stdev: {diff.r1.get('stdev', 0):7.3f} → {diff.r2.get('stdev', 0):7.3f}")
-        print(f"  max:   {diff.r1['max']:7.3f} → {diff.r2['max']:7.3f}")
-        print(f"  min:   {diff.r1['min']:7.3f} → {diff.r2['min']:7.3f}")
+        print(f'| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |')
+        print(f"|   V1    |   {diff.r1['mean']:10.3f} ± {diff.r1['stdev']:8.3f} | {diff.r1['min']:10.3f} | {diff.r1['percentile']['50']:10.3f} | {diff.r1['percentile']['75']:10.3f} | {diff.r1['max']:10.3f} |")
+        print(f"|   V2    |   {diff.r2['mean']:10.3f} ± {diff.r2['stdev']:8.3f} | {diff.r2['min']:10.3f} | {diff.r2['percentile']['50']:10.3f} | {diff.r2['percentile']['75']:10.3f} | {diff.r2['max']:10.3f} |")
+
+        mean_prefix = '+' if diff.r1['mean'] < diff.r2['mean'] else '-'
+        median_prefix = '+' if diff.r1['percentile']['50'] < diff.r2['percentile']['50'] else '-'
+        print(f'mean:   {mean_prefix}{diff.mean_diff:7.2f}%')
+        print(f'median: {median_prefix}{diff.median_diff:7.2f}%')
+        print(f'{diff.significance}')
         print('')
 
 
@@ -87,27 +91,13 @@ def _run_spec(version, spec, result_hosts, env, settings):
     return results
 
 
-def _get_best_of(r1, r2):
-    if len(r1) != len(r2):
-        raise ValueError("Both results, r1 and r2, must have the same size")
-    best_of = []
-    for i in range(len(r1)):
-        if r2[i].runtime_stats['mean'] < r1[i].runtime_stats['mean']:
-            best_of.append(r2[i])
-        else:
-            best_of.append(r1[i])
-    return best_of
-
-
 def run_compare(v1, v2, spec, result_hosts, forks, env, settings):
     run_v1 = partial(_run_spec, v1, spec, result_hosts, env, settings)
     run_v2 = partial(_run_spec, v2, spec, result_hosts, env, settings)
-    results_v1 = run_v1()
-    results_v2 = run_v2()
-    for i in range(forks - 1):
-        results_v1 = _get_best_of(results_v1, run_v1())
-        results_v2 = _get_best_of(results_v2, run_v2())
-    compare_results(results_v1, results_v2)
+    for _ in range(forks):
+        results_v1 = run_v1()
+        results_v2 = run_v2()
+        compare_results(results_v1, results_v2)
 
 
 def main():
