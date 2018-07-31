@@ -10,39 +10,11 @@ import argparse
 import json
 from functools import partial
 from uuid import uuid4
-from scipy import stats
 
 from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
 from cr8.log import Logger
-
-
-# critical value for a confidence level of 99% - assuming a normal distribution
-# See also: http://stattrek.com/statistics/dictionary.aspx?definition=critical_value
-CRITICAL_VALUE = stats.norm.ppf([0.99])[0]
-
-
-def perc_diff(v1, v2):
-    return (abs(v1 - v2) / ((v1 + v2) / 2)) * 100
-
-
-class Diff:
-    def __init__(self, r1, r2):
-        self.r1 = r1 = r1.runtime_stats
-        self.r2 = r2 = r2.runtime_stats
-        r1_samples = r1.get('samples', [r1['mean']])
-        r2_samples = r2.get('samples', [r2['mean']])
-        ind = stats.ttest_ind(r1_samples, r2_samples)
-        tscore = ind.statistic
-        self.mean_diff = perc_diff(r1['mean'], r2['mean'])
-        self.median_diff = perc_diff(r1['percentile']['50'], r2['percentile']['50'])
-        if abs(tscore) >= CRITICAL_VALUE:
-            self.significance = 'Likely significant'
-        else:
-            self.significance = 'Likely NOT significant'
-
-    def __str__(self):
-        return json.dumps(self.__dict__)
+from compare_measures import perc_diff, Diff, print_diff
 
 
 def compare_results(results_v1, results_v2):
@@ -59,19 +31,9 @@ def compare_results(results_v1, results_v2):
     results_v2 = {(r.statement, r.concurrency): r for r in results_v2}
     for k, result_v1 in results_v1.items():
         result_v2 = results_v2[k]
-        diff = Diff(result_v1, result_v2)
         print(f'Q: {k[0]}')
         print(f'C: {k[1]}')
-        print(f'| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |')
-        print(f"|   V1    |   {diff.r1['mean']:10.3f} ± {diff.r1['stdev']:8.3f} | {diff.r1['min']:10.3f} | {diff.r1['percentile']['50']:10.3f} | {diff.r1['percentile']['75']:10.3f} | {diff.r1['max']:10.3f} |")
-        print(f"|   V2    |   {diff.r2['mean']:10.3f} ± {diff.r2['stdev']:8.3f} | {diff.r2['min']:10.3f} | {diff.r2['percentile']['50']:10.3f} | {diff.r2['percentile']['75']:10.3f} | {diff.r2['max']:10.3f} |")
-
-        mean_prefix = '+' if diff.r1['mean'] < diff.r2['mean'] else '-'
-        median_prefix = '+' if diff.r1['percentile']['50'] < diff.r2['percentile']['50'] else '-'
-        print(f'mean:   {mean_prefix}{diff.mean_diff:7.2f}%')
-        print(f'median: {median_prefix}{diff.median_diff:7.2f}%')
-        print(f'{diff.significance}')
-        print('')
+        print_diff(Diff(result_v1.runtime_stats, result_v2.runtime_stats))
 
 
 def _run_spec(version, spec, result_hosts, env, settings):

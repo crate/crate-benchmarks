@@ -40,7 +40,9 @@ Scripts
 
 Scripts to simply common tasks:
 
-- compare.py_: compare a spec against two different versions of CrateDB.
+- compare_measures.py_: compare measures read from two files
+
+- compare_run.py_: compare a spec against two different versions of CrateDB.
 
 - find_regressions.py_: read benchmark results from a table and compare them for
   regressions.
@@ -55,9 +57,9 @@ over quantity here.
 Benchmarks should be written so that they represent common execution paths or
 common use cases that differ a lot from other cases.
 
-When writing new benchmarks it's also advisable to run `compare.py` once, where
-``--v1 == --v2`` to get a feeling of the stability of the benchmark. If there
-is a large difference, the benchmark should be tuned as it would be too
+When writing new benchmarks it's also advisable to run ``compare_run.py`` once,
+where ``--v1 == --v2`` to get a feeling of the stability of the benchmark. If
+there is a large difference, the benchmark should be tuned as it would be too
 unreliable to spot real differences.
 
 
@@ -71,7 +73,7 @@ Looking for more help?
 - Get `paid support`_
 
 
-.. _compare.py: compare.py
+.. _compare_measures.py: compare_measures.py
 .. _cr8: https://github.com/mfussenegger/cr8
 .. _find_regressions.py: find_regressions.py
 .. _jupyter: https://jupyter.org/
