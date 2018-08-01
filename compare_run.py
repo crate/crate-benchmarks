@@ -7,14 +7,13 @@ compare the results
 """
 
 import argparse
-import json
 from functools import partial
 from uuid import uuid4
 
 from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
 from cr8.log import Logger
-from compare_measures import perc_diff, Diff, print_diff
+from compare_measures import Diff, print_diff
 
 
 def compare_results(results_v1, results_v2):
