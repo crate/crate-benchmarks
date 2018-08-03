@@ -1,9 +1,9 @@
 [setup]
 statements = [
-  "create table t090 (x long) clustered into 1 shards",
-  "create table t075 (x long) clustered into 1 shards",
-  "create table t050 (x long) clustered into 1 shards",
-  "create table t025 (x long) clustered into 1 shards"
+  "create table t090 (x long) clustered into 5 shards",
+  "create table t075 (x long) clustered into 5 shards",
+  "create table t050 (x long) clustered into 5 shards",
+  "create table t025 (x long) clustered into 5 shards"
 ]
 
   [[setup.data_files]]
