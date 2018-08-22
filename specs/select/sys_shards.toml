@@ -1,0 +1,29 @@
+[setup]
+statements = [
+    "create table t_shards (id int, name string, value float) clustered into 100 shards with (number_of_replicas=0)",
+    "create blob table b_t_shards clustered into 100 shards with (number_of_replicas=0)",
+    "create table p_t_shards (id int, p1 string, p2 int) clustered into 100 shards partitioned by (p1, p2) with (number_of_replicas=0)",
+    "insert into p_t_shards (id, p1, p2) values (1, '1', 12), (2, '2', 22)",
+    "refresh table p_t_shards",
+]
+
+[[queries]]
+statement = "select * from sys.shards order by schema_name, table_name"
+iterations = 2000
+
+[[queries]]
+statement = "select * from sys.shards order by schema_name, table_name"
+iterations = 10000
+concurrency = 15
+
+[[queries]]
+statement = "select * from sys.shards"
+iterations = 2000
+
+[[queries]]
+statement = "select * from sys.shards"
+iterations = 10000
+concurrency = 15
+
+[teardown]
+statements = ["drop table t_shards", "drop table p_t_shards", "drop blob table b_t_shards"]

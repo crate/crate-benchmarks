@@ -1,4 +1,9 @@
-# Gives a good indication of our parser/analyzer/planner/execution-setup-overhead 
+# Gives a good indication of our parser/analyzer/planner/execution-setup-overhead/collect-expressions
+[setup]
+statements = [
+    # create some shards so sys.allocations will contain some rows
+    "create table t_shards (id int, name string, value float) clustered into 100 shards with (number_of_replicas=0)",
+]
 
 [[queries]]
 statement = "select name from sys.cluster"
@@ -8,4 +13,58 @@ concurrency = 1
 [[queries]]
 statement = "select name from sys.cluster"
 iterations = 65000
+gitconcurrency = 15
+
+[[queries]]
+statement = "select * from sys.nodes"
+iterations = 10000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.nodes"
+iterations = 30000
 concurrency = 15
+
+[[queries]]
+statement = "select * from sys.allocations"
+iterations = 10000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.health"
+iterations = 10000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.jobs"
+iterations = 20000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.operations"
+iterations = 20000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.jobs_metrics"
+iterations = 10000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.checks"
+iterations = 10000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.node_checks"
+iterations = 10000
+concurrency = 1
+
+[[queries]]
+statement = "select * from sys.summits"
+iterations = 2000
+concurrency = 1
+
+
+[teardown]
+statements = ["drop table t_shards"]
