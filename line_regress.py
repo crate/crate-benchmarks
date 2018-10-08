@@ -34,5 +34,6 @@ def main():
         result = 1 if (result == 1 or lineregress.slope >= 0.1) else 0
     sys.exit(result)
 
+
 if __name__ == "__main__":
     main()

@@ -9,6 +9,8 @@ benchmark results
 import argparse
 import math
 import sys
+import numpy as np
+from scipy import stats
 from typing import NamedTuple
 from termcolor import colored
 from itertools import groupby
@@ -30,6 +32,7 @@ class Diff(NamedTuple):
     prev_val: float
     new_val: float
     diff: float
+    linregress_slope: float
 
 
 class Row(NamedTuple):
@@ -103,6 +106,9 @@ def find_diffs(results):
         group = list(group)
         if len(group) < 3:
             continue
+        x = np.array(range(len(group)))
+        y = np.array([r.percentile50 or r.minimum for r in group])
+        linregress = stats.linregress(x, y)
         largest_min = max((r.minimum for r in group[:-1]))
         worst_result = next((r for r in group if r.minimum == largest_min))
         last_row = list(group)[-1]
@@ -115,7 +121,8 @@ def find_diffs(results):
             last_row.version,
             largest_min,
             last_row.minimum,
-            diff
+            diff,
+            linregress.slope
         ))
     return diffs
 
@@ -139,7 +146,8 @@ def print_diffs(diffs):
             values['diff'] = diff_fmt.format(g.diff)
 
             print(('  {prev_version} → {new_version}\n'
-                   '  {diff}%   {prev_val:.3f} → {new_val:.3f}').format(**values))
+                   '  {diff}%   {prev_val:.3f} → {new_val:.3f}\n'
+                   '  linregress slope: {linregress_slope:.3f}').format(**values))
             print('')
 
 
@@ -157,9 +165,11 @@ def find_regressions(hosts, table):
         results = _fetch_results(c, table)
         diffs = find_diffs(results)
         if diffs:
-            stable_regressions = list(filter(is_stable, diffs))
-            print_diffs(stable_regressions)
-            if any(filter(lambda d: d.diff > 15, stable_regressions)):
+            stable_regressions = filter(is_stable, diffs)
+            likely_regressions = [d for d in stable_regressions
+                                  if d.linregress_slope > 1.00]
+            print_diffs(likely_regressions)
+            if any(filter(lambda d: d.diff > 15, likely_regressions)):
                 sys.exit(1)
 
 
