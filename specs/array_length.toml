@@ -1,0 +1,69 @@
+[setup]
+statements = [
+  "create table t_arrays_biased_empty (xs array(integer))",
+  "create table t_arrays_biased_one_element (xs array(integer))",
+  "create table t_arrays_biased_5_elements (xs array(integer))",
+  "create table t_arrays_even (xs array(integer))",
+  "copy t_arrays_biased_empty from 's3://crate.benchmark.data/t_arrays_biased_empty.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_biased_one_element from 's3://crate.benchmark.data/t_arrays_biased_one_element.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_biased_5_elements from 's3://crate.benchmark.data/t_arrays_biased_5_elements.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_even from 's3://crate.benchmark.data/t_arrays_even.json.gz' with (compression = 'gzip')",
+]
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_empty where array_length(xs, 1) > 0"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_empty where array_length(xs, 1) >= 1"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_empty where array_length(xs, 1) > 1"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_one_element where array_length(xs, 1) > 0"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_one_element where array_length(xs, 1) >= 1"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_one_element where array_length(xs, 1) > 1"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_5_elements where array_length(xs, 1) > 0"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_5_elements where array_length(xs, 1) >= 1"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_5_elements where array_length(xs, 1) > 1"
+iterations = 200
+
+
+[[queries]]
+statement = "select count(*) from t_arrays_even where array_length(xs, 1) > 0"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_even where array_length(xs, 1) >= 1"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_even where array_length(xs, 1) > 1"
+iterations = 200
+
+
+[teardown]
+statements = [
+  "drop table t_arrays_biased_empty",
+  "drop table t_arrays_biased_one_element",
+  "drop table t_arrays_biased_5_elements",
+  "drop table t_arrays_even",
+]
