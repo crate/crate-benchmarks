@@ -35,6 +35,12 @@ spec = Spec(
             "statement": "insert into id_int_value_str (id, value) (select col1, col2 from unnest(?, ?))",
             "args": args(),
             "iterations": 1000
+        },
+        {
+            "statement": "insert into id_int_value_str (id, value) (select col1, col2 from unnest(?, ?))",
+            "args": args(),
+            "iterations": 1000,
+            "concurrency": 15
         }
     ]
 )
