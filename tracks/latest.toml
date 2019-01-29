@@ -24,6 +24,7 @@ queries = [
 full = [
     "../specs/select/sys_select.toml",
     "../specs/insert_single.py",
+    "../specs/insert_unnest.py",
     "../specs/insert_bulk.toml",
     "../specs/delete_single.py",
     "../specs/delete_bulk.py",
