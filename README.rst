@@ -47,7 +47,6 @@ Scripts to simply common tasks:
 - find_regressions.py_: read benchmark results from a table and compare them for
   regressions.
 
-
 Writing Benchmarks
 ==================
 
@@ -62,24 +61,18 @@ where ``--v1 == --v2`` to get a feeling of the stability of the benchmark. If
 there is a large difference, the benchmark should be tuned as it would be too
 unreliable to spot real differences.
 
-
 Help
 ====
 
 Looking for more help?
 
-- Check `StackOverflow`_ for common problems
-- Chat with us on `Slack`_
-- Get `paid support`_
-
+- Check out our `support channels`_
 
 .. _compare_measures.py: compare_measures.py
 .. _cr8: https://github.com/mfussenegger/cr8
+.. _Crate.io: http://crate.io/
+.. _CrateDB: https://github.com/crate/crate
 .. _find_regressions.py: find_regressions.py
 .. _jupyter: https://jupyter.org/
 .. _notebooks: notebooks
-.. _Crate.io: http://crate.io/
-.. _CrateDB: https://github.com/crate/crate
-.. _paid support: https://crate.io/pricing/
-.. _Slack: https://crate.io/docs/support/slackin/
-.. _StackOverflow: https://stackoverflow.com/tags/crate
+.. _support channels: https://crate.io/support/
