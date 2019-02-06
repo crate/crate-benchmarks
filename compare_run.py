@@ -52,13 +52,28 @@ def _run_spec(version, spec, result_hosts, env, settings):
     return results
 
 
-def run_compare(v1, v2, spec, result_hosts, forks, env, settings):
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env, settings)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env, settings)
+def run_compare(v1,
+                v2,
+                spec,
+                result_hosts,
+                forks,
+                env_v1,
+                env_v2,
+                settings_v1,
+                settings_v2):
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2)
     for _ in range(forks):
         results_v1 = run_v1()
         results_v2 = run_v2()
         compare_results(results_v1, results_v2)
+
+
+def _dict_from_kw_args(args):
+    if args:
+        return dict(i.split('=') for i in args)
+    else:
+        return {}
 
 
 def main():
@@ -79,17 +94,27 @@ def main():
                    help='Number of times the nodes are launched and the spec re-run')
     p.add_argument('--env', action='append',
                    help='Environment variable for crate nodes. E.g. --env CRATE_HEAP_SIZE=2g')
+    p.add_argument('--env-v1', action='append',
+                   help='Like --env but only applied to v1')
+    p.add_argument('--env-v2', action='append',
+                   help='Like --env but only applied to v2')
     p.add_argument('-s', '--setting', action='append',
                    help='Crate setting. E.g. -s path.data=/tmp/c1/')
+    p.add_argument('--setting-v1', action='append',
+                   help='Crate setting. Only applied to v1')
+    p.add_argument('--setting-v2', action='append',
+                   help='Crate setting. Only applied to v2')
     args = p.parse_args()
-    if args.env:
-        env = dict(i.split('=') for i in args.env)
-    else:
-        env = {}
-    if args.setting:
-        settings = dict(i.split('=') for i in args.setting)
-    else:
-        settings = {}
+    env = _dict_from_kw_args(args.env)
+    env_v1 = env.copy()
+    env_v1.update(_dict_from_kw_args(args.env_v1))
+    env_v2 = env.copy()
+    env_v2.update(_dict_from_kw_args(args.env_v2))
+    settings = _dict_from_kw_args(args.setting)
+    settings_v1 = settings.copy()
+    settings_v1.update(_dict_from_kw_args(args.setting_v1))
+    settings_v2 = settings.copy()
+    settings_v2.update(_dict_from_kw_args(args.setting_v2))
     try:
         run_compare(
             args.v1,
@@ -97,8 +122,10 @@ def main():
             args.spec,
             args.result_hosts,
             forks=max(1, args.forks),
-            env=env,
-            settings=settings
+            env_v1=env_v1,
+            env_v2=env_v2,
+            settings_v1=settings_v1,
+            settings_v2=settings_v2
         )
     except KeyboardInterrupt:
         print('Exiting..')
