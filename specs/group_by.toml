@@ -20,7 +20,7 @@ concurrency = 15
 iterations = 100
 
 [[queries]]
-statement = '''select avg("adRevenue") from uservisits group by "cCode"'''
+statement = '''select avg("adRevenue") from uservisits group by "cCode", "lCode"'''
 concurrency = 15
 iterations = 100
 
