@@ -1,4 +1,7 @@
 
+from cr8.bench_spec import Spec, Instructions
+
+
 class BulkArgsGenerator:
 
     def __init__(self, bulk_size):
@@ -24,15 +27,13 @@ spec = Spec(
     queries=[
         {
             'statement': """insert into articles_bulk_insert (id, name, price) values ($1, $2, $3)
-                            on duplicate key update
-                            name = $2, price = $3""",
+                            on conflict (id) do update set name = $2, price = $3""",
             'bulk_args': BulkArgsGenerator(1000),
             'iterations': 1000,
         },
         {
             'statement': """insert into articles_bulk_insert (id, name, price) values (?, ?, ?)
-                            on duplicate key update
-                            price = VALUES(price) + price""",
+                            on conflict (id) do update set price = excluded.price + price""",
             'bulk_args': BulkArgsGenerator(1000),
             'iterations': 1000,
         }
