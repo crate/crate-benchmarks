@@ -10,10 +10,10 @@ statements = [
 ]
 
 [[queries]]
-statement = '''select avg("adRevenue") over (order by "cCode")
+statement = '''select avg("adRevenue") over (partition by "cCode" order by "visitDate")
                 from uservisits'''
 iterations = 50
-min_version = '3.2.0'
+min_version = '4.0.0'
 
 [[queries]]
 statement = '''select nth_value("adRevenue", 3) over (order by "cCode")
