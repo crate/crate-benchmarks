@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS generated_columns (
   id INTEGER,
+  col_0 INTEGER,
   col_1 INTEGER,
   col_2 INTEGER,
   col_3 INTEGER,
