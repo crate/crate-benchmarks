@@ -6,7 +6,7 @@ create_table_stmt = """
     )
     clustered into 1 shards
     partitioned by (p)
-    with (number_of_replicas=0)
+    with (column_policy = 'dynamic', number_of_replicas=0)
 """
 
 
