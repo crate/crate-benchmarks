@@ -23,7 +23,7 @@ min_version = '3.3.0'
 
 [[queries]]
 statement = '''select nth_value("adRevenue", 3) over (order by "cCode")
-                from uservisits'''
+                from uservisits where _fetchid % 10 = 0'''
 iterations = 200
 concurrency = 15
 min_version = '3.3.0'
