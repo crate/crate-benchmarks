@@ -250,6 +250,30 @@ def date_trunc(data_faker, column, provider):
 def date_format(data_faker, column, provider):
     return f"DATE_FORMAT('%e', {column}) != 13"
 
+# Window functions
+
+def row_number(data_faker, column):
+    window_definition = generate_window_definition(column)
+    return f"ROW_NUMBER() {window_definition}"
+
+def nth_value(data_faker, column):
+    window_definition = generate_window_definition(column)
+    random_index = random.randint(0, 10)
+    return f"NTH_VALUE({column}, {random_index}) {window_definition}"
+
+def count(data_faker, column):
+    window_definition = generate_window_definition(column)
+    return f"COUNT({column}) {window_definition}"
+
+def arbitrary(data_faker, column):
+    window_definition = generate_window_definition(column)
+    return f"ARBITRARY({column}) {window_definition}"
+
+
+def generate_window_definition(column):
+   partition_clause = f"PARTITION BY {column} " if every(5) else ""
+   orderby_clause = f"ORDER BY {column}" if every(10) else ""
+   return f"OVER({partition_clause} {orderby_clause})"
 
 def every(x):
     return random.randint(1, x) == 1
@@ -346,6 +370,9 @@ SCALARS_BY_TYPE = {
                lower, upper, sha1, md5, match, regexp_matches,),
     'timestamp': (date_trunc, date_format,),
 }
+WINDOW_FUNCTIONS = (
+   row_number, nth_value, count, arbitrary,
+)
 MATCH_TYPES = (
     'best_fields',
     'most_fields',
@@ -442,7 +469,23 @@ def generate_query(data_faker, columns, schema, table):
             expressions.append(random.choice(CONJUNCTIONS))
         expressions.append(expr)
     filter_ = ' '.join(expressions)
-    return f'SELECT count(*) FROM "{schema}"."{table}" WHERE {filter_};'
+    use_window_functions = every(20)
+    if use_window_functions:
+        wfunction = random.choice(WINDOW_FUNCTIONS)
+        column = get_number_or_text_column(columns)
+        wfunction_expr = wfunction(data_faker, column)
+        return f'SELECT {wfunction_expr} FROM "{schema}"."{table}" WHERE {filter_};'
+    else:
+        return f'SELECT count(*) FROM "{schema}"."{table}" WHERE {filter_};'
+
+def get_number_or_text_column(columns):
+    found_column = None
+    while not found_column:
+        column = random.choice(list(columns.keys()))
+        data_type = columns[column]
+        if type_is_number(data_type) or data_type == 'string':
+            found_column = column
+    return found_column
 
 
 def generate_queries(data_faker, columns, schema, table, duration):
