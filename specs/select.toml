@@ -16,6 +16,10 @@ statement = "select * from uservisits where \"sourceIP\" = '25.193.131.52'"
 iterations = 5000
 
 [[queries]]
+statement = "SELECT * FROM uservisits WHERE abs(\"adRevenue\") > 10 LIMIT 5"
+iterations = 200
+
+[[queries]]
 # MULTI_GET
 statement = """select * from uservisits where
 \"sourceIP\" = '162.122.2.75' or
