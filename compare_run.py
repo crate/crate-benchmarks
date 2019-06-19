@@ -71,7 +71,7 @@ def run_compare(v1,
 
 def _dict_from_kw_args(args):
     if args:
-        return dict(i.split('=') for i in args)
+        return dict(i.split('=', maxsplit=1) for i in args)
     else:
         return {}
 
