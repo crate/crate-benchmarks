@@ -26,6 +26,24 @@ To run all benchmarks, do::
 
     $ venv/bin/cr8 run-track tracks/latest.toml [ -r result-host ]
 
+To run a single benchmark (spec)::
+
+    $ venv/bin/cr8 run-spec specs/specfile.toml localhost:4200
+
+For more information on the parameters run::
+
+    $ venv/bin/cr8 run-spec -h
+
+.. note::
+
+   venv_ is a Python module that provides support for creating lightweight
+   virtual environments.
+
+.. note::
+
+   Running an individual spec requires that you have a running CrateDB instance
+   and that you pass its host:port as the last parameter.
+
 Visualization and Analysis
 ==========================
 
@@ -76,3 +94,5 @@ Looking for more help?
 .. _jupyter: https://jupyter.org/
 .. _notebooks: notebooks
 .. _support channels: https://crate.io/support/
+.. _venv: https://docs.python.org/3/library/venv.html
+.. _toml: https://learnxinyminutes.com/docs/toml/

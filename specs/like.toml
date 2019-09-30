@@ -7,8 +7,20 @@ statements = [
 ]
 
 [[queries]]
-statement = '''select "sourceIP" from uservisits where "sourceIP" like '%.%.%.%' limit 10'''
-iterations = 300
+statement = '''select "sourceIP" from uservisits where "sourceIP" like '%.%.%.%' limit 3000'''
+iterations = 200
+
+[[queries]]
+statement = '''select "sourceIP" from uservisits where "sourceIP" ilike '%.%.%.%' limit 3000'''
+iterations = 200
+
+[[queries]]
+statement = '''select "UserAgent" from uservisits where "UserAgent" like 'mozilla%' limit 3000'''
+iterations = 200
+
+[[queries]]
+statement = '''select "UserAgent" from uservisits where "UserAgent" ilike 'mozilla%' limit 3000'''
+iterations = 200
 
 [teardown]
 statements = ["drop table uservisits"]
