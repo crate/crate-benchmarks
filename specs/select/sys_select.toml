@@ -13,7 +13,7 @@ concurrency = 1
 [[queries]]
 statement = "select name from sys.cluster"
 iterations = 65000
-gitconcurrency = 15
+concurrency = 15
 
 [[queries]]
 statement = "select * from sys.nodes"
