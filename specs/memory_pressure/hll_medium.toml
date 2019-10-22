@@ -1,0 +1,50 @@
+[setup]
+statement_files = ["hll.sql"]
+
+    [[setup.data_files]]
+    target = "hll"
+    source = "data.json"
+    bulk_size = 1000
+    concurrency = 25
+
+
+[[queries]]
+statement = """
+SELECT
+    custom_user_id,
+    hyperloglog_distinct(id, 8)
+FROM
+    hll
+WHERE
+    _docid % 10 = 0
+GROUP BY
+    1
+ORDER BY
+    2 DESC
+LIMIT 20
+"""
+concurrency = 2
+iterations = 500
+
+
+[[queries]]
+statement = """
+SELECT
+    custom_user_id,
+    hyperloglog_distinct(id, 8)
+FROM
+    hll
+WHERE
+    _docid % 10 = 0
+GROUP BY
+    1
+ORDER BY
+    2 DESC
+LIMIT 20
+"""
+concurrency = 10
+iterations = 500
+
+
+[teardown]
+statements = ["drop table hll"]

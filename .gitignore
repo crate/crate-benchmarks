@@ -40,3 +40,6 @@ __pycache__/
 *.egg-info/
 develop-eggs/
 .installed.cfg
+
+specs/memory_pressure/data.json
+specs/memory_pressure/custom_user_ids.txt
