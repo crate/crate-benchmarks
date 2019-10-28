@@ -1,0 +1,79 @@
+[setup]
+statement_files = ["hll.sql"]
+
+    [[setup.data_files]]
+    target = "hll"
+    source = "data.json"
+    bulk_size = 1000
+    concurrency = 25
+
+
+#[[queries]]
+#statement = "select * from hll"
+#iterations = 5
+#concurrency = 1
+#
+#[[queries]]
+#statement = "select * from hll"
+#iterations = 10
+#concurrency = 5
+#
+#
+#[[queries]]
+#statement = "select * from hll t1, hll t2"
+#iterations = 10
+#concurrency = 1
+#
+#
+#[[queries]]
+#statement = "select * from hll t1, hll t2"
+#iterations = 10
+#concurrency = 15
+#
+#
+#[[queries]]
+#statement = "select id from hll order by id"
+#iterations = 10
+#concurrency = 1
+#
+#[[queries]]
+#statement = "select id from hll order by id"
+#iterations = 10
+#concurrency = 15
+
+
+#[[queries]]
+#statement = "select id from hll where id is not null order by id"
+#iterations = 10
+#concurrency = 1
+#
+#[[queries]]
+#statement = "select id from hll where id is not null order by id"
+#iterations = 10
+#concurrency = 15
+
+
+#[[queries]]
+#statement = "select distinct id from hll"
+#iterations = 10
+#concurrency = 1
+#
+#[[queries]]
+#statement = "select distinct id from hll"
+#iterations = 10
+#concurrency = 5
+#
+#
+#[[queries]]
+#statement = "select distinct x from t2"
+#iterations = 10
+#concurrency = 5
+
+[[queries]]
+statement = "select distinct x from t2 where x is not null order by 1"
+iterations = 10
+concurrency = 55
+
+
+[teardown]
+statements = ["drop table hll"]
