@@ -1,7 +1,7 @@
 [setup]
 statements = [
     "create table t(a array(integer))",
-    "copy t from 's3://crate.benchmark.data/table_int_array.json.gz' with (compression = 'gzip')",
+    "copy t from 'https://cdn.crate.io/downloads/datasets/benchmarks/table_int_array.json.gz' with (compression = 'gzip')",
     "refresh table t"
 ]
 

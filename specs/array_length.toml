@@ -4,10 +4,10 @@ statements = [
   "create table t_arrays_biased_one_element (xs array(integer))",
   "create table t_arrays_biased_5_elements (xs array(integer))",
   "create table t_arrays_even (xs array(integer))",
-  "copy t_arrays_biased_empty from 's3://crate.benchmark.data/t_arrays_biased_empty.json.gz' with (compression = 'gzip')",
-  "copy t_arrays_biased_one_element from 's3://crate.benchmark.data/t_arrays_biased_one_element.json.gz' with (compression = 'gzip')",
-  "copy t_arrays_biased_5_elements from 's3://crate.benchmark.data/t_arrays_biased_5_elements.json.gz' with (compression = 'gzip')",
-  "copy t_arrays_even from 's3://crate.benchmark.data/t_arrays_even.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_biased_empty from 'https://cdn.crate.io/downloads/datasets/benchmarks/t_arrays_biased_empty.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_biased_one_element from 'https://cdn.crate.io/downloads/datasets/benchmarks/t_arrays_biased_one_element.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_biased_5_elements from 'https://cdn.crate.io/downloads/datasets/benchmarks/t_arrays_biased_5_elements.json.gz' with (compression = 'gzip')",
+  "copy t_arrays_even from 'https://cdn.crate.io/downloads/datasets/benchmarks/t_arrays_even.json.gz' with (compression = 'gzip')",
 ]
 
 [[queries]]

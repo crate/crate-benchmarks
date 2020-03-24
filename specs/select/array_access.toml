@@ -1,7 +1,7 @@
 [setup]
 statements = [
     "create table array_access (a array(long))",
-    "copy array_access from 's3://crate.benchmark.data/table_long_array_access.json.gz' with (compression = 'gzip')",
+    "copy array_access from 'https://cdn.crate.io/downloads/datasets/benchmarks/table_long_array_access.json.gz' with (compression = 'gzip')",
     "refresh table array_access"
 ]
 

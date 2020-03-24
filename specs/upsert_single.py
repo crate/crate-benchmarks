@@ -18,7 +18,7 @@ spec = Spec(
     setup=Instructions(
         statement_files=["sql/articles.sql"],
         statements=[
-            "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
+            "copy articles from 'https://cdn.crate.io/downloads/datasets/benchmarks/articles_0.json.gz' with (compression = 'gzip')",
             "refresh table articles"
         ]
     ),

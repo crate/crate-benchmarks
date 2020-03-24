@@ -1,8 +1,8 @@
 [setup]
 statement_files = ["../sql/articles.sql", "../sql/colors.sql"]
 statements = [
-    "copy articles from 's3://crate-stresstest-data/join-sample-data/articles_*' with (compression = 'gzip')",
-    "copy colors from 's3://crate-stresstest-data/join-sample-data/colors_*' with (compression = 'gzip')",
+    "copy articles from 'https://cdn.crate.io/downloads/datasets/benchmarks/articles_0.json.gz' with (compression = 'gzip')",
+    "copy colors from 'https://cdn.crate.io/downloads/datasets/benchmarks/colors_0.json.gz' with (compression = 'gzip')",
     "refresh table articles, colors"
 ]
 
