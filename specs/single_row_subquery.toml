@@ -1,7 +1,7 @@
 [setup]
 statement_files = ["sql/uservisits.sql"]
 statements = [
-    "copy uservisits from 's3://crate.amplab/data/1node/uservisits/part-00001*' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
     "refresh table uservisits"
 ]
 
