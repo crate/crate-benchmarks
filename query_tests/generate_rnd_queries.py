@@ -410,7 +410,7 @@ CREATE TABLE benchmarks.query_tests (
   ageo_shape array(geo_shape)
 ) CLUSTERED INTO 2 SHARDS WITH (number_of_replicas = 0, refresh_interval = 0)
 '''
-IMPORT_DATA = "COPY benchmarks.query_tests FROM 's3://crate-stresstest-data/query-tests/*.json'"
+
 TYPE_REQUIRES_QUOTES = ('string', 'ip', 'geo_shape')
 
 
@@ -547,7 +547,7 @@ def main():
 spec = Spec(
     setup=Instructions(statements=[
         CREATE_TABLE,
-        IMPORT_DATA,
+        "COPY benchmarks.query_tests FROM ['https://cdn.crate.io/downloads/datasets/query-tests/query_tests_0_.json', 'https://cdn.crate.io/downloads/datasets/query-tests/query_tests_1_.json']",
         "refresh table benchmarks.query_tests",
         "optimize table benchmarks.query_tests"
     ]),
