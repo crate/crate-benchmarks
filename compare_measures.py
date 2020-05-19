@@ -35,7 +35,7 @@ class Diff:
         self.mean_diff = perc_diff(r1['mean'], r2['mean'])
         self.median_diff = perc_diff(r1['percentile']['50'], r2['percentile']['50'])
         probability = (1 - ind.pvalue) * 100.0
-        self.ptext = f'There is a {probability:.2f}% probability that the observed difference is not random or due to noise, and the best estimate of that difference is {self.mean_diff:.2f}%'
+        self.ptext = f'There is a {probability:.2f}% probability that the observed difference is not random, and the best estimate of that difference is {self.mean_diff:.2f}%'
         if abs(ind.statistic) >= CRITICAL_VALUE:
             self.significance = 'The test has statistical significance'
         else:
@@ -53,8 +53,6 @@ def print_diff(diff):
     print(f"|   V2    |   {diff.r2['mean']:10.3f} ± {diff.r2['stdev']:8.3f} | {diff.r2['min']:10.3f} | {diff.r2['percentile']['50']:10.3f} | {diff.r2['percentile']['75']:10.3f} | {diff.r2['max']:10.3f} |")
     print(f'├---------┴-------------------------┴------------┴------------┴------------┴------------┘')
     print(f"|               {mean_prefix}{diff.mean_diff:7.2f}%                           {median_prefix}{diff.median_diff:7.2f}%   ")
-    print(f'| V1 mean is within {diff.r1_ci[0]:.2f} - {diff.r1_ci[1]:.2f}')
-    print(f'| V2 mean is within {diff.r2_ci[0]:.2f} - {diff.r2_ci[1]:.2f}')
     print(f'{diff.ptext}')
     print(f'{diff.significance}')
     print('')

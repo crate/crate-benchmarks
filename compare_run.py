@@ -7,6 +7,11 @@ compare the results
 """
 
 import argparse
+import json
+import os
+import shutil
+import subprocess
+import tempfile
 from functools import partial
 from uuid import uuid4
 
@@ -16,7 +21,7 @@ from cr8.log import Logger
 from compare_measures import Diff, print_diff
 
 
-def compare_results(results_v1, results_v2):
+def compare_results(results_v1, metrics_v1, results_v2, metrics_v2):
     print('')
     print('')
     print('# Results (server side duration in ms)')
@@ -34,22 +39,111 @@ def compare_results(results_v1, results_v2):
         print(f'C: {k[1]}')
         print_diff(Diff(result_v1.runtime_stats, result_v2.runtime_stats))
 
+    ns_to_ms = 0.000001
+    v1_gcy_cnt = metrics_v1['gc']['young']['count']
+    v2_gcy_cnt = metrics_v2['gc']['young']['count']
+    v1_gcy_avg = metrics_v1['gc']['young']['avg_duration_ns'] * ns_to_ms
+    v2_gcy_avg = metrics_v2['gc']['young']['avg_duration_ns'] * ns_to_ms
+    v1_gcy_max = metrics_v1['gc']['young']['max_duration_ns'] * ns_to_ms
+    v2_gcy_max = metrics_v2['gc']['young']['max_duration_ns'] * ns_to_ms
 
-def _run_spec(version, spec, result_hosts, env, settings):
+    v1_gco_cnt = metrics_v1['gc']['old']['count']
+    v2_gco_cnt = metrics_v2['gc']['old']['count']
+    v1_gco_avg = metrics_v1['gc']['old']['avg_duration_ns'] * ns_to_ms
+    v2_gco_avg = metrics_v2['gc']['old']['avg_duration_ns'] * ns_to_ms
+    v1_gco_max = metrics_v1['gc']['old']['max_duration_ns'] * ns_to_ms
+    v2_gco_max = metrics_v2['gc']['old']['max_duration_ns'] * ns_to_ms
+
+    byte_to_mb = 0.000001
+    v1_heap_used = metrics_v1['heap']['used'] * byte_to_mb
+    v2_heap_used = metrics_v2['heap']['used'] * byte_to_mb
+    v1_heap_init = metrics_v1['heap']['initial'] * byte_to_mb
+    v2_heap_init = metrics_v2['heap']['initial'] * byte_to_mb
+
+    v1_alloc_rate = metrics_v1['alloc']['rate'] * byte_to_mb
+    v2_alloc_rate = metrics_v2['alloc']['rate'] * byte_to_mb
+    v1_alloc_total = metrics_v1['alloc']['total'] * byte_to_mb
+    v2_alloc_total = metrics_v2['alloc']['total'] * byte_to_mb
+    print(f'''
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 | {v1_gcy_cnt:4.0f} {v1_gcy_avg:8.2f} {v1_gcy_max:8.2f} | {v1_gco_cnt:4.0f} {v1_gco_avg:8.2f} {v1_gco_max:8.2f} | {v1_heap_init:8.0f} {v1_heap_used:8.0f} | {v1_alloc_rate:8.2f} {v1_alloc_total:10.0f}
+ V2 | {v2_gcy_cnt:4.0f} {v2_gcy_avg:8.2f} {v2_gcy_max:8.2f} | {v2_gco_cnt:4.0f} {v2_gco_avg:8.2f} {v2_gco_max:8.2f} | {v2_heap_init:8.0f} {v2_heap_used:8.0f} | {v2_alloc_rate:8.2f} {v2_alloc_total:10.0f}
+    ''')
+    print('V1 top allocation frames')
+    for frame in metrics_v1['alloc']['top_frames']:
+        print('  ' + frame)
+    print('V2 top allocation frames')
+    for frame in metrics_v2['alloc']['top_frames']:
+        print('  ' + frame)
+
+
+def jfr_start(pid, tmpdir):
+    java_home = os.environ.get('JAVA_HOME')
+    jcmd = os.path.join(java_home, 'bin', 'jcmd')
+    filename = os.path.join(tmpdir, str(uuid4()) + '.jfr')
+    subprocess.check_call([
+        jcmd,
+        str(pid),
+        'JFR.start',
+        f'filename="{filename}"',
+        'name=rec',
+        'settings=profile',
+        'maxsize=50m',
+        'maxage=10m'
+    ])
+    return filename
+
+
+def jfr_stop(pid):
+    java_home = os.environ.get('JAVA_HOME')
+    jcmd = os.path.join(java_home, 'bin', 'jcmd')
+    subprocess.check_call([jcmd, str(pid), 'JFR.stop', 'name=rec'])
+
+
+def jfr_extract_metrics(filename):
+    java_home = os.environ.get('JAVA_HOME')
+    java = os.path.join(java_home, 'bin', 'java')
+    cmd = [java, '--enable-preview', '--source', '14', 'JfrOverview.java', filename]
+    output = subprocess.check_output(cmd, universal_newlines=True)
+    return json.loads(output)
+
+
+def _run_spec(version, spec, result_hosts, env, settings, tmpdir):
     crate_dir = get_crate(version)
     settings.setdefault('cluster.name', str(uuid4()))
     results = []
     with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
         n.start()
+        do_run_spec(
+            spec=spec,
+            benchmark_hosts=n.http_url,
+            log=log,
+            result_hosts=result_hosts,
+            sample_mode='reservoir',
+            action='setup'
+        )
+        jfr_file = jfr_start(n.process.pid, tmpdir)
         log.result = results.append
         do_run_spec(
             spec=spec,
             benchmark_hosts=n.http_url,
             log=log,
             result_hosts=result_hosts,
-            sample_mode='reservoir'
+            sample_mode='reservoir',
+            action='queries'
         )
-    return results
+        jfr_stop(n.process.pid)
+        do_run_spec(
+            spec=spec,
+            benchmark_hosts=n.http_url,
+            log=log,
+            result_hosts=result_hosts,
+            sample_mode='reservoir',
+            action='teardown'
+        )
+        return (results, jfr_extract_metrics(jfr_file))
 
 
 def run_compare(v1,
@@ -61,12 +155,16 @@ def run_compare(v1,
                 env_v2,
                 settings_v1,
                 settings_v2):
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2)
-    for _ in range(forks):
-        results_v1 = run_v1()
-        results_v2 = run_v2()
-        compare_results(results_v1, results_v2)
+    tmpdir = tempfile.mkdtemp()
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir)
+    try:
+        for _ in range(forks):
+            results_v1, jfr_metrics1 = run_v1()
+            results_v2, jfr_metrics2 = run_v2()
+            compare_results(results_v1, jfr_metrics1, results_v2, jfr_metrics2)
+    finally:
+        shutil.rmtree(tmpdir, True)
 
 
 def _dict_from_kw_args(args):

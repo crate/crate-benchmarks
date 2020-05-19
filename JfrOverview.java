@@ -1,11 +1,12 @@
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 
 import jdk.jfr.consumer.RecordedEvent;
 import jdk.jfr.consumer.RecordedFrame;
@@ -184,12 +185,11 @@ public class JfrOverview {
             return values;
         }
 
-        public Iterable<Record> byTotal() {
-            return () -> getRecords()
+        public Stream<Record> byTotal() {
+            return getRecords()
                 .stream()
                 .sorted(Comparator.comparingLong(Record::total).reversed())
-                .limit(5)
-                .iterator();
+                .limit(5);
         }
 
         public Iterable<Record> byCount() {
@@ -299,31 +299,58 @@ public class JfrOverview {
                 }
             }
         }
-        System.out.println("gc.name:" + gcName);
-        System.out.println("gc.young.count:" + youngGc.count);
-        System.out.println("gc.young.max:" + youngGc.max);
-        System.out.println("gc.young.avg:" + youngGc.getAverage());
-        System.out.println("gc.old.count:" + oldGc.count);
-        System.out.println("gc.old.max:" + oldGc.max);
-        System.out.println("gc.old.avg:" + oldGc.getAverage());
-        System.out.println("sys.cpu:" + machineCpu.getAverage());
-        System.out.println("jvm.sys:" + jvmSystem.getAverage());
-        System.out.println("jvm.user:" + jvmUser.getAverage());
-        System.out.println("heap.used:" + usedHeap.value);
-        System.out.println("heap.initial:" + initialHeap.value);
-        System.out.println("memory:" + physicalMemory.value);
-        System.out.println("threads:" + threads.value);
-        System.out.println("classes:" + classes.value);
-        System.out.println("compilation:" + compilation.total);
-        System.out.println("alloc.rate:" + (long) ALLOC_RATE.value);
-        System.out.println("alloc.total:" + ALLOC_TOTAL.total);
-
-        for (var rec : ALLOCATION_TOP_FRAME.byTotal()) {
-            System.out.println("  " + rec.name() + ":" + rec.total());
-        }
-        System.out.println("---");
-        for (var rec : executionTopFrame.byCount()) {
-            System.out.println("  " + rec.name() + ":" + rec.count());
-        }
+        String jsonResult = String.format(Locale.ENGLISH,
+            """
+            {
+                "gc": {
+                    "name": "%s",
+                    "young": {
+                        "count": %s,
+                        "max_duration_ns": %s,
+                        "avg_duration_ns": %s
+                    },
+                    "old": {
+                        "count": %s,
+                        "max_duration_ns": %s,
+                        "avg_duration_ns": %s
+                    }
+                },
+                "cpu": {
+                    "system": %s,
+                    "jvm_user": %s,
+                    "jvm_system": %s
+                },
+                "heap": {
+                    "initial": %s,
+                    "used": %s
+                },
+                "alloc": {
+                    "rate": %s,
+                    "total": %s,
+                    "top_frames": %s
+                },
+                "threads": %s,
+                "classes": %s
+            }
+            """,
+            gcName,
+            youngGc.count,
+            youngGc.max,
+            youngGc.getAverage(),
+            oldGc.count,
+            oldGc.max,
+            oldGc.getAverage(),
+            machineCpu.getAverage(),
+            jvmUser.getAverage(),
+            jvmSystem.getAverage(),
+            initialHeap.value,
+            usedHeap.value,
+            ALLOC_RATE.value,
+            ALLOC_TOTAL.total,
+            '[' + String.join(", ", ALLOCATION_TOP_FRAME.byTotal().map(x -> String.format(Locale.ENGLISH, "\"%s:%s\"", x.name(), x.total())).toArray(String[]::new)) + ']',
+            threads.value,
+            classes.value
+        );
+        System.out.println(jsonResult);
     }
 }
