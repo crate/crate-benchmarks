@@ -33,6 +33,16 @@ class Diff:
         self.r1_ci = stats.norm.interval(0.95, loc=r1_samples.mean(), scale=r1_samples.std(ddof=1))
         self.r2_ci = stats.norm.interval(0.95, loc=r2_samples.mean(), scale=r2_samples.std(ddof=1))
         self.mean_diff = perc_diff(r1['mean'], r2['mean'])
+        if 'percentile' not in r1 and len(r1_samples) == 1:
+            r1['percentile'] = {
+                '50': r1_samples[0],
+                '75': r1_samples[0],
+            }
+        if 'percentile' not in r2 and len(r2_samples) == 1:
+            r2['percentile'] = {
+                '50': r2_samples[0],
+                '75': r2_samples[0],
+            }
         self.median_diff = perc_diff(r1['percentile']['50'], r2['percentile']['50'])
         probability = (1 - ind.pvalue) * 100.0
         self.ptext = f'There is a {probability:.2f}% probability that the observed difference is not random, and the best estimate of that difference is {self.mean_diff:.2f}%'
