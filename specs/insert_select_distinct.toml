@@ -1,0 +1,24 @@
+[setup]
+statement_files = ["sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "refresh table uservisits",
+    "create table target (code text)"
+]
+
+
+[[queries]]
+statement = 'insert into target (code) (select distinct "cCode" from uservisits)'
+concurrency = 1
+iterations = 1
+
+
+[teardown]
+statements = [
+  "drop table uservisits",
+  "drop table target"
+]
