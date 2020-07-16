@@ -14,5 +14,17 @@ statement = '''select avg("adRevenue") from uservisits'''
 iterations = 500
 
 
+[[queries]]
+name = "global max-long"
+statement = "select max(duration) from uservisits"
+iterations = 500
+
+
+[[queries]]
+name = "global max-double"
+statement = 'select max("adRevenue") from uservisits'
+iterations = 500
+
+
 [teardown]
 statements = ["drop table uservisits"]
