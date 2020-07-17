@@ -26,5 +26,17 @@ statement = 'select max("adRevenue") from uservisits'
 iterations = 500
 
 
+[[queries]]
+name = "global min-long"
+statement = "select min(duration) from uservisits"
+iterations = 500
+
+
+[[queries]]
+name = "global min-double"
+statement = 'select min("adRevenue") from uservisits'
+iterations = 500
+
+
 [teardown]
 statements = ["drop table uservisits"]
