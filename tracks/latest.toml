@@ -20,6 +20,7 @@ queries = [
     "../specs/select.toml",
     "../specs/in_string.toml",
     "../specs/in_numeric.toml",
+    "../specs/order_by_no_limit.toml",
 ]
 full = [
     "../specs/select/sys_select.toml",
