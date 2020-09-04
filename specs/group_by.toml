@@ -10,6 +10,25 @@ statements = [
 ]
 
 [[queries]]
+name = "avg, sum, min and group by a single numeric key"
+statement = '''select avg("adRevenue"), sum("adRevenue"), min("adRevenue") from uservisits group by "duration"'''
+concurrency = 10
+iterations = 1000
+
+[[queries]]
+name = "avg and group by a single numeric key"
+statement = '''select avg("adRevenue") from uservisits group by "duration"'''
+concurrency = 10
+iterations = 1000
+
+[[queries]]
+name = "avg and group by string and numeric keys"
+statement = '''select avg("adRevenue") from uservisits group by "cCode", "duration"'''
+concurrency = 10
+iterations = 1000
+
+[[queries]]
+name = "count star and group by a single string key"
 statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
 concurrency = 15
 iterations = 100
