@@ -26,22 +26,22 @@ statements = [
 [[queries]]
 statement = "select count(*) from (select distinct x from t090) t"
 concurrency = 10
-iterations = 200
+iterations = 1000
 
 [[queries]]
 statement = "select count(*) from (select distinct x from t075) t"
 concurrency = 10
-iterations = 200
+iterations = 1000
 
 [[queries]]
 statement = "select count(*) from (select distinct x from t050) t"
 concurrency = 10
-iterations = 200
+iterations = 1000
 
 [[queries]]
 statement = "select count(*) from (select distinct x from t025) t"
 concurrency = 10
-iterations = 200
+iterations = 1000
 
 [teardown]
 statements = [
