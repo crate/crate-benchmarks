@@ -19,6 +19,10 @@ statement = "select count(*) from uservisits"
 iterations = 200
 
 [[queries]]
+statement = "select count(*) from uservisits AS u"
+iterations = 200
+
+[[queries]]
 statement = '''select count("cCode") from uservisits'''
 iterations = 50
 
