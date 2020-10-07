@@ -236,10 +236,6 @@ def match(data_faker, column, provider):
     return f"MATCH({column}, {match_value}) USING {match_type}"
 
 
-def regexp_matches(data_faker, column, provider):
-    compare_to = provider()
-    return f"REGEXP_MATCHES({column}, '(a(.+)z)') = [{compare_to}]"
-
 # Date/Time functions
 
 
@@ -252,18 +248,22 @@ def date_format(data_faker, column, provider):
 
 # Window functions
 
+
 def row_number(data_faker, column):
     window_definition = generate_window_definition(column)
     return f"ROW_NUMBER() {window_definition}"
+
 
 def nth_value(data_faker, column):
     window_definition = generate_window_definition(column)
     random_index = random.randint(0, 10)
     return f"NTH_VALUE({column}, {random_index}) {window_definition}"
 
+
 def count(data_faker, column):
     window_definition = generate_window_definition(column)
     return f"COUNT({column}) {window_definition}"
+
 
 def arbitrary(data_faker, column):
     window_definition = generate_window_definition(column)
@@ -271,9 +271,10 @@ def arbitrary(data_faker, column):
 
 
 def generate_window_definition(column):
-   partition_clause = f"PARTITION BY {column} " if every(5) else ""
-   orderby_clause = f"ORDER BY {column}" if every(10) else ""
-   return f"OVER({partition_clause} {orderby_clause})"
+    partition_clause = f"PARTITION BY {column} " if every(5) else ""
+    orderby_clause = f"ORDER BY {column}" if every(10) else ""
+    return f"OVER({partition_clause} {orderby_clause})"
+
 
 def every(x):
     return random.randint(1, x) == 1
@@ -367,11 +368,11 @@ SCALARS_BY_TYPE = {
     'number': (abs, ceil, floor, ln, log, power, crate_random, round, sqrt, sin,
                asin, cos, acos, tan, atan, any,),
     'string': (concat, format, substr, char_length, bit_length, octet_length,
-               lower, upper, sha1, md5, match, regexp_matches,),
+               lower, upper, sha1, md5, match,),
     'timestamp': (date_trunc, date_format,),
 }
 WINDOW_FUNCTIONS = (
-   row_number, nth_value, count, arbitrary,
+    row_number, nth_value, count, arbitrary,
 )
 MATCH_TYPES = (
     'best_fields',
@@ -477,6 +478,7 @@ def generate_query(data_faker, columns, schema, table):
         return f'SELECT {wfunction_expr} FROM "{schema}"."{table}" WHERE {filter_};'
     else:
         return f'SELECT count(*) FROM "{schema}"."{table}" WHERE {filter_};'
+
 
 def get_number_or_text_column(columns):
     found_column = None
