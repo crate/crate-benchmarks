@@ -1,0 +1,20 @@
+[setup]
+statements = [
+    # create some shards so sys.allocations will contain some rows
+    "create table tbl (id int, name string, value float) clustered into 999 shards with (number_of_replicas=0)",
+]
+
+[[queries]]
+statement = "select * from sys.allocations order by shard_id desc limit 100"
+iterations = 10000
+concurrency = 15
+
+
+[[queries]]
+statement = "select * from sys.allocations where shard_id = 4"
+iterations = 10000
+concurrency = 15
+
+
+[teardown]
+statements = ["drop table tbl"]
