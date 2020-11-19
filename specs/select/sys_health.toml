@@ -1,0 +1,23 @@
+[setup]
+statements = [
+   "create table t1 (id int, name string) clustered into 499 shards with (number_of_replicas=0)",
+   "create table t2 (id int, name string) clustered into 250 shards with (number_of_replicas=1)",
+]
+
+[[queries]]
+statement = "select * from sys.health order by table_name desc limit 100"
+iterations = 10000
+concurrency = 15
+
+
+[[queries]]
+statement = "select * from sys.health where table_name = 't2'"
+iterations = 10000
+concurrency = 15
+
+
+[teardown]
+statements = [
+  "drop table t1",
+  "drop table t2",
+]

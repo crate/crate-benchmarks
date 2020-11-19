@@ -31,11 +31,6 @@ iterations = 10000
 concurrency = 1
 
 [[queries]]
-statement = "select * from sys.health"
-iterations = 10000
-concurrency = 1
-
-[[queries]]
 statement = "select * from sys.jobs"
 iterations = 20000
 concurrency = 1
