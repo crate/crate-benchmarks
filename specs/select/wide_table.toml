@@ -1,0 +1,22 @@
+[setup]
+statement_files = ["../sql/wide.sql"]
+
+    [[setup.data_files]]
+    # Data must be generated first using ./generators/wide.sh > specs/data/wide.json
+    target = "wide"
+    source = "../data/wide.json"
+
+
+[[queries]]
+statement = "select x1788, x1200 from wide limit 100"
+iterations = 800
+concurrency = 10
+
+[[queries]]
+statement = "select x1788, x1200 from wide limit 1500"
+iterations = 800
+concurrency = 10
+
+
+[teardown]
+statements = ["drop table wide"]
