@@ -3,7 +3,7 @@ argh==0.26.2
 async-timeout==3.0.1
 attrs==19.3.0
 backcall==0.1.0
-bleach==3.1.5
+bleach==3.3.0
 chardet==3.0.4
 cr8==0.19.1
 crate==0.23.2
