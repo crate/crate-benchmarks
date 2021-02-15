@@ -24,12 +24,12 @@ spec = Spec(
     ),
     queries=[
         {
-            'statement': 'select * from t_any where value = any(?)',
+            'statement': 'select count(*) from t_any where value = any(?)',
             'args': ([str(i) for i in range(500)], ),
             'iterations': 5000,
         },
         {
-            'statement': 'select * from t_any where value != any(?)',
+            'statement': 'select count(*) from t_any where value != any(?)',
             'args': ([str(i) for i in range(500)], ),
             'iterations': 5000,
         },
