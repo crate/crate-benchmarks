@@ -10,7 +10,7 @@ statements = [
 ]
 
 [[queries]]
-statement = "select * from uservisits where duration in (?, ?, ?, ?, ?)"
+statement = "select count(*) from uservisits where duration in (?, ?, ?, ?, ?)"
 iterations = 1000
 args = [1, 2, 3, 4, 5]
 
