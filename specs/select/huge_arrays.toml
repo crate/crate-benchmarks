@@ -1,0 +1,17 @@
+[setup]
+statement_files = ["../sql/huge_arrays.sql"]
+
+    [[setup.data_files]]
+    # Data must be generated first using ./generators/huge_arrays.sh > specs/data/huge_arrays.json
+    target = "huge_arrays"
+    source = "../data/huge_arrays.json"
+    bulk_size = 500
+
+
+[[queries]]
+statement = "select xs from huge_arrays"
+iterations = 500
+
+
+[teardown]
+statements = ["drop table huge_arrays"]
