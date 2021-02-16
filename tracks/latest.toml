@@ -21,9 +21,9 @@ queries = [
     "../specs/in_string.toml",
     "../specs/in_numeric.toml",
     "../specs/order_by_no_limit.toml",
+    "../specs/select/simple_subquery.toml",
 ]
 full = [
-    "../specs/select/sys_select.toml",
     "../specs/insert_single.py",
     "../specs/insert_unnest.py",
     "../specs/insert_bulk.toml",
@@ -46,10 +46,19 @@ full = [
     "../specs/delete/*.py",
     "../specs/delete/*.toml",
     "../specs/select/*.py",
-    "../specs/select/*.toml",
+    "../specs/select/sys_select.toml",
+    "../specs/select/array_access.toml",
+    "../specs/select/count.toml",
+    "../specs/select/disabled_doc_values.toml",
+    "../specs/select/hash_joins.toml",
+    "../specs/select/hyperloglog.toml",
+    "../specs/select/joins_aggregations.toml",
+    "../specs/select/sys_allocations.toml",
+    "../specs/select/sys_health.toml",
+    "../specs/select/sys_select.toml",
+    "../specs/select/sys_shards.toml",
     "../specs/in_subquery.toml",
     "../specs/union.toml",
-    "../specs/select/disabled_doc_values.toml",
     "../specs/ignore3vl.toml",
 
 ]
