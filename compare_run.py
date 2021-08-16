@@ -19,6 +19,7 @@ from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
 from cr8.log import Logger
 from compare_measures import Diff, print_diff
+from util import dict_from_kw_args
 
 
 def compare_results(results_v1, metrics_v1, results_v2, metrics_v2):
@@ -167,13 +168,6 @@ def run_compare(v1,
         shutil.rmtree(tmpdir, True)
 
 
-def _dict_from_kw_args(args):
-    if args:
-        return dict(i.split('=', maxsplit=1) for i in args)
-    else:
-        return {}
-
-
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
@@ -203,16 +197,16 @@ def main():
     p.add_argument('--setting-v2', action='append',
                    help='Crate setting. Only applied to v2')
     args = p.parse_args()
-    env = _dict_from_kw_args(args.env)
+    env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
-    env_v1.update(_dict_from_kw_args(args.env_v1))
+    env_v1.update(dict_from_kw_args(args.env_v1))
     env_v2 = env.copy()
-    env_v2.update(_dict_from_kw_args(args.env_v2))
-    settings = _dict_from_kw_args(args.setting)
+    env_v2.update(dict_from_kw_args(args.env_v2))
+    settings = dict_from_kw_args(args.setting)
     settings_v1 = settings.copy()
-    settings_v1.update(_dict_from_kw_args(args.setting_v1))
+    settings_v1.update(dict_from_kw_args(args.setting_v1))
     settings_v2 = settings.copy()
-    settings_v2.update(_dict_from_kw_args(args.setting_v2))
+    settings_v2.update(dict_from_kw_args(args.setting_v2))
     try:
         run_compare(
             args.v1,

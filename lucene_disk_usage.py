@@ -5,19 +5,7 @@ import argparse
 import json
 from pathlib import Path
 from collections import defaultdict
-
-
-def human_readable_byte_size(value):
-    for count in ('Bytes', 'KB', 'MB', 'GB'):
-        if value < 1024.0:
-            return (value, count)
-        value /= 1024.0
-    return (value, 'TB')
-
-
-def format_byte_size(value):
-    file_size, unit = human_readable_byte_size(value)
-    return f'{file_size:8.2f} {unit}'
+from util import format_byte_size
 
 
 def gather_sizes(path):

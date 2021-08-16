@@ -4,3 +4,4 @@ cr8
 scipy
 termcolor
 numpy
+crash
