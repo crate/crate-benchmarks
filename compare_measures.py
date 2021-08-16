@@ -10,17 +10,15 @@ The measures files should contain 1 number per line
 
 import argparse
 import numpy as np
+import json
 from scipy import stats
 from cr8 import metrics
+from util import perc_diff
 
 
 # critical value for a confidence level of 99% - assuming a normal distribution
 # See also: http://stattrek.com/statistics/dictionary.aspx?definition=critical_value
 CRITICAL_VALUE = stats.norm.ppf([0.99])[0]
-
-
-def perc_diff(v1, v2):
-    return (abs(v1 - v2) / ((v1 + v2) / 2)) * 100
 
 
 class Diff:
