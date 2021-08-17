@@ -63,23 +63,23 @@ def run_comparison(version1,
     print(f'Version2: {version2}')
     headers = ('Description', 'Version 1', 'Unit', 'Version 2', 'Unit', 'Diff')
     keys = [
-        ('Segment Info', '.si'),
-        ('Fields', '.fnm'),
-        ('Field Index', '.fdx'),
-        ('Field Data', '.fdt'),
-        ('Term Dictionary', '.tim'),
-        ('Term Index', '.tip'),
-        ('Frequencies', '.doc'),
-        ('Positions', '.pos'),
-        ('Payloads', '.pay'),
-        ('Norms (nvd)', '.nvd'),
-        ('Norms (nvm)', '.nvm'),
-        ('Per-Doc Values (dvd)', '.dvd'),
-        ('Per-Doc Values (dvm)', '.dvm'),
-        ('Term Vector Index', '.tvx'),
-        ('Term Vector Data', '.tvd'),
-        ('Live Documents', '.liv'),
-        ('Point values', '.dii')
+        ('Segment Info', 'si'),
+        ('Fields', 'fnm'),
+        ('Field Index', 'fdx'),
+        ('Field Data', 'fdt'),
+        ('Term Dictionary', 'tim'),
+        ('Term Index', 'tip'),
+        ('Frequencies', 'doc'),
+        ('Positions', 'pos'),
+        ('Payloads', 'pay'),
+        ('Norms (nvd)', 'nvd'),
+        ('Norms (nvm)', 'nvm'),
+        ('Per-Doc Values (dvd)', 'dvd'),
+        ('Per-Doc Values (dvm)', 'dvm'),
+        ('Term Vector Index', 'tvx'),
+        ('Term Vector Data', 'tvd'),
+        ('Live Documents', 'liv'),
+        ('Point values', 'dii')
     ]
 
     def mk_row(key):
