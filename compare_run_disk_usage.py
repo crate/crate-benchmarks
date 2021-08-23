@@ -88,9 +88,9 @@ def run_comparison(version1,
         val2 = v2[ext]
         v1_size, v1_unit = human_readable_byte_size(val1)
         v2_size, v2_unit = human_readable_byte_size(val2)
-        return (description, v1_size, v2_unit, v1_size, v2_unit, perc_diff(val1, val2))
+        return (description, v1_size, v1_unit, v2_size, v2_unit, perc_diff(val1, val2))
     rows = [mk_row(key) for key in keys]
-    print(tabulate(rows, headers=headers))
+    print(tabulate(rows, headers=headers, floatfmt=".2f"))
 
 
 def main():
