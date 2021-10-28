@@ -1,26 +1,22 @@
 [setup]
 statements = [
    '''create table tbl (dummy_col_for_gen_ser_insert int, obj OBJECT(STRICT) AS ("prop" TEXT))''',
-   '''insert into tbl(dummy_col_for_gen_ser_insert) (select * from generate_series(1,1000000))''',
-   '''update tbl set obj['prop']=dummy_col_for_gen_ser_insert%1000::text''',
-   '''create view tbl_view_no_alias AS SELECT obj['prop'] FROM tbl WHERE dummy_col_for_gen_ser_insert%2=0''',
-   '''create view tbl_view_alias AS SELECT obj['prop'] "prop" FROM tbl WHERE dummy_col_for_gen_ser_insert%2=0'''
+   '''insert into tbl(dummy_col_for_gen_ser_insert) (select * from generate_series(1,100000))''',
+   '''update tbl set obj['prop']=dummy_col_for_gen_ser_insert%1000::text'''
 ]
 
 [[queries]]
-statement = "select count(*) from tbl_view_alias where prop = '500' limit 100"
+statement = "select count(*) from (select obj['prop'] as prop from tbl) t where prop = '500' limit 100"
 iterations = 1000
 concurrency = 15
 
 [[queries]]
-statement = " select count(*) from tbl_view_no_alias where obj['prop']='500' limit 100"
+statement = "select count(*) from (select obj['prop'] from tbl) t where obj['prop']='500' limit 100"
 iterations = 1000
 concurrency = 15
 
 
 [teardown]
 statements = [
-  "drop table tbl",
-  "drop view tbl_view_alias",
-  "drop view tbl_view_no_alias",
+  "drop table tbl"
 ]
