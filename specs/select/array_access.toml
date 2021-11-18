@@ -11,4 +11,4 @@ statement = "select a from array_access where a[1] = 101"
 iterations = 10
 
 [teardown]
-statements = ["drop table array_access"]
+statements = ["drop table if exists array_access"]

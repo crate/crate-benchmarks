@@ -26,4 +26,4 @@ iterations = 10000
 concurrency = 15
 
 [teardown]
-statements = ["drop table t_shards", "drop table p_t_shards", "drop blob table b_t_shards"]
+statements = ["drop table if exists t_shards", "drop table if exists p_t_shards", "drop blob table b_t_shards"]

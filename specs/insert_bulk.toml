@@ -10,4 +10,4 @@ concurrency = 1
 num_records = 1000000
 
 [teardown]
-statements = ["drop table id_int_value_str"]
+statements = ["drop table if exists id_int_value_str"]

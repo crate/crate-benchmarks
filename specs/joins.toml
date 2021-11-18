@@ -29,4 +29,4 @@ iterations = 150
 
 
 [teardown]
-statements = ["drop table articles", "drop table colors"]
+statements = ["drop table if exists articles", "drop table if exists colors"]

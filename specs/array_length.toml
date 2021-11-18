@@ -62,8 +62,8 @@ iterations = 200
 
 [teardown]
 statements = [
-  "drop table t_arrays_biased_empty",
-  "drop table t_arrays_biased_one_element",
-  "drop table t_arrays_biased_5_elements",
-  "drop table t_arrays_even",
+  "drop table if exists t_arrays_biased_empty",
+  "drop table if exists t_arrays_biased_one_element",
+  "drop table if exists t_arrays_biased_5_elements",
+  "drop table if exists t_arrays_even",
 ]

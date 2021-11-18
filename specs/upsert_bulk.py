@@ -23,7 +23,7 @@ spec = Spec(
             "refresh table articles_bulk_insert"
         ]
     ),
-    teardown=Instructions(statements=["drop table articles_bulk_insert"]),
+    teardown=Instructions(statements=["drop table if exists articles_bulk_insert"]),
     queries=[
         {
             'statement': """insert into articles_bulk_insert (id, name, price) values ($1, $2, $3)

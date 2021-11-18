@@ -29,7 +29,7 @@ spec = Spec(
     ),
     teardown=Instructions(
         statements=[
-            'drop table id_int_value_str',
+            'drop table if exists id_int_value_str',
         ]
     ),
     queries=[

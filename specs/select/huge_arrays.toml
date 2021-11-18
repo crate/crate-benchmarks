@@ -14,4 +14,4 @@ iterations = 500
 
 
 [teardown]
-statements = ["drop table huge_arrays"]
+statements = ["drop table if exists huge_arrays"]

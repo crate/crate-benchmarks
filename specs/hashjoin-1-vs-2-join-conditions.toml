@@ -27,4 +27,4 @@ statement = "select t1.id1, t2.id1 from t1 inner join t2 on t1.id1=t2.id1 and t1
 iterations = 10000
 
 [teardown]
-statements = ["drop table t1", "drop table t2"]
+statements = ["drop table if exists t1", "drop table if exists t2"]
