@@ -25,7 +25,7 @@ spec = Spec(
             }
         ]
     ),
-    teardown=Instructions(statements=["drop table id_int_value_str"]),
+    teardown=Instructions(statements=["drop table if exists id_int_value_str"]),
     queries=[
         {
             'statement': 'update id_int_value_str set value = ? where id = ?',

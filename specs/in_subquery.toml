@@ -15,4 +15,4 @@ statement = "select * from articles where id not in (select id from colors where
 iterations = 200
 
 [teardown]
-statements = ["drop table articles", "drop table colors"]
+statements = ["drop table if exists articles", "drop table if exists colors"]

@@ -22,7 +22,7 @@ spec = Spec(
             "refresh table articles"
         ]
     ),
-    teardown=Instructions(statements=["drop table articles"]),
+    teardown=Instructions(statements=["drop table if exists articles"]),
     queries=[
         {
             'statement': """insert into articles (id, name, price) values ($1, $2, $3)

@@ -15,4 +15,4 @@ limit 100
 iterations = 10000
 
 [teardown]
-statements = ["drop table uservisits"]
+statements = ["drop table if exists uservisits"]

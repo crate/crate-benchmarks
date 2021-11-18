@@ -45,8 +45,8 @@ iterations = 200
 
 [teardown]
 statements = [
-  "drop table t090",
-  "drop table t075",
-  "drop table t050",
-  "drop table t025"
+  "drop table if exists t090",
+  "drop table if exists t075",
+  "drop table if exists t050",
+  "drop table if exists t025"
 ]

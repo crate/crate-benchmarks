@@ -23,7 +23,7 @@ spec = Spec(
             }
         ]
     ),
-    teardown=Instructions(statements=["drop table t_update_bulk"]),
+    teardown=Instructions(statements=["drop table if exists t_update_bulk"]),
     queries=[
         {
             'statement': 'update t_update_bulk set value = ? where id = ?',

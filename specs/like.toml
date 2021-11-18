@@ -23,4 +23,4 @@ statement = '''select "UserAgent" from uservisits where "UserAgent" ilike 'mozil
 iterations = 200
 
 [teardown]
-statements = ["drop table uservisits"]
+statements = ["drop table if exists uservisits"]

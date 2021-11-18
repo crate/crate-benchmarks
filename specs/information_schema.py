@@ -2,7 +2,7 @@ create_table_stmt = """create table table_{} (name string)
                        clustered into 1 shards
                        with (number_of_replicas=0)"""
 
-drop_table_stmt = "drop table table_{}"
+drop_table_stmt = "drop table if exists table_{}"
 
 spec = Spec(
     setup=Instructions(statements=[create_table_stmt.format(i) for i in range(150)]),

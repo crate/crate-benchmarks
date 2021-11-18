@@ -49,4 +49,4 @@ concurrency = 5
 iterations = 100
 
 [teardown]
-statements = ["drop table uservisits"]
+statements = ["drop table if exists uservisits"]

@@ -13,7 +13,7 @@ spec = Spec(
             }
         ]
     ),
-    teardown=Instructions(statements=['drop table t']),
+    teardown=Instructions(statements=['drop table if exists t']),
     queries=[
         {
             'statement': 'delete from t where id = ?',

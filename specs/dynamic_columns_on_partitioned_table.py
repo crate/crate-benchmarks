@@ -46,7 +46,7 @@ class statements:
 
 spec = Spec(
     setup=Instructions(statements=[create_table_stmt]),
-    teardown=Instructions(statements=["drop table t"]),
+    teardown=Instructions(statements=["drop table if exists t"]),
     queries=[
         {
             'statement': statements(),
