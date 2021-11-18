@@ -6,7 +6,7 @@ create_table_stmt = """
 """
 
 drop_table_stmt = """
-    drop table if exists t_any
+    drop table t_any
 """
 
 spec = Spec(

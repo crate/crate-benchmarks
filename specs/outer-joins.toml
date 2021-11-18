@@ -73,11 +73,11 @@ iterations = 250
 
 [teardown]
 statements = [
-    "drop table if exists actor",
-    "drop table if exists film_actor",
-    "drop table if exists film",
-    "drop table if exists film_category",
-    "drop table if exists category",
-    "drop table if exists employees",
-    "drop table if exists offices",
+    "drop table actor",
+    "drop table film_actor",
+    "drop table film",
+    "drop table film_category",
+    "drop table category",
+    "drop table employees",
+    "drop table offices",
 ]

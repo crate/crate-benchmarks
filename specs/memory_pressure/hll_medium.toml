@@ -47,4 +47,4 @@ iterations = 500
 
 
 [teardown]
-statements = ["drop table if exists hll"]
+statements = ["drop table hll"]

@@ -15,4 +15,4 @@ iterations = 1000
 args = [1, 2, 3, 4, 5]
 
 [teardown]
-statements = ["drop table if exists uservisits"]
+statements = ["drop table uservisits"]

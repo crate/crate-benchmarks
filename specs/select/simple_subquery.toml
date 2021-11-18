@@ -23,4 +23,4 @@ iterations = 50
 
 
 [teardown]
-statements = ["drop table if exists uservisits"]
+statements = ["drop table uservisits"]

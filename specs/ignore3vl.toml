@@ -24,4 +24,4 @@ statement = "select count(*) from t where not ignore3vl(50 = any(a))"
 iterations = 2000
 
 [teardown]
-statements = ["drop table if exists t"]
+statements = ["drop table t"]

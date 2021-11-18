@@ -19,7 +19,7 @@ spec = Spec(
             """
         ]
     ),
-    teardown=Instructions(statements=["drop table if exists id_int_value_str"]),
+    teardown=Instructions(statements=["drop table id_int_value_str"]),
     queries=[
         {
             "statement": "insert into id_int_value_str (id, value) values (?, ?)",

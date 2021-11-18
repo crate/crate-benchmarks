@@ -19,6 +19,6 @@ iterations = 1
 
 [teardown]
 statements = [
-  "drop table if exists uservisits",
-  "drop table if exists target"
+  "drop table uservisits",
+  "drop table target"
 ]

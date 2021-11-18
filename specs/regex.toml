@@ -14,4 +14,4 @@ statement = '''select * from userVisits where uagent_plain ~ '(?i).*\bWindows\sN
 iterations = 500
 
 [teardown]
-statements = ["drop table if exists uservisits"]
+statements = ["drop table uservisits"]

@@ -22,4 +22,4 @@ statement = '''select * from uservisits_no_doc_values order by "adRevenue" limit
 iterations = 1000
 
 [teardown]
-statements = ["drop table if exists uservisits_no_doc_values"]
+statements = ["drop table uservisits_no_doc_values"]

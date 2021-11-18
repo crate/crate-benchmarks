@@ -18,6 +18,6 @@ concurrency = 15
 
 [teardown]
 statements = [
-  "drop table if exists t1",
-  "drop table if exists t2",
+  "drop table t1",
+  "drop table t2",
 ]

@@ -62,4 +62,4 @@ concurrency = 1
 
 
 [teardown]
-statements = ["drop table if exists t_shards"]
+statements = ["drop table t_shards"]

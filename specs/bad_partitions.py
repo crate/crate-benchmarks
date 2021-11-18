@@ -28,7 +28,7 @@ def _queries():
 
 spec = Spec(
     setup=Instructions(statements=[CREATE_TABLE]),
-    teardown=Instructions(statements=["drop table if exists tp"]),
+    teardown=Instructions(statements=["DROP TABLE tp"]),
     queries=_queries(),
 )
 

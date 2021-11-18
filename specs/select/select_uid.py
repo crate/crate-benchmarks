@@ -13,7 +13,7 @@ spec = Spec(
             }
         ]
     ),
-    teardown=Instructions(statements=['drop table if exists t']),
+    teardown=Instructions(statements=['drop table t']),
     queries=[
         {
             'statement': 'select _uid from t where id = ?',

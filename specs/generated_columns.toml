@@ -21,4 +21,4 @@ iterations = 10000
 
 
 [teardown]
-statements = ["drop table if exists generated_columns"]
+statements = ["drop table generated_columns"]

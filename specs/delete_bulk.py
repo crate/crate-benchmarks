@@ -26,7 +26,7 @@ spec = Spec(
     ),
     teardown=Instructions(
         statements=[
-            'drop table if exists t_delete_bulk',
+            'drop table t_delete_bulk',
         ]
     ),
     queries=[

@@ -14,4 +14,4 @@ concurrency = 1
 
 
 [teardown]
-statements = ["drop table if exists t"]
+statements = ["drop table t"]

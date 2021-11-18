@@ -29,7 +29,7 @@ def args():
 
 spec = Spec(
     setup=Instructions(statement_files=["sql/id_int_value_str.sql"]),
-    teardown=Instructions(statements=["drop table if exists id_int_value_str"]),
+    teardown=Instructions(statements=["drop table id_int_value_str"]),
     queries=[
         {
             "statement": "insert into id_int_value_str (id, value) (select col1, col2 from unnest(?, ?))",

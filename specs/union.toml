@@ -19,4 +19,4 @@ statement = "select id, name from articles union all select id, name from colors
 iterations = 100
 
 [teardown]
-statements = ["drop table if exists articles", "drop table if exists colors"]
+statements = ["drop table articles", "drop table colors"]
