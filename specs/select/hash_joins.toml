@@ -51,4 +51,4 @@ min_version = '3.0.0'
 concurrency = 1
 
 [teardown]
-statements = ["drop table uservisits_small", "drop table uservisits_large"]
+statements = ["drop table if exists uservisits_small", "drop table if exists uservisits_large"]

@@ -23,4 +23,4 @@ statement = '''select hyperloglog_distinct("visitDate") from uservisits'''
 iterations = 50
 
 [teardown]
-statements = ["drop table uservisits"]
+statements = ["drop table if exists uservisits"]

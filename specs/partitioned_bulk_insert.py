@@ -39,7 +39,7 @@ spec = Spec(
         statements=setup_statements(100)
     ),
     teardown=Instructions(
-        statements=['drop table part_bulk_insert']
+        statements=['drop table if exists part_bulk_insert']
     ),
     queries=[
         {

@@ -19,4 +19,4 @@ concurrency = 10
 
 
 [teardown]
-statements = ["drop table wide"]
+statements = ["drop table if exists wide"]
