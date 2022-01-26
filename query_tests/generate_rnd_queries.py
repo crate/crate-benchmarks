@@ -16,7 +16,7 @@ import random
 import time
 from functools import partial
 from argparse import ArgumentParser, RawTextHelpFormatter
-from cr8.insert_fake_data import DataFaker
+from cr8.insert_fake_data import DataFaker, Column
 from cr8.misc import parse_table
 from cr8.bench_spec import Spec, Instructions
 from crate.client import connect
@@ -440,7 +440,7 @@ def rnd_expr(data_faker, columns):
         def provider():
             return data_faker.fake.unix_time() * 1000
     else:
-        provider = data_faker.provider_for_column(column, inner_type)
+        provider = data_faker.provider_for_column(Column(column, inner_type, None))
     if inner_type in TYPE_REQUIRES_QUOTES:
         provider = partial(add_quotes, provider)
     use_scalar = every(15)
