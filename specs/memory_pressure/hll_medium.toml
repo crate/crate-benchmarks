@@ -1,9 +1,9 @@
 [setup]
 statement_files = ["hll.sql"]
 
-    [[setup.data_files]]
+    [[setup.data_cmds]]
     target = "hll"
-    source = "data.json"
+    cmd = ['specs/memory_pressure/gen_data.sh']
     bulk_size = 1000
     concurrency = 25
 
