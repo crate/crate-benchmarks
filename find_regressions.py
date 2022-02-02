@@ -9,6 +9,7 @@ benchmark results
 import argparse
 import math
 import sys
+import os
 import numpy as np
 from scipy import stats
 from typing import NamedTuple
@@ -160,7 +161,9 @@ def is_stable(diff):
 
 
 def find_regressions(hosts, table):
-    with connect(hosts) as conn:
+    user = os.getenv('DB_USERNAME')
+    password = os.getenv('DB_PASSWORD')
+    with connect(hosts, username=user, password=password) as conn:
         c = conn.cursor()
         results = _fetch_results(c, table)
         diffs = find_diffs(results)
