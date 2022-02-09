@@ -22,7 +22,7 @@ from compare_measures import Diff, print_diff
 from util import dict_from_kw_args
 
 
-def compare_results(results_v1, metrics_v1, results_v2, metrics_v2):
+def compare_results(results_v1, metrics_v1, results_v2, metrics_v2, show_plot):
     print('')
     print('')
     print('# Results (server side duration in ms)')
@@ -38,7 +38,7 @@ def compare_results(results_v1, metrics_v1, results_v2, metrics_v2):
         result_v2 = results_v2[k]
         print(f'Q: {k[0]}')
         print(f'C: {k[1]}')
-        print_diff(Diff(result_v1.runtime_stats, result_v2.runtime_stats))
+        print_diff(Diff(result_v1.runtime_stats, result_v2.runtime_stats), show_plot)
 
     ns_to_ms = 0.000001
     v1_gcy_cnt = metrics_v1['gc']['young']['count']
@@ -155,7 +155,8 @@ def run_compare(v1,
                 env_v1,
                 env_v2,
                 settings_v1,
-                settings_v2):
+                settings_v2,
+                show_plot):
     tmpdir = tempfile.mkdtemp()
     run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir)
     run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir)
@@ -163,7 +164,7 @@ def run_compare(v1,
         for _ in range(forks):
             results_v1, jfr_metrics1 = run_v1()
             results_v2, jfr_metrics2 = run_v2()
-            compare_results(results_v1, jfr_metrics1, results_v2, jfr_metrics2)
+            compare_results(results_v1, jfr_metrics1, results_v2, jfr_metrics2, show_plot)
     finally:
         shutil.rmtree(tmpdir, True)
 
@@ -196,6 +197,7 @@ def main():
                    help='Crate setting. Only applied to v1')
     p.add_argument('--setting-v2', action='append',
                    help='Crate setting. Only applied to v2')
+    p.add_argument('--show-plot', type=bool, default=False)
     args = p.parse_args()
     env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
@@ -217,7 +219,8 @@ def main():
             env_v1=env_v1,
             env_v2=env_v2,
             settings_v1=settings_v1,
-            settings_v2=settings_v2
+            settings_v2=settings_v2,
+            show_plot=args.show_plot
         )
     except KeyboardInterrupt:
         print('Exiting..')

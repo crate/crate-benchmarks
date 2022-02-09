@@ -5,3 +5,4 @@ scipy
 termcolor
 numpy
 crash
+plotext

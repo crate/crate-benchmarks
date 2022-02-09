@@ -14,6 +14,7 @@ import json
 from scipy import stats
 from cr8 import metrics
 from util import perc_diff
+import plotext as plt
 
 
 # critical value for a confidence level of 99% - assuming a normal distribution
@@ -53,7 +54,7 @@ class Diff:
         return json.dumps(self.__dict__)
 
 
-def print_diff(diff):
+def print_diff(diff, show_plot=False):
     mean_prefix = '+' if diff.r1['mean'] < diff.r2['mean'] else '-'
     median_prefix = '+' if diff.r1['percentile']['50'] < diff.r2['percentile']['50'] else '-'
     print(f'| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |')
@@ -64,6 +65,13 @@ def print_diff(diff):
     print(f'{diff.ptext}')
     print(f'{diff.significance}')
     print('')
+    if show_plot:
+        plt.subplots(2, 1)
+        plt.subplot(1, 1)
+        plt.scatter(diff.r1.get('samples', diff.r1['mean']), label='v1')
+        plt.subplot(2, 1)
+        plt.scatter(diff.r2.get('samples', diff.r2['mean']), label='v2')
+        plt.show()
 
 
 def main(path_old, path_new):
@@ -82,5 +90,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--old', type=str, help='Path to file with old measures')
     parser.add_argument('--new', type=str, help='Path to file with new measures')
+
     args = parser.parse_args()
     main(args.old, args.new)
