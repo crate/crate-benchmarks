@@ -82,7 +82,7 @@ System/JVM Metrics (durations in ms, byte-values in MB)
 
 def jfr_start(pid, tmpdir):
     java_home = os.environ.get('JAVA_HOME')
-    jcmd = os.path.join(java_home, 'bin', 'jcmd')
+    jcmd = java_home and os.path.join(java_home, 'bin', 'jcmd') or 'jcmd'
     filename = os.path.join(tmpdir, str(uuid4()) + '.jfr')
     subprocess.check_call([
         jcmd,
@@ -99,14 +99,14 @@ def jfr_start(pid, tmpdir):
 
 def jfr_stop(pid):
     java_home = os.environ.get('JAVA_HOME')
-    jcmd = os.path.join(java_home, 'bin', 'jcmd')
+    jcmd = java_home and os.path.join(java_home, 'bin', 'jcmd') or 'jcmd'
     subprocess.check_call([jcmd, str(pid), 'JFR.stop', 'name=rec'])
 
 
 def jfr_extract_metrics(filename):
     java_home = os.environ.get('JAVA_HOME')
-    java = os.path.join(java_home, 'bin', 'java')
-    cmd = [java, '--enable-preview', '--source', '14', 'JfrOverview.java', filename]
+    java = java_home and os.path.join(java_home, 'bin', 'java') or 'java'
+    cmd = [java, '--enable-preview', '--source', '17', 'JfrOverview.java', filename]
     output = subprocess.check_output(cmd, universal_newlines=True)
     return json.loads(output)
 
