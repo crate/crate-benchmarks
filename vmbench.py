@@ -21,6 +21,11 @@ Synopsis
     # to /home/crate/cratedb-benchmark-results.
     vmbench.py run
 
+    # Aggregate numbers on designated variant.
+    python vmbench.py analyze vanilla
+    python vmbench.py analyze idlepoll
+    python vmbench.py analyze idlepoll-nosmt
+
 
 Production
 ==========
@@ -44,12 +49,14 @@ import json
 import platform
 import subprocess
 import sys
+import textwrap
 from collections import OrderedDict
 from pathlib import Path
 
 from cr8.run_crate import run_crate
 from cr8.run_spec import run_spec
 
+from compare_results import read_results
 from util import human_readable_byte_size
 
 
@@ -66,6 +73,10 @@ class Scenario:
     ]
 
     timestamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
+
+    def __init__(self):
+        home = Path.home()
+        self.resultfile_path = (home / "cratedb-benchmarks-results")
 
     def start_cratedb(self):
         run_crate(version="4.7", env=["CRATE_HEAP_SIZE=14G"], keep_data=True)
@@ -97,15 +108,9 @@ class Scenario:
         specfile = self.get_specfile(spec["file"])
 
         # Compute path to result file.
-        home = Path.home()
-        spec_slug = slugify(Path(specfile).stem)
         variant = get_variant()
-        resultfile = (
-            home
-            / "cratedb-benchmarks-results"
-            / variant
-            / f"{spec_slug}-{self.timestamp}.json"
-        )
+        spec_slug = slugify(Path(specfile).stem)
+        resultfile = self.resultfile_path / variant / f"{spec_slug}-{self.timestamp}.json"
         resultfile.parent.mkdir(parents=True, exist_ok=True)
 
         # Invoke benchmark specification, either in "full" or "queries"-only mode.
@@ -123,6 +128,32 @@ class Scenario:
             output_fmt="json",
         )
         # amend_result_file(resultfile)
+
+    def analyze(self, variant):
+        for spec in self.specs:
+            specfile = self.get_specfile(spec["file"])
+            spec_slug = slugify(Path(specfile).stem)
+            result_files = list(Path(self.resultfile_path).joinpath(variant).glob(spec_slug + "-*"))
+            #print(f"Result files for {spec_slug}:\n{result_files}")
+            print(f"# {spec_slug}")
+            for result_file in result_files:
+                results = read_results(result_file)
+                #print(results)
+                for result in results:
+                    filename = result["meta"]["name"]
+                    started = result["started"]
+                    statement = result["statement"]
+                    concurrency = result["concurrency"]
+                    vmax = result["runtime_stats"]["max"]
+                    vmin = result["runtime_stats"]["min"]
+                    vmedian = result["runtime_stats"]["median"]
+                    range = (vmax - vmin) / vmedian
+
+                    #timestamp = datetime.datetime.fromtimestamp(started / 1000).strftime("%Y%m%dT%H%M%S")
+                    #print(f"{timestamp}-{filename}::{statement}-c{concurrency}:", range)
+                    statement = textwrap.shorten(statement, 50)
+                    print(f"{filename};{concurrency:02};{statement:55};{range}")
+            print()
 
 
 def amend_result_file(self, resultfile):
@@ -176,7 +207,7 @@ def get_sysinfo():
     return data
 
 
-def read_proc(path):
+def read_file(path):
     try:
         return open(path, "r").read()
     except:
@@ -186,20 +217,22 @@ def read_proc(path):
 def get_kernelinfo():
 
     data = OrderedDict()
-    data["cmdline"] = read_proc("/proc/cmdline")
-    data["version_signature"] = read_proc("/proc/version_signature")
+    data["cmdline"] = read_file("/proc/cmdline")
+    data["version_signature"] = read_file("/proc/version_signature")
 
     return data
 
 
 def get_variant():
-    cmdline = read_proc("/proc/cmdline")
+    cmdline = read_file("/proc/cmdline")
     variant = "vanilla"
     if cmdline is not None:
+        options = []
         if "idle=poll" in cmdline:
-            variant = "idlepoll"
+            options.append("idlepoll")
         if "nosmt" in cmdline:
-            variant += "-nosmt"
+            options.append("nosmt")
+        variant = "-".join(options)
     return variant
 
 
@@ -219,18 +252,24 @@ def slugify(value):
 
 
 def main():
-    subcommand = sys.argv[1]
+    subcommand = None
+    try:
+        subcommand = sys.argv[1]
+    except IndexError:
+        pass
     scenario = Scenario()
     if subcommand == "start":
         scenario.start_cratedb()
     elif subcommand == "setup":
         scenario.setup_specs()
     elif subcommand == "run":
-        # scenario.setup_specs()
-        # scenario.run_spec(specfile="specs/amo.toml")
         scenario.run_specs()
+    elif subcommand == "analyze":
+        scenario.analyze(sys.argv[2])
+    elif subcommand == "help":
+        print(__doc__)
     else:
-        raise KeyError(f"Unknown subcommand {subcommand}")
+        raise KeyError(f"Unknown subcommand {subcommand}, try {sys.argv[0]} help")
 
 
 if __name__ == "__main__":
