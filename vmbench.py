@@ -177,7 +177,7 @@ def get_sysinfo():
 
 def read_proc(path):
     try:
-        return open(path, "r").read().decode()
+        return open(path, "r").read()
     except:
         pass
 
