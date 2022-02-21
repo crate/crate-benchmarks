@@ -12,14 +12,23 @@ Synopsis
 ::
 
     # Start CrateDB with 14 GB heap memory.
-    sudo --user=crate vmbench.py start
+    vmbench.py start
 
     # Provision database with `uservisits` table.
-    sudo --user=crate vmbench.py setup
+    vmbench.py setup
 
     # Invoke list of benchmark specifications, saving corresponding result files
     # to /home/crate/cratedb-benchmark-results.
-    sudo --user=crate vmbench.py run
+    vmbench.py run
+
+
+Production
+==========
+::
+
+    sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py start
+    sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py setup
+    sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py run
 
 
 References
@@ -62,25 +71,29 @@ class Scenario:
 
     def setup_specs(self):
         # Use `setup` recipe from `hyperloglog.toml`, it provides a complete set of `uservisits` data.
+        hyperloglog_spec = self.get_specfile("specs/select/hyperloglog.toml")
         run_spec(
             benchmark_hosts=self.CRATEDB_HOST,
             action="setup",
-            spec="specs/select/hyperloglog.toml",
+            spec=hyperloglog_spec,
         )
         run_spec(
             benchmark_hosts=self.CRATEDB_HOST,
             action="load_data",
-            spec="specs/select/hyperloglog.toml",
+            spec=hyperloglog_spec,
         )
 
     def run_specs(self):
         for spec in self.specs:
             self.run_spec(spec=spec)
 
+    def get_specfile(self, specfile):
+        return Path.cwd().joinpath(specfile)
+
     def run_spec(self, spec):
 
         full = spec.get("full")
-        specfile = spec["file"]
+        specfile = self.get_specfile(spec["file"])
 
         # Compute path to result file.
         home = Path.home()
