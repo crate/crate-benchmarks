@@ -103,7 +103,7 @@ class Scenario:
             home
             / "cratedb-benchmarks-results"
             / variant
-            / f"{self.timestamp}-{spec_slug}.json"
+            / f"{spec_slug}-{self.timestamp}.json"
         )
         resultfile.parent.mkdir(parents=True, exist_ok=True)
 
