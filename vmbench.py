@@ -59,7 +59,7 @@ class Scenario:
     specs = [
         {"file": "specs/queries.toml"},
         {"file": "specs/select/hyperloglog.toml"},
-        {"file": "specs/insert_single.py", "full": True},
+        #{"file": "specs/insert_single.py", "full": True},
         {"file": "specs/insert_bulk.toml", "full": True},
         {"file": "specs/insert_unnest.py", "full": True},
     ]
