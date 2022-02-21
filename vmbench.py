@@ -36,7 +36,8 @@ References
 
 - https://engineering.mongodb.com/post/reducing-variability-in-performance-tests-on-ec2-setup-and-key-results
 - https://engineering.mongodb.com/post/repeatable-performance-tests-cpu-options-are-best-disabled
-- https://www.kernel.org/doc/html/v5.0/admin-guide/pm/cpuidle.html
+- https://www.kernel.org/doc/html/latest/admin-guide/pm/cpuidle.html
+- https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html#smt-control
 """
 import datetime
 import json
@@ -197,6 +198,8 @@ def get_variant():
     if cmdline is not None:
         if "idle=poll" in cmdline:
             variant = "idlepoll"
+        if "nosmt" in cmdline:
+            variant += "-nosmt"
     return variant
 
 
