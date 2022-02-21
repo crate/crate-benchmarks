@@ -37,7 +37,6 @@ import sys
 from collections import OrderedDict
 from pathlib import Path
 
-import psutil
 from cr8.run_crate import run_crate
 from cr8.run_spec import run_spec
 
@@ -133,6 +132,7 @@ def get_sysinfo():
     """
     https://pypi.org/project/sysinfo/
     """
+    import psutil
 
     def format_size(value):
         return " ".join(map(str, human_readable_byte_size(value)))
