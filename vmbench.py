@@ -75,8 +75,6 @@ class Scenario:
         {"file": "specs/insert_unnest.py", "full": True},
     ]
 
-    timestamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
-
     def __init__(self):
         home = Path.home()
         self.resultfile_path = (home / "cratedb-benchmarks-results")
@@ -114,7 +112,8 @@ class Scenario:
         # Compute path to result file.
         variant = get_variant()
         spec_slug = slugify(Path(specfile).stem)
-        resultfile = self.resultfile_path / variant / f"{spec_slug}-{self.timestamp}.json"
+        timestamp = datetime.datetime.now().strftime("%Y%m%dT%H%M%S")
+        resultfile = self.resultfile_path / variant / f"{spec_slug}-{timestamp}.json"
         resultfile.parent.mkdir(parents=True, exist_ok=True)
 
         # Invoke benchmark specification, either in "full" or "queries"-only mode.
