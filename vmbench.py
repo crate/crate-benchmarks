@@ -88,7 +88,7 @@ class Scenario:
             self.run_spec(spec=spec)
 
     def get_specfile(self, specfile):
-        return Path.cwd().joinpath(specfile)
+        return Path(__file__).parent.joinpath(specfile)
 
     def run_spec(self, spec):
 
