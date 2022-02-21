@@ -236,7 +236,8 @@ def get_variant():
             options.append("idlepoll")
         if "nosmt" in cmdline:
             options.append("nosmt")
-        variant = "-".join(options)
+        if options:
+            variant = "-".join(options)
     return variant
 
 
