@@ -21,6 +21,9 @@ Synopsis
     # to /home/crate/cratedb-benchmark-results.
     vmbench.py run
 
+    # Run each scenario five times.
+    vmbench.py run-count 5
+
     # Aggregate numbers on designated variant.
     python vmbench.py analyze vanilla
     python vmbench.py analyze idlepoll
@@ -95,9 +98,10 @@ class Scenario:
             spec=hyperloglog_spec,
         )
 
-    def run_specs(self):
-        for spec in self.specs:
-            self.run_spec(spec=spec)
+    def run_specs(self, count=1):
+        for _ in range(count):
+            for spec in self.specs:
+                self.run_spec(spec=spec)
 
     def get_specfile(self, specfile):
         return Path(__file__).parent.joinpath(specfile)
@@ -264,6 +268,8 @@ def main():
         scenario.setup_specs()
     elif subcommand == "run":
         scenario.run_specs()
+    elif subcommand == "run-count":
+        scenario.run_specs(int(sys.argv[2]))
     elif subcommand == "analyze":
         scenario.analyze(sys.argv[2])
     elif subcommand == "help":
