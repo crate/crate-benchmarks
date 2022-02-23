@@ -7,6 +7,14 @@ About
 Investigate variability in benchmark runs on virtual machines.
 
 
+Setup
+=====
+
+The analyzer routines use pandas and tabulate, so::
+
+    pip install --requirement=requirements.txt pandas tabulate
+
+
 Synopsis
 ========
 ::
@@ -14,7 +22,7 @@ Synopsis
     # Start CrateDB with 14 GB heap memory.
     vmbench.py start
 
-    # Provision database with `uservisits` table.
+    # Provision database with `uservisits` table, once.
     vmbench.py setup
 
     # Invoke list of benchmark specifications, saving corresponding result files
@@ -22,24 +30,39 @@ Synopsis
     vmbench.py run
 
     # Run each scenario five times.
-    vmbench.py run-count 5
+    vmbench.py run 5
 
-    # Aggregate numbers on designated variant.
-    python vmbench.py analyze vanilla
-    python vmbench.py analyze idlepoll
-    python vmbench.py analyze idlepoll-nosmt
+    # Summarize numbers on designated variant.
+    python vmbench.py collect vanilla
+    python vmbench.py collect idlepoll
+    python vmbench.py collect idlepoll-nosmt
 
-    # Compare runs between variants side by side.
-    python vmbench.py analyze-compare
+    # Compare numbers between variants side by side.
+    python vmbench.py summary
 
 
 Production
 ==========
+
+Convenient shortcut to address `vmbench` program within virtualenv::
+
+    vmbench() {
+        sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py "$@"
+    }
+
 ::
 
-    sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py start
-    sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py setup
-    sudo --user=crate /opt/crate-benchmarks/.venv/bin/python /opt/crate-benchmarks/vmbench.py run
+    # Bootstrap environment.
+    # Note: Run this after each reboot.
+    vmbench start
+    vmbench setup
+
+    # Run benchmarks.
+    # Note: Change Linux kernel parameters and iterate to create "variants".
+    vmbench run 5
+
+    # Compare benchmark results between variants.
+    vmbench summary
 
 
 References
@@ -73,7 +96,7 @@ class Scenario:
     specs = [
         {"file": "specs/queries.toml"},
         {"file": "specs/select/hyperloglog.toml"},
-        #{"file": "specs/insert_single.py", "full": True},
+        # {"file": "specs/insert_single.py", "full": True},
         {"file": "specs/insert_bulk.toml", "full": True},
         {"file": "specs/insert_unnest.py", "full": True},
     ]
@@ -86,7 +109,7 @@ class Scenario:
 
     def __init__(self):
         home = Path.home()
-        self.resultfile_path = (home / "cratedb-benchmarks-results")
+        self.resultfile_path = home / "cratedb-benchmarks-results"
 
     def start_cratedb(self):
         run_crate(version="4.7", env=["CRATE_HEAP_SIZE=14G"], keep_data=True)
@@ -141,66 +164,155 @@ class Scenario:
         )
         # amend_result_file(resultfile)
 
-    def analyze(self, variant):
+
+class Analyzer:
+    def __init__(self, scenario: Scenario):
+        self.scenario = scenario
+
+    def summary(self):
+        return self.summarize_variants(grouped=True)
+
+    def summarize_variants(self, grouped=False):
+        """
+        Collect results from multiple variants across multiple runs and summarize
+        the results into spreadsheet shape for convenient side-by-side comparison.
+        """
+        import pandas as pd
+
+        # Slurp all result files.
         range_items = []
-        for spec in self.specs:
-            specfile = self.get_specfile(spec["file"])
+        for variant in Scenario.variants:
+            range_items += self.collect(variant)
+        # print(json.dumps(range_items, indent=2))
+
+        # Display the data in tabular shape.
+        df = pd.DataFrame(range_items)
+
+        if not grouped:
+            dft = self.reshape_comparison(df)
+            yield "all", dft
+
+        else:
+            # Display the data in tabular shape, grouped by run identifier.
+            df_grouped = df.groupby(by="run")
+            for run_id, dfg in df_grouped:
+                # print(f"# Run: {run_id}")
+                del dfg["run"]
+                dfg = self.reshape_comparison(dfg)
+                yield run_id, dfg
+
+    def collect(self, variant):
+        """
+        - Scan result folder for all spec result files matching variant.
+        - For each result file, iterate all result items.
+        - For each result item, compute `range = (vmax - vmin) / vmedian`.
+        """
+        spec_item_results = []
+
+        # All the defined spec files.
+        for spec in self.scenario.specs:
+            specfile = self.scenario.get_specfile(spec["file"])
             spec_slug = slugify(Path(specfile).stem)
-            result_files = list(Path(self.resultfile_path).joinpath(variant).glob(spec_slug + "-*"))
-            #print(f"Result files for {spec_slug}:\n{result_files}")
-            #print(f"# {spec_slug}")
+
+            # Each spec file produces multiple result files across multiple runs.
+            result_files = list(Path(self.scenario.resultfile_path).joinpath(variant).glob(spec_slug + "-*"))
+            # print(f"Result files for {spec_slug}:\n{result_files}")
+            # print(f"# {spec_slug}")
+
+            result_file: Path
             for result_file in sorted(result_files):
+
+                # Derive "run identifier" from timestamp in filename.
+                # Needed to identify an individual single spec item across multiple runs.
+                run_id = result_file.stem.rsplit("-", maxsplit=1)[-1]
+
+                # Results from a single spec results file.
                 results = read_results(result_file)
-                #print(results)
+
+                # Each result file has multiple items, one per test case / statement,
+                # with designated concurrency. We call it "spec item".
                 for result in results:
-                    filename = result["meta"]["name"]
+                    specfile = result["meta"]["name"]
                     started = result["started"]
                     statement = result["statement"]
                     concurrency = result["concurrency"]
                     vmax = result["runtime_stats"]["max"]
                     vmin = result["runtime_stats"]["min"]
                     vmedian = result["runtime_stats"]["median"]
+
+                    """
+                    > For each test, we analyzed the 25 data points, with a goal of finding a
+                    > configuration that minimizes this single metric:
+                    >
+                    >     range = (max - min) / median
+
+                    -- https://engineering.mongodb.com/post/reducing-variability-in-performance-tests-on-ec2-setup-and-key-results
+                    """
                     range = (vmax - vmin) / vmedian
 
-                    #timestamp = datetime.datetime.fromtimestamp(started / 1000).strftime("%Y%m%dT%H%M%S")
-                    #print(f"{timestamp}-{filename}::{statement}-c{concurrency}:", range)
                     statement_short = textwrap.shorten(statement, 50)
-                    #print(f"{filename};{concurrency:02};{statement_short};{range}")
 
-                    range_item = dict(
-                        # Compound key to identify a single spec item.
-                        stmt=f"{filename}::{statement_short}",
+                    # To identify an individual single spec item across multiple runs, we use its
+                    # start timestamp and call it the "run identifier".
+                    # run_id = datetime.datetime.fromtimestamp(started / 1000).strftime("%Y%m%dT%H%M%S")
+
+                    spec_item_result = dict(
+                        # Composite key to uniquely identify a single spec item across multiple spec runs.
+                        spec=specfile,
+                        stmt=statement_short,
                         concurrency=concurrency,
-                        started=started,
-
+                        run=run_id,
                         # Column axis in spe.
                         variant=variant,
-
                         # Value.
                         range=range,
                     )
-                    range_items.append(range_item)
-            #print()
-        return range_items
+                    spec_item_results.append(spec_item_result)
 
-    def analyze_compare(self):
-        import pandas as pd
+        return spec_item_results
+
+    def reshape_comparison(self, df):
+        """
+        Create spreadsheet-style pivot table from all spec item results,
+        for side-by-side comparison of outcomes for different variants,
+        across multiple runs.
+
+        - All index fields will be squashed into a pandas MultiIndex as composite key.
+        - All distinct values of the "variant" field will be used as designated columns.
+        """
+
+        # Define fields to be used as multi index / composite key.
+        index_fields = ["spec", "stmt", "concurrency"]
+
+        # When data is already grouped by run id, it is missing as field already.
+        # So, make it part of the composite key only conditionally.
+        if "run" in df:
+            index_fields.append("run")
+
+        # Pivot into spreadsheet-style data frame.
+        df = df.pivot(index=index_fields, columns=["variant"], values="range")
+
+        # Make sure the order of the "variant" columns matches the definition.
+        df = df.reindex(columns=self.scenario.variants)
+
+        # Just slap a meaningful name on the composite key column, derived from its original field names.
+        df.index.name = ", ".join(index_fields)
+
+        return df
+
+    @staticmethod
+    def display_frame_tabular(df):
         from tabulate import tabulate
 
-        # Slurp all result files.
-        range_items = []
-        for variant in Scenario.variants:
-            range_items += self.analyze(variant)
-        #print(json.dumps(range_items, indent=4))
-
-        # Bring the data into tabular shape.
-        df = pd.DataFrame(range_items)
-        df = df.pivot(index=["stmt", "concurrency", "started"], columns=["variant"], values="range")
-        df = df.reindex(columns=self.variants)
         print(tabulate(df, headers="keys"))
 
 
 def amend_result_file(self, resultfile):
+    """
+    The idea was to annotate the JSON result file with more data about the runtime environment.
+    FIXME: This function does not work on JSONL files yet.
+    """
+
     # Read result file.
     with open(resultfile, "r") as f:
         data = json.load(f)
@@ -227,9 +339,7 @@ def get_sysinfo():
         return " ".join(map(str, human_readable_byte_size(value)))
 
     def shellout(command):
-        return subprocess.check_output(
-            command, shell=True, stderr=subprocess.STDOUT
-        ).decode()
+        return subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode()
 
     data = OrderedDict()
 
@@ -285,15 +395,20 @@ def slugify(value):
     # https://github.com/earthobservations/luftdatenpumpe/blob/0.20.2/luftdatenpumpe/util.py#L211-L230
     import unicodedata
 
-    value = (
-        unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
-    )
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
     import re
 
-    value = re.sub("[^\w\s-]", "-", value).strip().lower()
-    value = re.sub("[-\s]+", "-", value)
+    value = re.sub(r"[^\w\s-]", "-", value).strip().lower()
+    value = re.sub(r"[-\s]+", "-", value)
     value = value.strip("-")
     return value
+
+
+def print_header(title):
+    length = len(title)
+    print("-" * length)
+    print(title)
+    print("-" * length)
 
 
 def main():
@@ -302,19 +417,32 @@ def main():
         subcommand = sys.argv[1]
     except IndexError:
         pass
+
     scenario = Scenario()
+    analyser = Analyzer(scenario=scenario)
+
+    # Run benchmarks and record results.
     if subcommand == "start":
         scenario.start_cratedb()
     elif subcommand == "setup":
         scenario.setup_specs()
     elif subcommand == "run":
-        scenario.run_specs()
-    elif subcommand == "run-count":
-        scenario.run_specs(int(sys.argv[2]))
-    elif subcommand == "analyze":
-        scenario.analyze(sys.argv[2])
-    elif subcommand == "analyze-compare":
-        scenario.analyze_compare()
+        try:
+            count = int(sys.argv[2])
+        except:
+            count = 1
+        scenario.run_specs(count)
+
+    # Analyze benchmark results.
+    elif subcommand == "collect":
+        print(json.dumps(analyser.collect(sys.argv[2]), indent=2))
+    elif subcommand == "summary":
+        for index, (run_id, df) in enumerate(analyser.summary()):
+            print_header(f"Run #{index+1} at {run_id}")
+            print()
+            analyser.display_frame_tabular(df)
+            print()
+            print()
 
     elif subcommand == "help":
         print(__doc__)
