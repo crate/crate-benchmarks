@@ -90,6 +90,10 @@ from util import human_readable_byte_size
 
 
 class Scenario:
+    """
+    Run a defined set of `run-spec` files and record their outcomes with different variants.
+    The variants are runtime environment tunings with Linux kernel parameters.
+    """
 
     CRATEDB_HOST = "localhost:4200"
 
@@ -108,10 +112,12 @@ class Scenario:
     ]
 
     def __init__(self):
+        # TODO: Optionally use path from `VMBENCH_RESULTS` environment variable.
         home = Path.home()
         self.resultfile_path = home / "cratedb-benchmarks-results"
 
     def start_cratedb(self):
+        # TODO: Make version and heap size configurable.
         run_crate(version="4.7", env=["CRATE_HEAP_SIZE=14G"], keep_data=True)
 
     def setup_specs(self):
@@ -133,7 +139,8 @@ class Scenario:
             for spec in self.specs:
                 self.run_spec(spec=spec)
 
-    def get_specfile(self, specfile):
+    @staticmethod
+    def get_specfile(specfile):
         return Path(__file__).parent.joinpath(specfile)
 
     def run_spec(self, spec):
@@ -162,10 +169,16 @@ class Scenario:
             logfile_result=resultfile,
             output_fmt="json",
         )
+
+        # TODO: Implement proper result file amending.
         # amend_result_file(resultfile)
 
 
 class Analyzer:
+    """
+    Analyze `run-spec` JSONL result files.
+    """
+
     def __init__(self, scenario: Scenario):
         self.scenario = scenario
 
@@ -393,11 +406,10 @@ def get_variant():
 
 def slugify(value):
     # https://github.com/earthobservations/luftdatenpumpe/blob/0.20.2/luftdatenpumpe/util.py#L211-L230
+    import re
     import unicodedata
 
     value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
-    import re
-
     value = re.sub(r"[^\w\s-]", "-", value).strip().lower()
     value = re.sub(r"[-\s]+", "-", value)
     value = value.strip("-")
@@ -435,7 +447,11 @@ def main():
 
     # Analyze benchmark results.
     elif subcommand == "collect":
-        print(json.dumps(analyser.collect(sys.argv[2]), indent=2))
+        try:
+            variant = sys.argv[2]
+        except IndexError:
+            raise KeyError(f"Variant needed, choose one of {scenario.variants}.")
+        print(json.dumps(analyser.collect(variant), indent=2))
     elif subcommand == "summary":
         for index, (run_id, df) in enumerate(analyser.summary()):
             print_header(f"Run #{index+1} at {run_id}")
