@@ -319,7 +319,7 @@ class Analyzer:
     def display_frame_tabular(df):
         from tabulate import tabulate
 
-        print(tabulate(df, headers="keys"))
+        print(tabulate(df, headers="keys", tablefmt="github"))
 
 
 def amend_result_file(self, resultfile):
@@ -419,10 +419,10 @@ def slugify(value):
 
 
 def print_header(title):
-    length = len(title)
-    print("-" * length)
-    print(title)
-    print("-" * length)
+    # length = len(title)
+    # print("-" * length)
+    print(f"### {title}")
+    # print("-" * length)
 
 
 def main():
@@ -456,7 +456,7 @@ def main():
         print(json.dumps(analyser.collect(variant), indent=2))
     elif subcommand == "summary":
         for run_id, df in analyser.summary():
-            print_header(f"Run #{run_id}")
+            print_header(f"Run {run_id+1}")
             print()
             analyser.display_frame_tabular(df)
             print()
