@@ -29,6 +29,9 @@ Synopsis
     python vmbench.py analyze idlepoll
     python vmbench.py analyze idlepoll-nosmt
 
+    # Compare runs between variants side by side.
+    python vmbench.py analyze-compare
+
 
 Production
 ==========
@@ -73,6 +76,12 @@ class Scenario:
         #{"file": "specs/insert_single.py", "full": True},
         {"file": "specs/insert_bulk.toml", "full": True},
         {"file": "specs/insert_unnest.py", "full": True},
+    ]
+
+    variants = [
+        "vanilla",
+        "idlepoll",
+        "idlepoll-nosmt",
     ]
 
     def __init__(self):
@@ -133,13 +142,14 @@ class Scenario:
         # amend_result_file(resultfile)
 
     def analyze(self, variant):
+        range_items = []
         for spec in self.specs:
             specfile = self.get_specfile(spec["file"])
             spec_slug = slugify(Path(specfile).stem)
             result_files = list(Path(self.resultfile_path).joinpath(variant).glob(spec_slug + "-*"))
             #print(f"Result files for {spec_slug}:\n{result_files}")
-            print(f"# {spec_slug}")
-            for result_file in result_files:
+            #print(f"# {spec_slug}")
+            for result_file in sorted(result_files):
                 results = read_results(result_file)
                 #print(results)
                 for result in results:
@@ -154,9 +164,40 @@ class Scenario:
 
                     #timestamp = datetime.datetime.fromtimestamp(started / 1000).strftime("%Y%m%dT%H%M%S")
                     #print(f"{timestamp}-{filename}::{statement}-c{concurrency}:", range)
-                    statement = textwrap.shorten(statement, 50)
-                    print(f"{filename};{concurrency:02};{statement:55};{range}")
-            print()
+                    statement_short = textwrap.shorten(statement, 50)
+                    #print(f"{filename};{concurrency:02};{statement_short};{range}")
+
+                    range_item = dict(
+                        # Compound key to identify a single spec item.
+                        stmt=f"{filename}::{statement_short}",
+                        concurrency=concurrency,
+                        started=started,
+
+                        # Column axis in spe.
+                        variant=variant,
+
+                        # Value.
+                        range=range,
+                    )
+                    range_items.append(range_item)
+            #print()
+        return range_items
+
+    def analyze_compare(self):
+        import pandas as pd
+        from tabulate import tabulate
+
+        # Slurp all result files.
+        range_items = []
+        for variant in Scenario.variants:
+            range_items += self.analyze(variant)
+        #print(json.dumps(range_items, indent=4))
+
+        # Bring the data into tabular shape.
+        df = pd.DataFrame(range_items)
+        df = df.pivot(index=["stmt", "concurrency", "started"], columns=["variant"], values="range")
+        df = df.reindex(columns=self.variants)
+        print(tabulate(df, headers="keys"))
 
 
 def amend_result_file(self, resultfile):
@@ -272,6 +313,9 @@ def main():
         scenario.run_specs(int(sys.argv[2]))
     elif subcommand == "analyze":
         scenario.analyze(sys.argv[2])
+    elif subcommand == "analyze-compare":
+        scenario.analyze_compare()
+
     elif subcommand == "help":
         print(__doc__)
     else:
