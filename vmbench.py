@@ -233,11 +233,12 @@ class Analyzer:
             # print(f"# {spec_slug}")
 
             result_file: Path
-            for result_file in sorted(result_files):
+            for run_index, result_file in enumerate(sorted(result_files)):
 
                 # Derive "run identifier" from timestamp in filename.
                 # Needed to identify an individual single spec item across multiple runs.
-                run_id = result_file.stem.rsplit("-", maxsplit=1)[-1]
+                # run_id = result_file.stem.rsplit("-", maxsplit=1)[-1]
+                run_id = run_index
 
                 # Results from a single spec results file.
                 results = read_results(result_file)
@@ -453,8 +454,8 @@ def main():
             raise KeyError(f"Variant needed, choose one of {scenario.variants}.")
         print(json.dumps(analyser.collect(variant), indent=2))
     elif subcommand == "summary":
-        for index, (run_id, df) in enumerate(analyser.summary()):
-            print_header(f"Run #{index+1} at {run_id}")
+        for run_id, df in analyser.summary():
+            print_header(f"Run #{run_id}")
             print()
             analyser.display_frame_tabular(df)
             print()
