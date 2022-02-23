@@ -218,7 +218,7 @@ class Analyzer:
         """
         - Scan result folder for all spec result files matching variant.
         - For each result file, iterate all result items.
-        - For each result item, compute `range = (vmax - vmin) / vmedian`.
+        - For each result item, compute `range = (max - min) / median`.
         """
         spec_item_results = []
 
@@ -262,7 +262,8 @@ class Analyzer:
 
                     -- https://engineering.mongodb.com/post/reducing-variability-in-performance-tests-on-ec2-setup-and-key-results
                     """
-                    range = (vmax - vmin) / vmedian
+                    vrange = (vmax - vmin) / vmedian
+                    vrange = round(vrange, 2)
 
                     statement_short = textwrap.shorten(statement, 50)
 
@@ -279,7 +280,7 @@ class Analyzer:
                         # Column axis in spe.
                         variant=variant,
                         # Value.
-                        range=range,
+                        range=vrange,
                     )
                     spec_item_results.append(spec_item_result)
 
