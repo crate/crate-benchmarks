@@ -118,7 +118,7 @@ class Scenario:
 
     def start_cratedb(self):
         # TODO: Make version and heap size configurable.
-        run_crate(version="4.7", env=["CRATE_HEAP_SIZE=14G"], keep_data=True)
+        run_crate(version="4.7", env=["CRATE_HEAP_SIZE=4G"], keep_data=True)
 
     def setup_specs(self):
         # Use `setup` recipe from `hyperloglog.toml`, it provides a complete set of `uservisits` data.
