@@ -70,8 +70,16 @@ References
 
 - https://engineering.mongodb.com/post/reducing-variability-in-performance-tests-on-ec2-setup-and-key-results
 - https://engineering.mongodb.com/post/repeatable-performance-tests-cpu-options-are-best-disabled
+
+poll=idle+nosmt
+---------------
 - https://www.kernel.org/doc/html/latest/admin-guide/pm/cpuidle.html
 - https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html#smt-control
+
+cpufreq
+-------
+- https://access.redhat.com/documentation/enus/red_hat_enterprise_linux/8/html/monitoring_and_managing_system_status_and_performance/tuning-cpu-frequency-to-optimize-energy-consumption_monitoring-and-managing-system-status-and-performance
+- https://01.org/linuxgraphics/gfx-docs/drm/admin-guide/pm/cpufreq.html
 """
 import datetime
 import json
