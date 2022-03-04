@@ -84,11 +84,13 @@ cpufreq
 import datetime
 import json
 import platform
+import statistics
 import subprocess
 import sys
 import textwrap
 from collections import OrderedDict
 from pathlib import Path
+from time import time
 
 from cr8.run_crate import run_crate
 from cr8.run_spec import run_spec
@@ -143,9 +145,26 @@ class Scenario:
         )
 
     def run_specs(self, count=1):
+        durations = []
         for _ in range(count):
+            started = int(time() * 1000)
             for spec in self.specs:
                 self.run_spec(spec=spec)
+            ended = int(time() * 1000)
+            duration = ended - started
+            durations.append(duration)
+
+        # Compute statistics.
+        vmin = min(durations)
+        vmax = max(durations)
+        vmedian = statistics.median(durations)
+
+        # Compute variability.
+        vrange = (vmax - vmin) / vmedian
+        vrange = round(vrange, 4)
+
+        print()
+        print(f"Variability: {vrange}")
 
     @staticmethod
     def get_specfile(specfile):
