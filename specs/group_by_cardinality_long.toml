@@ -1,10 +1,16 @@
 [setup]
 statements = [
+  "create table t100 (x long) clustered into 5 shards",
   "create table t090 (x long) clustered into 5 shards",
   "create table t075 (x long) clustered into 5 shards",
   "create table t050 (x long) clustered into 5 shards",
-  "create table t025 (x long) clustered into 5 shards"
+  "create table t025 (x long) clustered into 5 shards",
+  "create table t000 (x long) clustered into 5 shards"
 ]
+
+  [[setup.data_files]]
+  target = "t100"
+  source = "data/t_100.json.gz"
 
   [[setup.data_files]]
   target = "t090"
@@ -22,6 +28,15 @@ statements = [
   target = "t025"
   source = "data/t_025.json.gz"
 
+  [[setup.data_files]]
+  target = "t000"
+  source = "data/t_000.json.gz"
+
+
+[[queries]]
+statement = "select count(*) from (select distinct x from t100) t"
+concurrency = 10
+iterations = 200
 
 [[queries]]
 statement = "select count(*) from (select distinct x from t090) t"
@@ -43,10 +58,17 @@ statement = "select count(*) from (select distinct x from t025) t"
 concurrency = 10
 iterations = 200
 
+[[queries]]
+statement = "select count(*) from (select distinct x from t000) t"
+concurrency = 10
+iterations = 200
+
 [teardown]
 statements = [
+  "drop table if exists t100",
   "drop table if exists t090",
   "drop table if exists t075",
   "drop table if exists t050",
-  "drop table if exists t025"
+  "drop table if exists t025",
+  "drop table if exists t000"
 ]
