@@ -1,0 +1,51 @@
+[setup]
+statements = [
+  "create table uniform (x string) clustered into 5 shards",
+  "create table normal (x string) clustered into 5 shards",
+  "create table poisson (x string) clustered into 5 shards",
+  "create table exponential (x string) clustered into 5 shards",
+]
+
+  [[setup.data_cmds]]
+  target = "uniform"
+  cmd = ['generators/gen_specific_distribution.sh', 'uniform']
+
+  [[setup.data_cmds]]
+  target = "normal"
+  cmd = ['generators/gen_specific_distribution.sh', 'normal']
+
+  [[setup.data_cmds]]
+  target = "poisson"
+  cmd = ['generators/gen_specific_distribution.sh', 'poisson']
+
+  [[setup.data_cmds]]
+  target = "exponential"
+  cmd = ['generators/gen_specific_distribution.sh', 'exponential']
+
+[[queries]]
+statement = "select count(*) from (select distinct x from uniform) t"
+concurrency = 10
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from (select distinct x from normal) t"
+concurrency = 10
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from (select distinct x from poisson) t"
+concurrency = 10
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from (select distinct x from exponential) t"
+concurrency = 10
+iterations = 200
+
+[teardown]
+statements = [
+  "drop table if exists uniform",
+  "drop table if exists normal",
+  "drop table if exists poisson",
+  "drop table if exists exponential"
+]
