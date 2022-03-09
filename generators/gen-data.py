@@ -25,7 +25,10 @@ def poisson(n):
     # we use a small value for the loc to get a different shape (skewed to the right side).
 
     #Also, loc should not be 1 in order not to get a shape similar to exponential distribution.
-    values = np.random.poisson(lam=2, size=n)
+
+    # If X1 and X2 are Poisson random variables with means μ1 and μ2 respectively, then X1 + X2 is a Poisson random variable with mean μ1 + μ2.
+    # We shift data by adding variable to itself 1e10 times, new variable X is sum of 1e10 variables and mean is also sum of 1e10 means.
+    values = np.random.poisson(lam=2, size=1000000) * 1e10,
     for i in values:
         print(json.dumps({"x": str(i)}))
 
