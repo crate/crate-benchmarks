@@ -90,7 +90,7 @@ import sys
 import textwrap
 from collections import OrderedDict
 from pathlib import Path
-from time import time
+from time import time, strftime, gmtime
 
 from cr8.run_crate import run_crate
 from cr8.run_spec import run_spec
@@ -145,6 +145,8 @@ class Scenario:
         )
 
     def run_specs(self, count=1):
+        total_started = int(time() * 1000)
+
         durations = []
         for _ in range(count):
             started = int(time() * 1000)
@@ -154,6 +156,9 @@ class Scenario:
             duration = ended - started
             durations.append(duration)
 
+        total_ended = int(time() * 1000)
+        total_duration = total_ended - total_started
+
         # Compute statistics.
         vmin = min(durations)
         vmax = max(durations)
@@ -161,10 +166,15 @@ class Scenario:
 
         # Compute variability.
         vrange = (vmax - vmin) / vmedian
-        vrange = round(vrange, 4)
+
+        # Format total runtime.
+        variability = "{:.4f}".format(round(vrange, 4))
+        runtime = strftime("%H:%M:%S", gmtime(total_duration / 1000))
+        daytime = strftime("%H:%M:%S", gmtime(total_started / 1000))
 
         print()
-        print(f"Variability: {vrange}")
+        print(f"# variability,runtime,daytime")
+        print(f"{variability},{runtime},{daytime}")
 
     @staticmethod
     def get_specfile(specfile):
