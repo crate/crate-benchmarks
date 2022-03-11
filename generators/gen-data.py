@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 CLI to generate JSON records containing bigints with specified probability distribution
@@ -28,7 +29,7 @@ def poisson(n):
 
     # If X1 and X2 are Poisson random variables with means μ1 and μ2 respectively, then X1 + X2 is a Poisson random variable with mean μ1 + μ2.
     # We shift data by adding variable to itself 1e10 times, new variable X is sum of 1e10 variables and mean is also sum of 1e10 means.
-    values = np.random.poisson(lam=2, size=1000000) * 1e10,
+    values = (np.random.poisson(lam=2, size=n)*1e10).astype(long)
     for i in values:
         print(json.dumps({"x": str(i)}))
 
