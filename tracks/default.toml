@@ -3,7 +3,7 @@
 
 [settings]
 "bootstrap.memory_lock" = true
-"indices.breaker.query.limit" = "85%"
+"indices.breaker.query.limit" = "90%"
 "cluster.name" = "cr8"
 "node.name" = "bench1"
 "stats.enabled" = true
