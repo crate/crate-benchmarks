@@ -1,12 +1,10 @@
 [setup]
 statement_files = ["../sql/huge_arrays.sql"]
 
-    [[setup.data_files]]
-    # Data must be generated first using ./generators/huge_arrays.sh > specs/data/huge_arrays.json
+    [[setup.data_cmds]]
     target = "huge_arrays"
-    source = "../data/huge_arrays.json"
+    cmd = ['generators/huge_arrays.sh']
     bulk_size = 500
-
 
 [[queries]]
 statement = "select xs from huge_arrays"
