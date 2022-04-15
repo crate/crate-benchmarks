@@ -1,10 +1,10 @@
 [setup]
 statement_files = ["../sql/wide.sql"]
 
-    [[setup.data_files]]
-    # Data must be generated first using ./generators/wide.sh > specs/data/wide.json
+    [[setup.data_cmds]]
     target = "wide"
-    source = "../data/wide.json"
+    cmd = ['generators/wide.sh']
+    bulk_size = 500
 
 
 [[queries]]
