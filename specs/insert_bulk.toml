@@ -1,5 +1,8 @@
 [setup]
 statement_files = ["sql/id_int_value_str.sql"]
+statements = [
+  "create table tbl (id integer, value string) with (number_of_replicas = 0)"
+]
 
 [[load_data]]
 target = "id_int_value_str"
@@ -9,5 +12,29 @@ bulk_size = 1000
 concurrency = 1
 num_records = 1000000
 
+[[load_data]]
+target = "id_int_value_str"
+source = "data/id_int_value_str.json"
+
+bulk_size = 1000
+concurrency = 10
+num_records = 1000000
+
+[[load_data]]
+target = "tbl"
+source = "data/id_int_value_str.json"
+
+bulk_size = 1000
+concurrency = 1
+num_records = 1000000
+
+[[load_data]]
+target = "tbl"
+source = "data/id_int_value_str.json"
+
+bulk_size = 1000
+concurrency = 10
+num_records = 1000000
+
 [teardown]
-statements = ["drop table if exists id_int_value_str"]
+statements = ["drop table if exists id_int_value_str", "drop table if exists tbl"]
