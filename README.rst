@@ -44,14 +44,6 @@ For more information on the parameters run::
    Running an individual spec requires that you have a running CrateDB instance
    and that you pass its host:port as the last parameter.
 
-Visualization and Analysis
-==========================
-
-To visualize and analyze the results, use a jupyter_ notebook::
-
-    $ jupyter notebook
-
-Examples are in the notebooks_ folder.
 
 Scripts
 =======
