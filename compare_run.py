@@ -133,7 +133,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir):
             log=log,
             result_hosts=result_hosts,
             sample_mode='reservoir',
-            action='queries'
+            action=['queries', 'load_data']
         )
         jfr_stop(n.process.pid)
         do_run_spec(
