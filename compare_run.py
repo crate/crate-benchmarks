@@ -106,7 +106,7 @@ def jfr_stop(pid):
 def jfr_extract_metrics(filename):
     java_home = os.environ.get('JAVA_HOME')
     java = java_home and os.path.join(java_home, 'bin', 'java') or 'java'
-    cmd = [java, '--enable-preview', '--source', '17', 'JfrOverview.java', filename]
+    cmd = [java, 'JfrOverview.java', filename]
     output = subprocess.check_output(cmd, universal_newlines=True)
     return json.loads(output)
 
