@@ -283,6 +283,9 @@ public class JfrOverview {
                 case "jdk.ObjectAllocationInNewTLAB" -> {
                     onAllocationSample(event, event.getLong("tlabSize"));
                 }
+                case "jdk.ObjectAllocationSample" -> {
+                    onAllocationSample(event, event.getLong("weight"));
+                }
                 case "jdk.ExecutionSample" -> {
                     String topFrame = topFrame(event.getStackTrace());
                     executionTopFrame.add(topFrame, 1);
