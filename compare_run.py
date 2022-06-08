@@ -72,12 +72,22 @@ System/JVM Metrics (durations in ms, byte-values in MB)
  V1 | {v1_gcy_cnt:4.0f} {v1_gcy_avg:8.2f} {v1_gcy_max:8.2f} | {v1_gco_cnt:4.0f} {v1_gco_avg:8.2f} {v1_gco_max:8.2f} | {v1_heap_init:8.0f} {v1_heap_used:8.0f} | {v1_alloc_rate:8.2f} {v1_alloc_total:10.0f}
  V2 | {v2_gcy_cnt:4.0f} {v2_gcy_avg:8.2f} {v2_gcy_max:8.2f} | {v2_gco_cnt:4.0f} {v2_gco_avg:8.2f} {v2_gco_max:8.2f} | {v2_heap_init:8.0f} {v2_heap_used:8.0f} | {v2_alloc_rate:8.2f} {v2_alloc_total:10.0f}
     ''')
-    print('V1 top allocation frames')
-    for frame in metrics_v1['alloc']['top_frames']:
-        print('  ' + frame)
-    print('V2 top allocation frames')
-    for frame in metrics_v2['alloc']['top_frames']:
-        print('  ' + frame)
+    print('Top allocation frames')
+    print('  V1')
+    for frame in metrics_v1['alloc']['top_frames_by_alloc']:
+        print('    ' + frame)
+    print('  V2')
+    for frame in metrics_v2['alloc']['top_frames_by_alloc']:
+        print('    ' + frame)
+
+    print('')
+    print('Top frames (by count)')
+    print('  V1')
+    for frame in metrics_v1['alloc']['top_frames_by_count']:
+        print('    ' + frame)
+    print('  V2')
+    for frame in metrics_v2['alloc']['top_frames_by_count']:
+        print('    ' + frame)
 
 
 def jfr_start(pid, tmpdir):

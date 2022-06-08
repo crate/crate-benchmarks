@@ -21,7 +21,7 @@ public class JfrOverview {
     private static long firstAllocationTime = -1;
 
     static class DoubleMeasure {
-        
+
         private int count = 0;
         private double total;
         private double max;
@@ -31,12 +31,12 @@ public class JfrOverview {
             return total / count;
         }
 
-		public void add(double value) {
+        public void add(double value) {
             this.count++;
             this.total += value;
             this.max = Math.max(this.value, value);
             this.value = value;
-		}
+        }
 
         @Override
         public String toString() {
@@ -45,7 +45,7 @@ public class JfrOverview {
     }
 
     static class LongMeasure {
-        
+
         private int count = 0;
         private long total;
         private long max;
@@ -72,14 +72,14 @@ public class JfrOverview {
             return total / count;
         }
 
-		public void add(long value) {
+        public void add(long value) {
             this.count++;
             this.total += value;
             this.max = Math.max(this.value, value);
             this.value = value;
-		}
+        }
     }
-    
+
 
     private static List<String> decodeDescriptors(String descriptor) {
         List<String> descriptors = new ArrayList<>();
@@ -161,20 +161,24 @@ public class JfrOverview {
     }
 
     public static record Record(String name, int count, long value, long total) {
+
+        String format() {
+            return "\"" + name + " total=" + total + ", count=" + count + "\"";
+        }
     }
 
     static class Histogram {
 
         private static final HashMap<String, LongMeasure> histogram = new HashMap<>();
 
-		public void add(String key, long value) {
+        public void add(String key, long value) {
             var measure = histogram.get(key);
             if (measure == null) {
                 measure = new LongMeasure();
                 histogram.put(key, measure);
             }
             measure.add(value);
-		}
+        }
 
         public List<Record> getRecords() {
             ArrayList<Record> values = new ArrayList<>();
@@ -189,15 +193,14 @@ public class JfrOverview {
             return getRecords()
                 .stream()
                 .sorted(Comparator.comparingLong(Record::total).reversed())
-                .limit(5);
+                .limit(10);
         }
 
-        public Iterable<Record> byCount() {
-            return () -> getRecords()
+        public Stream<Record> byCount() {
+            return getRecords()
                 .stream()
                 .sorted(Comparator.comparingLong(Record::count).reversed())
-                .limit(5)
-                .iterator();
+                .limit(10);
         }
     }
 
@@ -327,7 +330,8 @@ public class JfrOverview {
                 "alloc": {
                     "rate": %s,
                     "total": %s,
-                    "top_frames": %s
+                    "top_frames_by_count": %s,
+                    "top_frames_by_alloc": %s
                 },
                 "threads": %s,
                 "classes": %s
@@ -347,7 +351,8 @@ public class JfrOverview {
             usedHeap.value,
             ALLOC_RATE.value,
             ALLOC_TOTAL.total,
-            '[' + String.join(", ", ALLOCATION_TOP_FRAME.byTotal().map(x -> String.format(Locale.ENGLISH, "\"%s:%s\"", x.name(), x.total())).toArray(String[]::new)) + ']',
+            '[' + String.join(", ", ALLOCATION_TOP_FRAME.byCount().map(Record::format).toArray(String[]::new)) + ']',
+            '[' + String.join(", ", ALLOCATION_TOP_FRAME.byTotal().map(Record::format).toArray(String[]::new)) + ']',
             threads.value,
             classes.value
         );
