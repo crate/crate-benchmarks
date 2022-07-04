@@ -11,6 +11,14 @@ statements = [
 ]
 
 [[queries]]
+statement = "select count(*) from t_arrays_biased_empty where xs = []"
+iterations = 200
+
+[[queries]]
+statement = "select count(*) from t_arrays_biased_5_elements where xs = []"
+iterations = 200
+
+[[queries]]
 statement = "select count(*) from t_arrays_biased_empty where array_length(xs, 1) > 0"
 iterations = 200
 
