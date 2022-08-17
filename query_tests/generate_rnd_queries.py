@@ -126,12 +126,12 @@ def abs(data_faker, column, provider):
 
 
 def ceil(data_faker, column, provider):
-    compare_to = data_faker.provider_for_column("byte", "byte", None)()
+    compare_to = data_faker.provider_for_column(Column("byte", "byte", None))()
     return f"({column}!=0 AND CEIL({column}/{column}) != {compare_to})"
 
 
 def floor(data_faker, column, provider):
-    compare_to = data_faker.provider_for_column("byte", "byte", None)()
+    compare_to = data_faker.provider_for_column(Column("byte", "byte", None))()
     return f"({column}!=0 AND FLOOR({column}/{column}) != {compare_to})"
 
 
@@ -153,7 +153,7 @@ def crate_random(data_faker, column, provider):
 
 
 def round(data_faker, column, provider):
-    compare_to = data_faker.provider_for_column("byte", "byte", None)()
+    compare_to = data_faker.provider_for_column(Column("byte", "byte", None))()
     return f"({column}!=0 AND ROUND({column}/{column}) != {compare_to})"
 
 
