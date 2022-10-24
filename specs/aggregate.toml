@@ -38,5 +38,12 @@ statement = 'select min("adRevenue") from uservisits'
 iterations = 500
 
 
+[[queries]]
+name = "global max_by"
+statement = '''select max_by("adRevenue", "visitDate") from uservisits'''
+iterations = 500
+min_version = '5.1.0'
+
+
 [teardown]
 statements = ["drop table if exists uservisits"]
