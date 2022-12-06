@@ -48,7 +48,7 @@ For more information on the parameters run::
 Scripts
 =======
 
-Scripts to simply common tasks:
+Scripts to simplify common tasks:
 
 - compare_measures.py_: compare measures read from two files
 
