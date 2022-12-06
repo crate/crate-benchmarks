@@ -44,6 +44,11 @@ statement = '''select max_by("adRevenue", "visitDate") from uservisits'''
 iterations = 500
 min_version = '5.1.0'
 
+[[queries]]
+name = "sum on interval"
+statement = '''select sum(i) from (select '2 hours'::interval from generate_series(1, 100000)) as t (i)'''
+iterations = 500
+min_version = '5.2.0'
 
 [teardown]
 statements = ["drop table if exists uservisits"]
