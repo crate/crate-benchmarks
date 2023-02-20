@@ -45,7 +45,7 @@ def get_queries():
         },
         {
             'statement': ('SELECT lrt.t1.dev, lrt.t2.name '
-                          'FROM lrt.t1 INNER JOIN lrt.t2 ON lrt.t1.dev = lrt.t2.dev'
+                          'FROM lrt.t1 INNER JOIN lrt.t2 ON lrt.t1.dev = lrt.t2.dev '
                           'WHERE lrt.t1.dev = CAST(random() * 127 AS BYTE) '
                           'ORDER BY lrt.t2.name '
                           'LIMIT 100'),
