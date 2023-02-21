@@ -1,32 +1,34 @@
 [setup]
 statement_files = ["../specs/sql/uservisits.sql"]
 statements = [
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00000.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00001.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00002.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00003.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00004.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00005.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00006.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00007.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00008.gz' with (compression = 'gzip')",
-    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/tiny/uservisits/part-00009.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
     "refresh table uservisits"
 ]
 
 [[queries]]
+name = "select 1"
 statement = "select 1"
-concurrency = 25
+concurrency = 15
+warmup = 100
 iterations = 1000
 
 [[queries]]
+name = "select top 10 uservisits"
 statement = "select * from uservisits limit 10"
-concurrency = 25
+concurrency = 15
+warmup = 100
 iterations = 1000
 
 [[queries]]
+name = "group by on scalar"
 statement = '''select extract(day from "visitDate"), count(*) from uservisits group by 1 order by 2 desc limit 20'''
 concurrency = 5
+warmup = 100
 iterations = 500
 
 [teardown]
