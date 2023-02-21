@@ -1,0 +1,11 @@
+[setup]
+statement_files = ["../specs/sql/uservisits.sql"]
+
+[[load_data]]
+target = "uservisits"
+source = "https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz"
+bulk_size = 1000
+concurrency = 10
+
+[teardown]
+statements = ["drop table if exists uservisits"]
