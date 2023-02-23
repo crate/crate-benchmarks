@@ -1,0 +1,29 @@
+[setup]
+statement_files = ["../../specs/sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+[[queries]]
+name = "simple correlated subquery used in select items"
+statement = '''SELECT 1, (SELECT t.mountain) FROM sys.summits t LIMIT 100'''
+concurrency = 5
+warmup = 100
+iterations = 500
+
+[[queries]]
+name = "correlated subquery with filter on parent relation"
+statement = '''SELECT COUNT(*) FROM uservisits u WHERE "lCode" LIKE '%-EN' AND EXISTS (SELECT 1 FROM uservisits WHERE "cCode" = u."cCode")'''
+warmup = 1
+concurrency = 1
+iterations = 1
+
+
+[teardown]
+statements = ["drop table uservisits"]
