@@ -49,7 +49,7 @@ def get_queries():
                           'WHERE lrt.t1.dev = CAST(random() * 127 AS BYTE) '
                           'ORDER BY lrt.t2.name '
                           'LIMIT 100'),
-            'concurrency': 25,
+            'concurrency': 20,
             'duration': 1 * 60 * 60
         },
         {
