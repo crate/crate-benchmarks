@@ -22,6 +22,7 @@ queries = [
     "../specs/in_numeric.toml",
     "../specs/order_by_no_limit.toml",
     "../specs/select/simple_subquery.toml",
+    "../specs/select/correlated_subqueries.toml",
 ]
 full = [
     "../specs/insert_single.py",
