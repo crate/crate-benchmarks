@@ -1,0 +1,16 @@
+[setup]
+statements = [
+  "CREATE TABLE obj_null (o OBJECT(DYNAMIC) AS (a TEXT))",
+  "INSERT INTO obj_null (o) SELECT {a='a'} FROM generate_series(1,5000000,1)",
+  "refresh table obj_null"
+]
+
+
+[[queries]]
+name = "object is-not-null"
+statement = "SELECT count(*) FROM obj_null WHERE o IS NOT NULL;"
+iterations = 10
+
+
+[teardown]
+statements = ["drop table if exists obj_null"]
