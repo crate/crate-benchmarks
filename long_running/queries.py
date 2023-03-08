@@ -80,8 +80,8 @@ spec = Spec(
         ]
     ),
     teardown=Instructions(statements=[
-        "DROP TABLE lrt.t1",
-        "DROP TABLE lrt.t2",
+        "DROP TABLE IF EXISTS lrt.t1",
+        "DROP TABLE IF EXISTS lrt.t2",
     ]),
     queries=get_queries()
 )
