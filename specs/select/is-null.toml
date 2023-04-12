@@ -1,14 +1,22 @@
 [setup]
 statements = [
-  "CREATE TABLE obj_null (o OBJECT(DYNAMIC) AS (a TEXT))",
-  "INSERT INTO obj_null (o) SELECT {a='a'} FROM generate_series(1,5000000,1)",
-  "refresh table obj_null"
+  "CREATE TABLE few_null (o OBJECT(DYNAMIC) AS (a TEXT))",
+  "INSERT INTO few_null (o) SELECT {a='a'} FROM generate_series(1, 5000000, 1)",
+  "INSERT INTO few_null (o) SELECT null FROM generate_series(1, 500, 1)",
+  "refresh table few_null",
+  "CREATE TABLE many_null (o OBJECT(DYNAMIC) AS (a TEXT))",
+  "INSERT INTO many_null (o) SELECT null FROM generate_series(1, 5000000, 1)",
+  "INSERT INTO many_null (o) SELECT {a='a'} FROM generate_series(1, 500, 1)",
 ]
 
+[[queries]]
+name = "object few is-not-null"
+statement = "SELECT count(*) FROM few_null WHERE o IS NOT NULL;"
+iterations = 10
 
 [[queries]]
-name = "object is-not-null"
-statement = "SELECT count(*) FROM obj_null WHERE o IS NOT NULL;"
+name = "object many is-not-null"
+statement = "SELECT count(*) FROM many_null WHERE o IS NOT NULL;"
 iterations = 10
 
 
