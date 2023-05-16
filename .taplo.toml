@@ -1,5 +1,5 @@
 [[rule]]
-include = ["specs/**/*.toml", "fast/queries.toml", "fast/insert_bulk.toml"]
+include = ["specs/**/*.toml", "fast/queries.toml", "fast/insert_bulk.toml", "join-order-benchmark/*.toml"]
 
 [rule.schema]
 path = "https://raw.githubusercontent.com/mfussenegger/cr8/master/cr8-spec.schema.json"
