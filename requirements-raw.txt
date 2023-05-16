@@ -5,3 +5,4 @@ termcolor
 numpy
 crash
 plotext
+csvkit

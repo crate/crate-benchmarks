@@ -44,3 +44,6 @@ develop-eggs/
 specs/memory_pressure/data.json
 specs/memory_pressure/custom_user_ids.txt
 specs/data/huge_arrays.json
+
+join-order-benchmark/imdb/
+join-order-benchmark/imdb.tgz
