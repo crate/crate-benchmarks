@@ -12,7 +12,7 @@ Setup
 
 - Download the data::
 
-    wget http://homepages.cwi.nl/~boncz/job/imdb.tgz
+    wget https://cdn.crate.io/downloads/datasets/imdb.tgz
 
 - Extract it::
 
