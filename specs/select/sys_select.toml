@@ -7,52 +7,52 @@ statements = [
 
 [[queries]]
 statement = "select name from sys.cluster"
-iterations = 65000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select name from sys.cluster"
-iterations = 65000
+iterations = 15000
 concurrency = 15
 
 [[queries]]
 statement = "select * from sys.nodes"
-iterations = 10000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select * from sys.nodes"
-iterations = 30000
+iterations = 15000
 concurrency = 15
 
 [[queries]]
 statement = "select * from sys.allocations"
-iterations = 10000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select * from sys.jobs"
-iterations = 20000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select * from sys.operations"
-iterations = 20000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select * from sys.jobs_metrics"
-iterations = 10000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select * from sys.checks"
-iterations = 10000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
 statement = "select * from sys.node_checks"
-iterations = 10000
+iterations = 5000
 concurrency = 1
 
 [[queries]]
