@@ -22,7 +22,7 @@ name = "correlated subquery with filter on parent relation"
 statement = '''SELECT COUNT(*) FROM uservisits u WHERE "lCode" LIKE '%-EN' AND EXISTS (SELECT 1 FROM uservisits WHERE "cCode" = u."cCode")'''
 warmup = 1
 concurrency = 1
-iterations = 1
+iterations = 3
 
 
 [teardown]
