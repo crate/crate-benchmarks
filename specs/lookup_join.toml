@@ -1,0 +1,17 @@
+[setup]
+statements = [
+    "create table t1 (id int primary key,a text,b text)",
+    "insert into t1 (id,a,b) select b,(b%300)::TEXT,(b%450)::TEXT from generate_series(1,100000) a(b)",
+    "create table t2 (ts timestamp,id int,c double)",
+    "insert into t2(ts,id,c) select now(),b%7000,b%6300 from generate_series(1,1000) a(b)", 
+    "refresh table t1, t2",
+    "analyze",
+]
+
+[[queries]]
+statement = "select * from doc.t1 join doc.t2 on t1.id = t2.id"
+iterations = 100
+
+[teardown]
+statements = ["drop table if exists t1", "drop table if exists t2"]
+
