@@ -5,7 +5,8 @@ statements = [
     "create table t2 (ts timestamp,id int,c double)",
     "insert into t2(ts,id,c) select now(),b%7000,b%6300 from generate_series(1,1000) a(b)", 
     "refresh table t1, t2",
-    "analyze",
+    "optimize table t1 with (max_num_segments = 1)",
+    "optimize table t2 with (max_num_segments = 1)",
 ]
 
 [[queries]]
