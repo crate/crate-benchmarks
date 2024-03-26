@@ -1,0 +1,27 @@
+[setup]
+statements = [
+  """
+  create or replace function jsadd(x long, y long)
+  returns long
+  language javascript as $$
+    function jsadd(x, y) {
+      return x + y;
+    }
+  $$
+  """
+]
+
+
+[[queries]]
+name = "jsadd"
+statement = "select jsadd(x, x) from generate_series(1, 50) as t (x)"
+iterations = 50
+
+[[queries]]
+name = "normal-add"
+statement = "select x + x from generate_series(1, 50) as t (x)"
+iterations = 50
+
+
+[teardown]
+statements = ["drop function if exists jsadd(x long, y long)"]
