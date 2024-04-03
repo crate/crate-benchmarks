@@ -33,7 +33,7 @@ olefile==0.47
 openpyxl==3.1.2
 packaging==24.0
 parsedatetime==2.6
-pillow==10.2.0
+pillow==10.3.0
 platformdirs==4.2.0
 plotext==5.2.8
 prompt-toolkit==3.0.43
