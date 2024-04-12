@@ -22,7 +22,7 @@ Faker==4.18.0
 fonttools==4.49.0
 frozenlist==1.4.1
 greenlet==3.0.3
-idna==3.6
+idna==3.7
 isodate==0.6.1
 kiwisolver==1.4.5
 leather==0.4.0
