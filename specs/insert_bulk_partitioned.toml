@@ -1,0 +1,23 @@
+[setup]
+statement_files = ["sql/uservisits_parted.sql"]
+statements = [
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00006.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00007.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00008.gz' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+[[load_data]]
+target = "uservisits"
+source = "https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00009.gz"
+bulk_size = 100
+concurrency = 20
+
+
+[teardown]
+statements = ["drop table if exists uservisits"]
