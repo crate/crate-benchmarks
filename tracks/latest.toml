@@ -61,6 +61,4 @@ full = [
     "../specs/union.toml",
     "../specs/ignore3vl.toml",
     "../specs/lookup_join.toml",
-    "../specs/group_by_distribution_long.toml",
-    "../specs/group_by_distribution_string.toml",
 ]
