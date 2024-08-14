@@ -1,0 +1,71 @@
+[setup]
+statements = [
+  "create table tlarge (x numeric(38, 2))",
+  "create table tcompact (x numeric(18, 2))",
+  "refresh table tlarge, tcompact"
+]
+
+[[setup.data_cmds]]
+  target = "tlarge"
+  cmd = [
+    "mkjson",
+    "--num", "10000000",
+    "x=join('', join(replicate(randomInt(30, 36), randomInt(1, 9))), '.', join(replicate(2, randomInt(1, 9))))"
+  ]
+
+[[setup.data_cmds]]
+  target = "tcompact"
+  cmd = [
+    "mkjson",
+    "--num", "10000000",
+    "x=join('', join(replicate(randomInt(10, 16), randomInt(1, 9))), '.', join(replicate(2, randomInt(1, 9))))"
+  ]
+
+
+[[queries]]
+name = "compact-numeric-term-query"
+statement = "select count(*) from tcompact where x = (select x from tcompact limit 1)"
+iterations = 100
+concurrency = 10
+
+
+[[queries]]
+name = "compact-numeric-terms-query"
+statement = "select count(*) from tcompact where x in (select x from tcompact limit 50)"
+iterations = 100
+concurrency = 10
+
+
+[[queries]]
+name = "compact-numeric-range-query"
+statement = "select count(*) from tcompact where x >= (select x from tcompact limit 1)"
+iterations = 100
+concurrency = 10
+
+
+[[queries]]
+name = "large-numeric-term-query"
+statement = "select count(*) from tlarge where x = (select x from tlarge limit 1)"
+iterations = 100
+concurrency = 10
+
+
+[[queries]]
+name = "large-numeric-terms-query"
+statement = "select count(*) from tlarge where x in (select x from tlarge limit 50)"
+iterations = 100
+concurrency = 10
+
+
+[[queries]]
+name = "large-numeric-range-query"
+statement = "select count(*) from tlarge where x >= (select x from tlarge limit 1)"
+iterations = 100
+concurrency = 10
+
+
+[teardown]
+statements = [
+  "drop table if exists tcompact",
+  "drop table if exists tlarge",
+]
