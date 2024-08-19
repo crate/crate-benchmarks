@@ -23,6 +23,18 @@ statements = [
 
 
 [[queries]]
+name = "compact-numeric-order-limit"
+statement = "select x from tcompact order by x limit 20"
+iterations = 100
+concurrency = 10
+
+[[queries]]
+name = "large-numeric-order-limit"
+statement = "select x from tlarge order by x limit 20"
+iterations = 100
+concurrency = 10
+
+[[queries]]
 name = "compact-numeric-term-query"
 statement = "select count(*) from tcompact where x = (select x from tcompact limit 1)"
 iterations = 100
