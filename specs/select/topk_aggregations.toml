@@ -1,0 +1,27 @@
+[setup]
+statements = [
+    "create table t1 (string_no_doc_values string storage with (columnstore = false), string_doc_values string, long_no_doc_values long storage with (columnstore = false), long_doc_values long);",
+    "insert into t1 select b % 10::TEXT, b % 10::TEXT, b % 10, b % 10 from generate_series(1,100000) a(b);",
+    "refresh table t1",
+    "optimize table t1 with (max_num_segments = 1)",
+]
+
+[[queries]]
+statement = '''select topk(string_no_doc_values) from t1'''
+iterations = 50
+
+[[queries]]
+statement = '''select topk(string_doc_values) from t1'''
+iterations = 50
+
+[[queries]]
+statement = '''select topk(long_no_doc_values) from t1'''
+iterations = 50
+
+[[queries]]
+statement = '''select topk(long_doc_values) from t1'''
+iterations = 50
+
+
+[teardown]
+statements = ["drop table if exists t1"]
