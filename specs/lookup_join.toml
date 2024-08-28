@@ -9,6 +9,9 @@ statements = [
     "optimize table t2 with (max_num_segments = 1)",
 ]
 
+[session_settings]
+optimizer_equi_join_to_lookup_join = "true"
+
 [[queries]]
 statement = "select count(*) from doc.t1 join doc.t2 on t1.id = t2.id"
 iterations = 100
