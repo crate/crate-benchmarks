@@ -11,7 +11,7 @@ attrs==24.2.0
 babel==2.16.0
 colorama==0.4.6
 contourpy==1.3.0
-cr8==0.27.0
+cr8==0.27.1
 crash==0.31.5
 crate==0.35.2
 csvkit==2.0.1
