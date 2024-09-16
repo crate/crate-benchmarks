@@ -11,7 +11,7 @@ from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
 from cr8.log import Logger
 from crate.client import connect
-from crate.crash.tabulate import tabulate
+from tabulate import tabulate
 
 from util import dict_from_kw_args, perc_diff, human_readable_byte_size
 from lucene_disk_usage import gather_sizes
