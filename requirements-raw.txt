@@ -6,3 +6,4 @@ numpy
 crash
 plotext
 csvkit
+tabulate
