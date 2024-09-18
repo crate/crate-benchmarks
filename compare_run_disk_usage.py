@@ -79,7 +79,9 @@ def run_comparison(version1,
         ('Term Vector Index', 'tvx'),
         ('Term Vector Data', 'tvd'),
         ('Live Documents', 'liv'),
-        ('Point values', 'dii')
+        ('Point values (kdd)', 'kdd'),
+        ('Point values (kdi)', 'kdi'),
+        ('Point values (kdm)', 'kdm')
     ]
 
     def mk_row(key):
@@ -90,6 +92,14 @@ def run_comparison(version1,
         v2_size, v2_unit = human_readable_byte_size(val2)
         return (description, v1_size, v1_unit, v2_size, v2_unit, perc_diff(val1, val2))
     rows = [mk_row(key) for key in keys]
+
+    v1_sum = sum(v1.values())
+    v2_sum = sum(v2.values())
+    v1_sum_size, v1_sum_unit = human_readable_byte_size(v1_sum)
+    v2_sum_size, v2_sum_unit = human_readable_byte_size(v2_sum)
+    sum_diff = ('Total', v1_sum_size, v1_sum_unit, v2_sum_size, v2_sum_unit, perc_diff(v1_sum, v2_sum))
+    rows.append(sum_diff)
+
     print(tabulate(rows, headers=headers, floatfmt=".2f"))
 
 

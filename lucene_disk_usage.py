@@ -26,8 +26,9 @@ KNOWN_EXTENSIONS = {
     'tvx',
     'tvd',
     'liv',
-    'dii',
-    'dim',
+    'kdd',
+    'kdi',
+    'kdm',    
 }
 
 
@@ -55,6 +56,7 @@ def main(argv=None):
     parser.add_argument('--outfile', type=argparse.FileType('w'), default=sys.stdout)
     args = parser.parse_args(argv)
     sizes = gather_sizes(args.path)
+    sizes['total'] = sum(sizes.values())
 
     # https://lucene.apache.org/core/8_9_0/core/org/apache/lucene/codecs/lucene87/package-summary.html#package.description
     if args.format == 'json':
@@ -77,8 +79,10 @@ Per-Document Values: {format_byte_size(sizes['dvd'])}
 Term Vector Index:   {format_byte_size(sizes['tvx'])}
 Term Vector Data:    {format_byte_size(sizes['tvd'])}
 Live Documents:      {format_byte_size(sizes['liv'])}
-Point values:        {format_byte_size(sizes['dii'])}
-                     {format_byte_size(sizes['dim'])}
+Point values:        {format_byte_size(sizes['kdd'])}
+                     {format_byte_size(sizes['kdi'])}
+                     {format_byte_size(sizes['kdm'])} 
+Total:               {format_byte_size(sizes['total'])} 
 ''')
 
 
