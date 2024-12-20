@@ -1,5 +1,5 @@
 [setup]
-statement_files = ["sql/uservisits.sql"]
+statement_files = ["sql/uservisits.sql", "sql/percentile_small.sql"]
 statements = [
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
@@ -8,6 +8,11 @@ statements = [
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
     "refresh table uservisits"
 ]
+
+    [[setup.data_files]]
+        target = "percentile_small"
+        source = "data/percentile_small.json"
+
 
 [[queries]]
 statement = '''select avg("adRevenue") from uservisits'''
@@ -50,5 +55,21 @@ statement = '''select sum(i) from (select '2 hours'::interval from generate_seri
 iterations = 500
 min_version = '5.2.0'
 
+[[queries]]
+name = "global percentiles"
+statement = '''select percentile("adRevenue", [0.5, 0.75, 0.95]) from uservisits'''
+iterations = 500
+min_version = '1.0.0'
+
+[[queries]]
+name = "global percentiles small unordered"
+statement = '''select percentile("i", [0.5, 0.75, 0.95]) from percentile_small'''
+iterations = 500
+min_version = '1.0.0'
+
+
 [teardown]
-statements = ["drop table if exists uservisits"]
+statements = [
+    "drop table if exists uservisits",
+    "DROP TABLE IF EXISTS percentile_small"
+]
