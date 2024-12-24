@@ -8,7 +8,7 @@ configurations = [
 
 [specs]
 fixtures = [
-    "../specs/group_by.toml"
+    "../specs/aggregate.toml"
 ]
 queries = [
     "../specs/group_by.toml",
