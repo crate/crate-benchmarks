@@ -121,15 +121,20 @@ def jfr_extract_metrics(filename):
     return json.loads(output)
 
 
-def _run_spec(version, spec, result_hosts, env, settings, tmpdir):
+def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
     crate_dir = get_crate(version)
     settings.setdefault('cluster.name', str(uuid4()))
     results = []
     with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
         n.start()
+        benchmark_hosts = n.http_url
+        if protocol == 'pg':
+            pg_address = n.addresses['psql']
+            benchmark_hosts = f'asyncpg://{pg_address.host}:{pg_address.port}'
+        print(f'Running benchmark using protocol={protocol}, benchmark_hosts={benchmark_hosts}')
         do_run_spec(
             spec=spec,
-            benchmark_hosts=n.http_url,
+            benchmark_hosts=benchmark_hosts,
             log=log,
             result_hosts=result_hosts,
             sample_mode='reservoir',
@@ -166,10 +171,11 @@ def run_compare(v1,
                 env_v2,
                 settings_v1,
                 settings_v2,
-                show_plot):
+                show_plot,
+                protocol):
     tmpdir = tempfile.mkdtemp()
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir)
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol)
     try:
         for _ in range(forks):
             results_v1, jfr_metrics1 = run_v1()
@@ -208,6 +214,8 @@ def main():
     p.add_argument('--setting-v2', action='append',
                    help='Crate setting. Only applied to v2')
     p.add_argument('--show-plot', type=bool, default=False)
+    p.add_argument('--protocol', type=str, default='http',
+                   help='Define which protocol to use, choices are (http, pg). Defaults to: http')
     args = p.parse_args()
     env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
@@ -230,7 +238,8 @@ def main():
             env_v2=env_v2,
             settings_v1=settings_v1,
             settings_v2=settings_v2,
-            show_plot=args.show_plot
+            show_plot=args.show_plot,
+            protocol=args.protocol,
         )
     except KeyboardInterrupt:
         print('Exiting..')
