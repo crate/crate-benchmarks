@@ -237,5 +237,166 @@ statement = '''
 iterations = 1000
 concurrency = 10
 
+[[queries]]
+statement = '''
+  select 
+    distinct id 
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 1
+    and team_id = 6
+  limit 
+    26
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct id 
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 2
+    and team_id = 6
+  limit 
+    26
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct id 
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 3
+    and team_id = 6
+  limit 
+    26
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct id 
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 4
+    and team_id = 6
+  limit 
+    26
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct id 
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 5
+    and team_id = 6
+  limit 
+    26
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(*)
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 1
+    and team_id = 6
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(*)
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 2
+    and team_id = 6
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(*)
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 3
+    and team_id = 6
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(*)
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 4
+    and team_id = 6
+'''
+iterations = 1000
+concurrency = 10
+
+
+[[queries]]
+statement = '''
+  select 
+    count(*)
+  from 
+    tasks 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and merchant_id = 5
+    and team_id = 6
+'''
+iterations = 1000
+concurrency = 10
+
 [teardown]
 statement_files = ["sql/bringg_teardown.sql"]
