@@ -53,6 +53,17 @@ CREATE ANALYZER edge_ngram_phone_analyzer (
    )
 );
 
+CREATE ANALYZER whitespace_analyzer extends whitespace with (
+   TOKEN_FILTERS (
+     asciifolding,
+     lowercase,
+     length_min_2_chars with (
+       type="length",
+       min=2
+      )
+   )
+);
+
 create table customers (
   id integer,
 name text,
@@ -113,7 +124,8 @@ kind integer,
   INDEX external_id_ngram using fulltext (external_id) with (analyzer='ngram_lowercase_analyzer'),
   INDEX phone_ngram using fulltext (phone) with (analyzer='edge_ngram_phone_analyzer'),
   INDEX original_phone_number_ngram using fulltext (original_phone_number) with (analyzer='edge_ngram_phone_analyzer'),
-  INDEX address_ngram using fulltext (address) with (analyzer='ngram_lowercase_analyzer')
+  INDEX address_ngram using fulltext (address) with (analyzer='ngram_lowercase_analyzer'),
+  INDEX original_phone_number_ignore using fulltext (original_phone_number) with (analyzer='full_search_analyzer')
 );
 
 create table way_points (
@@ -212,7 +224,8 @@ verification_pin_code character varying,
   INDEX address_ngram using fulltext (address) with (analyzer='edge_ngram_lowercase_analyzer'),
   INDEX city_ngram using fulltext (city) with (analyzer='edge_ngram_lowercase_analyzer'),
   INDEX zipcode_ngram using fulltext (zipcode) with (analyzer='edge_ngram_full_field_analyzer'),
-  INDEX phone_ngram using fulltext (phone) with (analyzer='edge_ngram_phone_analyzer')
+  INDEX phone_ngram using fulltext (phone) with (analyzer='edge_ngram_phone_analyzer'),
+  INDEX zipcode_ignore using fulltext (zipcode) with (analyzer='full_search_analyzer')
 );
 
 
@@ -334,5 +347,6 @@ total_handling_units object,
 team_id integer,
   INDEX external_id_ngram using fulltext (external_id) with (analyzer='ngram_lowercase_analyzer'),
   INDEX title_standard using fulltext (title),
-  INDEX title_ngram using fulltext (title) with (analyzer='edge_ngram_lowercase_analyzer')
+  INDEX title_ngram using fulltext (title) with (analyzer='edge_ngram_lowercase_analyzer'),
+  INDEX preparation_external_id_ignore using fulltext (preparation_external_id) with (analyzer='full_search_analyzer')
 );

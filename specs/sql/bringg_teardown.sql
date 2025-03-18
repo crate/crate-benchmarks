@@ -5,3 +5,4 @@ DROP ANALYZER ngram_lowercase_analyzer;
 DROP ANALYZER edge_ngram_lowercase_analyzer;
 DROP ANALYZER edge_ngram_full_field_analyzer;
 DROP ANALYZER edge_ngram_phone_analyzer;
+DROP ANALYZER full_search_analyzer;
