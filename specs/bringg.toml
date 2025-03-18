@@ -1,6 +1,41 @@
 [setup]
 statement_files = ["sql/bringg_setup.sql"]
 
+[[queries]]
+name="load-tasks"
+concurrency=10
+statement = '''
+insert into
+  tasks (
+    id,
+    title,
+    external_id,
+    status,
+    ended_time,
+    merchant_id,
+    team_id,
+    task_type_id
+  ) (
+    select
+      id,
+      ['Stacy Jacobs', 'Amy Scott', 'Michelle Reyes', 'James Gregory', 'Craig Ross', 'Leslie Rodriguez', 'Paige Hill', 'Brandon Martinez', 'David Molina', 'Charles Lawson', 'Mary Flores', 'Cheryl Campbell', 'Margaret Hughes', 'Clayton Rangel', 'Nicole Flores', 'Mr. Travis Phelps', 'Sarah White', 'Jessica Villarreal', 'David Lee', 'Taylor Smith', 'Kimberly Hammond', 'Kevin Harris', 'Michael Gutierrez', 'Tamara Chen', 'Douglas Gomez', 'William Grimes', 'Wanda Peterson', 'Tiffany Hawkins', 'Danielle Miller', 'Brittany Jackson', 'Joseph Gardner', 'Sylvia Sellers', 'Katherine Smith', 'Elizabeth Baker', 'Lacey Allen', 'Jennifer Chavez', 'Jennifer Mullins', 'Denise Lyons', 'Phillip Fox', 'Alan Caldwell', 'Michael Flowers', 'Brian Mann', 'Julia Brown', 'Seth Thompson', 'Ryan Floyd', 'David Krueger', 'Amber Anderson', 'Mark Pearson', 'Sarah Jones', 'Daniel Anderson', 'Colleen Kaiser', 'Lisa Young', 'Trevor Garza', 'Alyssa Gray', 'Jennifer Mora', 'Elizabeth Bryant', 'Dana Gonzalez', 'Gary Whitney', 'Lisa Martin', 'Linda Mann', 'Michael Campbell', 'Samuel Mason', 'Scott Gordon', 'Lee Howell', 'Kathleen Duncan', 'Austin Davidson', 'Jessica Williams', 'Emily Richardson', 'Theresa Campbell', 'Michael Carney', 'Jennifer Keller', 'Mr. Charles Clark', 'Helen Valentine', 'James Lowery', 'Connor Johnson', 'Taylor Frye', 'Eric Thompson', 'Jordan Barnes', 'Nicholas Richards', 'Michelle Miller', 'Charles Whitaker', 'Mariah Dillon', 'Tamara Woodard', 'Jeffrey Gonzalez', 'Troy Munoz', 'Adam Nelson', 'Louis Frye', 'Rachel Mcdaniel', 'Sara Riley', 'William Smith', 'David Smith Jr.', 'Michael Hamilton', 'Matthew Rose II', 'Teresa Edwards', 'Sean Soto', 'Kathy Smith', 'Brent Jenkins', 'Justin Parker', 'Jason Boyd', 'Michele Evans'] [floor(random()*100)+1] as title,
+      ['Stacy Jacobs', 'Amy Scott', 'Michelle Reyes', 'James Gregory', 'Craig Ross', 'Leslie Rodriguez', 'Paige Hill', 'Brandon Martinez', 'David Molina', 'Charles Lawson', 'Mary Flores', 'Cheryl Campbell', 'Margaret Hughes', 'Clayton Rangel', 'Nicole Flores', 'Mr. Travis Phelps', 'Sarah White', 'Jessica Villarreal', 'David Lee', 'Taylor Smith', 'Kimberly Hammond', 'Kevin Harris', 'Michael Gutierrez', 'Tamara Chen', 'Douglas Gomez', 'William Grimes', 'Wanda Peterson', 'Tiffany Hawkins', 'Danielle Miller', 'Brittany Jackson', 'Joseph Gardner', 'Sylvia Sellers', 'Katherine Smith', 'Elizabeth Baker', 'Lacey Allen', 'Jennifer Chavez', 'Jennifer Mullins', 'Denise Lyons', 'Phillip Fox', 'Alan Caldwell', 'Michael Flowers', 'Brian Mann', 'Julia Brown', 'Seth Thompson', 'Ryan Floyd', 'David Krueger', 'Amber Anderson', 'Mark Pearson', 'Sarah Jones', 'Daniel Anderson', 'Colleen Kaiser', 'Lisa Young', 'Trevor Garza', 'Alyssa Gray', 'Jennifer Mora', 'Elizabeth Bryant', 'Dana Gonzalez', 'Gary Whitney', 'Lisa Martin', 'Linda Mann', 'Michael Campbell', 'Samuel Mason', 'Scott Gordon', 'Lee Howell', 'Kathleen Duncan', 'Austin Davidson', 'Jessica Williams', 'Emily Richardson', 'Theresa Campbell', 'Michael Carney', 'Jennifer Keller', 'Mr. Charles Clark', 'Helen Valentine', 'James Lowery', 'Connor Johnson', 'Taylor Frye', 'Eric Thompson', 'Jordan Barnes', 'Nicholas Richards', 'Michelle Miller', 'Charles Whitaker', 'Mariah Dillon', 'Tamara Woodard', 'Jeffrey Gonzalez', 'Troy Munoz', 'Adam Nelson', 'Louis Frye', 'Rachel Mcdaniel', 'Sara Riley', 'William Smith', 'David Smith Jr.', 'Michael Hamilton', 'Matthew Rose II', 'Teresa Edwards', 'Sean Soto', 'Kathy Smith', 'Brent Jenkins', 'Justin Parker', 'Jason Boyd', 'Michele Evans'] [floor(random()*100)+1] as external_id,
+      floor(random() * 8) + 1 as status,
+      now() - (floor(random() * 730) * interval '1 day') as ended_time,
+      case
+        when random() < 0.5 then 1
+        when random() < 0.5 then 2
+        when random() < 0.5 then 3
+        when random() < 0.5 then 4
+        else 5
+      end as merchant_id,
+      floor(random() * 250) + 1 as team_id,
+      floor(random() * 7) + 1 as task_type_id
+    from
+      generate_series(1, 1000000) as id
+  );
+
+'''
 
 [teardown]
   statement_files = ["sql/bringg_teardown.sql"]
