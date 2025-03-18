@@ -1,0 +1,6 @@
+[setup]
+statement_files = ["sql/bringg_setup.sql"]
+
+
+[teardown]
+  statement_files = ["sql/bringg_teardown.sql"]
