@@ -559,5 +559,195 @@ statement = '''
 iterations = 1000
 concurrency = 10
 
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and position=1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and position = 1
+    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+'''
+iterations = 1000
+concurrency = 10
+
 [teardown]
 statement_files = ["sql/bringg_teardown.sql"]
