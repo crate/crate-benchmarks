@@ -3,7 +3,6 @@ statement_files = ["sql/bringg_setup.sql"]
 
 [[queries]]
 name = "load-tasks"
-concurrency = 10
 statement = '''
 insert into
   tasks (
@@ -38,7 +37,6 @@ insert into
 
 [[queries]]
 name = "load-customers"
-concurrency = 10
 statement = '''
 insert into
   customers (
@@ -57,7 +55,6 @@ insert into
 
 [[queries]]
 name = "load-way_points"
-concurrency = 10
 statement = '''
 insert into
   way_points (
