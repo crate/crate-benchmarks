@@ -955,7 +955,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -975,7 +974,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -995,7 +993,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -1015,7 +1012,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -1035,7 +1031,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -1053,7 +1048,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -1071,7 +1065,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -1089,7 +1082,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
@@ -1107,7 +1099,6 @@ statement = '''
   from 
     tasks t 
     join way_points wp on wp.task_id = t.id
-    join customers c on c.id = wp.customer_id
   where 
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
