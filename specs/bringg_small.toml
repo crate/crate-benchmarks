@@ -1109,5 +1109,195 @@ statement = '''
 iterations = 1000
 concurrency = 10
 
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
 [teardown]
 statement_files = ["sql/bringg_teardown.sql"]
