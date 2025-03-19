@@ -1383,8 +1383,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 1
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South')
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -1405,8 +1405,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 2
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South')
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -1427,8 +1427,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 3
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South')
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -1449,8 +1449,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 4
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South')
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -1471,8 +1471,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 5
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South')
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -1493,8 +1493,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 1
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South');
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -1513,8 +1513,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 2
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South');
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -1533,8 +1533,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 3
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South');
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -1553,8 +1553,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 4
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South');
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -1573,8 +1573,8 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 5
     and t.task_type_id=6
-    AND match(wp1.city_ngram, 'New')
-    AND MATCH(wp2.address_ngram, 'South');
+    AND match(wp1.city_ngram, 'New') using phrase with (analyzer='full_search_analyzer')
+    AND MATCH(wp2.address_ngram, 'South') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
