@@ -53,7 +53,7 @@ CREATE ANALYZER edge_ngram_phone_analyzer (
    )
 );
 
-CREATE ANALYZER whitespace_analyzer extends whitespace with (
+CREATE ANALYZER full_search_analyzer extends whitespace with (
    TOKEN_FILTERS (
      asciifolding,
      lowercase,
@@ -61,6 +61,13 @@ CREATE ANALYZER whitespace_analyzer extends whitespace with (
        type="length",
        min=2
       )
+   )
+);
+
+CREATE ANALYZER full_search_ngram_analyzer extends keyword with (
+   TOKEN_FILTERS (
+     asciifolding,
+     lowercase
    )
 );
 
@@ -348,5 +355,6 @@ team_id integer,
   INDEX external_id_ngram using fulltext (external_id) with (analyzer='ngram_lowercase_analyzer'),
   INDEX title_standard using fulltext (title),
   INDEX title_ngram using fulltext (title) with (analyzer='edge_ngram_lowercase_analyzer'),
-  INDEX preparation_external_id_ignore using fulltext (preparation_external_id) with (analyzer='full_search_analyzer')
+  INDEX preparation_external_id_ignore using fulltext (preparation_external_id) with (analyzer='full_search_analyzer'),
+  INDEX preparation_external_id_ignore_two using fulltext (preparation_external_id) with (analyzer='full_search_ngram_analyzer')
 );
