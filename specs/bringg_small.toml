@@ -1789,5 +1789,255 @@ statement = '''
 iterations = 1000
 concurrency = 10
 
+[[queries]]
+name = "New History Page Main Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #1"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #2"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #3"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #4"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #5"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    )
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #1"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #2"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #3"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #4"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Customer Phone and WP Time Frame and Task Title/External ID - Merchant #5"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp on wp.task_id = t.id
+    join customers c on c.id = wp.customer_id
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
+    and wp.no_earlier_than <= now() - interval '30 hours'
+    and wp.no_later_than >= now() - interval '28 hours'
+    and (
+      match(t.title_ngram, 'ber') using phrase with (analyzer='full_search_analyzer')
+      or match(t.external_id_ngram, 'ber') using phrase with (analyzer='full_search_ngram_analyzer')
+    );
+'''
+iterations = 1000
+concurrency = 10
+
 [teardown]
 statement_files = ["sql/bringg_teardown.sql"]
