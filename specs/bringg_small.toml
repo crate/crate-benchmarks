@@ -1369,5 +1369,215 @@ statement = '''
 iterations = 1000
 concurrency = 10
 
+[[queries]]
+name = "New History Page Main Query - Task Type ID and WP1 City and WP2 Address - Merchant #1"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #2"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #3"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #4"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #5"
+statement = '''
+  select 
+    distinct t.id
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South')
+  limit
+    26;
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #1"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 1
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #2"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 2
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #3"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 3
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #4"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 4
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South');
+'''
+iterations = 1000
+concurrency = 10
+
+[[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #5"
+statement = '''
+  select 
+    count(distinct t.id)
+  from 
+    tasks t 
+    join way_points wp1 on wp1.task_id = t.id and wp1.position=1
+    join way_points wp2 on wp2.task_id = t.id and wp2.position=2 
+  where 
+    status IN (4,7) 
+    and ended_time > now() - interval '45 days'
+    and t.merchant_id = 5
+    and t.task_type_id=6
+    AND match(wp1.city_ngram, 'New')
+    AND MATCH(wp2.address_ngram, 'South');
+'''
+iterations = 1000
+concurrency = 10
+
 [teardown]
 statement_files = ["sql/bringg_teardown.sql"]
