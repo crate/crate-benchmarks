@@ -88,6 +88,7 @@ insert into
 '''
 
 [[queries]]
+name = "New History Page Main Query - Merchant #1"
 statement = '''
   select 
     distinct id 
@@ -104,6 +105,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Merchant #2"
 statement = '''
   select 
     distinct id 
@@ -120,6 +122,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Merchant #3"
 statement = '''
   select 
     distinct id 
@@ -136,6 +139,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Merchant #4"
 statement = '''
   select 
     distinct id 
@@ -152,6 +156,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Merchant #5"
 statement = '''
   select 
     distinct id 
@@ -168,6 +173,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Merchant #1"
 statement = '''
   select 
     count(*)
@@ -182,6 +188,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Merchant #2"
 statement = '''
   select 
     count(*)
@@ -196,6 +203,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Merchant #3"
 statement = '''
   select 
     count(*)
@@ -210,6 +218,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Merchant #4"
 statement = '''
   select 
     count(*)
@@ -224,6 +233,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Merchant #5"
 statement = '''
   select 
     count(*)
@@ -238,6 +248,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Single Team - Merchant #1"
 statement = '''
   select 
     distinct id 
@@ -255,6 +266,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Single Team - Merchant #2"
 statement = '''
   select 
     distinct id 
@@ -272,6 +284,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Single Team - Merchant #3"
 statement = '''
   select 
     distinct id 
@@ -289,6 +302,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Single Team - Merchant #4"
 statement = '''
   select 
     distinct id 
@@ -306,6 +320,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Single Team - Merchant #5"
 statement = '''
   select 
     distinct id 
@@ -323,6 +338,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Single Team - Merchant #1"
 statement = '''
   select 
     count(*)
@@ -338,6 +354,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Single Team - Merchant #2"
 statement = '''
   select 
     count(*)
@@ -353,6 +370,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Single Team - Merchant #3"
 statement = '''
   select 
     count(*)
@@ -368,6 +386,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Single Team - Merchant #4"
 statement = '''
   select 
     count(*)
@@ -384,6 +403,7 @@ concurrency = 10
 
 
 [[queries]]
+name = "New History Page Count Query - Single Team - Merchant #5"
 statement = '''
   select 
     count(*)
@@ -399,6 +419,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Many Teams - Merchant #1"
 statement = '''
   select 
     distinct id 
@@ -416,6 +437,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Many Teams - Merchant #2"
 statement = '''
   select 
     distinct id 
@@ -433,6 +455,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Many Teams - Merchant #3"
 statement = '''
   select 
     distinct id 
@@ -450,6 +473,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Many Teams - Merchant #4"
 statement = '''
   select 
     distinct id 
@@ -467,6 +491,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Many Teams - Merchant #5"
 statement = '''
   select 
     distinct id 
@@ -484,6 +509,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Many Teams - Merchant #1"
 statement = '''
   select 
     count(*)
@@ -499,6 +525,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Many Teams - Merchant #2"
 statement = '''
   select 
     count(*)
@@ -514,6 +541,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Many Teams - Merchant #3"
 statement = '''
   select 
     count(*)
@@ -529,6 +557,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Many Teams - Merchant #4"
 statement = '''
   select 
     count(*)
@@ -545,6 +574,7 @@ concurrency = 10
 
 
 [[queries]]
+name = "New History Page Count Query - Many Teams - Merchant #5"
 statement = '''
   select 
     count(*)
@@ -560,6 +590,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - First WP Customer Name - Merchant #1"
 statement = '''
   select 
     distinct t.id
@@ -580,6 +611,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - First WP Customer Name - Merchant #2"
 statement = '''
   select 
     distinct t.id
@@ -600,6 +632,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - First WP Customer Name - Merchant #3"
 statement = '''
   select 
     distinct t.id
@@ -620,6 +653,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - First WP Customer Name - Merchant #4"
 statement = '''
   select 
     distinct t.id
@@ -640,6 +674,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - First WP Customer Name - Merchant #5"
 statement = '''
   select 
     distinct t.id
@@ -660,6 +695,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - First WP Customer Name - Merchant #1"
 statement = '''
   select 
     count(distinct t.id)
@@ -678,6 +714,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - First WP Customer Name - Merchant #2"
 statement = '''
   select 
     count(distinct t.id)
@@ -696,6 +733,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - First WP Customer Name - Merchant #3"
 statement = '''
   select 
     count(distinct t.id)
@@ -714,6 +752,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - First WP Customer Name - Merchant #4"
 statement = '''
   select 
     count(distinct t.id)
@@ -732,6 +771,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - First WP Customer Name - Merchant #5"
 statement = '''
   select 
     count(distinct t.id)
@@ -750,6 +790,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Customer Phone - Merchant #1"
 statement = '''
   select 
     distinct t.id
@@ -769,6 +810,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Customer Phone - Merchant #2"
 statement = '''
   select 
     distinct t.id
@@ -788,6 +830,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Customer Phone - Merchant #3"
 statement = '''
   select 
     distinct t.id
@@ -807,6 +850,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Customer Phone - Merchant #4"
 statement = '''
   select 
     distinct t.id
@@ -826,6 +870,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Customer Phone - Merchant #5"
 statement = '''
   select 
     distinct t.id
@@ -845,6 +890,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Customer Phone - Merchant #1"
 statement = '''
   select 
     count(distinct t.id)
@@ -862,6 +908,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Customer Phone - Merchant #2"
 statement = '''
   select 
     count(distinct t.id)
@@ -879,6 +926,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Customer Phone - Merchant #3"
 statement = '''
   select 
     count(distinct t.id)
@@ -896,6 +944,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Customer Phone - Merchant #4"
 statement = '''
   select 
     count(distinct t.id)
@@ -913,6 +962,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Customer Phone - Merchant #5"
 statement = '''
   select 
     count(distinct t.id)
@@ -930,6 +980,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - WP Time Frame - Merchant #1"
 statement = '''
   select 
     distinct t.id
@@ -949,6 +1000,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - WP Time Frame - Merchant #2"
 statement = '''
   select 
     distinct t.id
@@ -968,6 +1020,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - WP Time Frame - Merchant #3"
 statement = '''
   select 
     distinct t.id
@@ -987,6 +1040,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - WP Time Frame - Merchant #4"
 statement = '''
   select 
     distinct t.id
@@ -1006,6 +1060,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - WP Time Frame - Merchant #5"
 statement = '''
   select 
     distinct t.id
@@ -1025,6 +1080,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - WP Time Frame - Merchant #1"
 statement = '''
   select 
     count(distinct t.id)
@@ -1042,6 +1098,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - WP Time Frame - Merchant #2"
 statement = '''
   select 
     count(distinct t.id)
@@ -1059,6 +1116,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - WP Time Frame - Merchant #3"
 statement = '''
   select 
     count(distinct t.id)
@@ -1076,6 +1134,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - WP Time Frame - Merchant #4"
 statement = '''
   select 
     count(distinct t.id)
@@ -1093,6 +1152,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - WP Time Frame - Merchant #5"
 statement = '''
   select 
     count(distinct t.id)
@@ -1110,6 +1170,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #1"
 statement = '''
   select 
     distinct t.id
@@ -1130,6 +1191,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #2"
 statement = '''
   select 
     distinct t.id
@@ -1150,6 +1212,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #3"
 statement = '''
   select 
     distinct t.id
@@ -1170,6 +1233,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #4"
 statement = '''
   select 
     distinct t.id
@@ -1190,6 +1254,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Main Query - Task Title/External ID - Merchant #5"
 statement = '''
   select 
     distinct t.id
@@ -1210,6 +1275,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #1"
 statement = '''
   select 
     count(distinct t.id)
@@ -1228,6 +1294,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #2"
 statement = '''
   select 
     count(distinct t.id)
@@ -1246,6 +1313,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #3"
 statement = '''
   select 
     count(distinct t.id)
@@ -1264,6 +1332,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #4"
 statement = '''
   select 
     count(distinct t.id)
@@ -1282,6 +1351,7 @@ iterations = 1000
 concurrency = 10
 
 [[queries]]
+name = "New History Page Count Query - Task Title/External ID - Merchant #5"
 statement = '''
   select 
     count(distinct t.id)
