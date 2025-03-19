@@ -572,7 +572,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 1
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -592,7 +592,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 2
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -612,7 +612,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 3
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -632,7 +632,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 4
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -652,7 +652,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 5
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer')
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer')
   limit
     26;
 '''
@@ -672,7 +672,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 1
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -690,7 +690,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 2
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -708,7 +708,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 3
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -726,7 +726,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 4
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -744,7 +744,7 @@ statement = '''
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 5
     and position = 1
-    and match(c.name_ngram, 'Ste') using best_fields with (analyzer='full_search_analyzer');
+    and match(c.name_ngram, 'Ste') using phrase with (analyzer='full_search_analyzer');
 '''
 iterations = 1000
 concurrency = 10
@@ -761,7 +761,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 1
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard')
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
   limit
     26;
 '''
@@ -780,7 +780,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 2
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard')
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
   limit
     26;
 '''
@@ -799,7 +799,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 3
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard')
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
   limit
     26;
 '''
@@ -818,7 +818,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 4
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard')
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
   limit
     26;
 '''
@@ -837,7 +837,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 5
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard')
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard')
   limit
     26;
 '''
@@ -856,7 +856,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 1
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard');
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard');
 '''
 iterations = 1000
 concurrency = 10
@@ -873,7 +873,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 2
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard');
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard');
 '''
 iterations = 1000
 concurrency = 10
@@ -890,7 +890,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 3
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard');
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard');
 '''
 iterations = 1000
 concurrency = 10
@@ -907,7 +907,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 4
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard');
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard');
 '''
 iterations = 1000
 concurrency = 10
@@ -924,7 +924,7 @@ statement = '''
     status IN (4,7) 
     and ended_time > now() - interval '45 days'
     and t.merchant_id = 5
-    and match(c.phone_ngram, '12027') using best_fields with (analyzer='standard');
+    and match(c.phone_ngram, '12027') using phrase with (analyzer='standard');
 '''
 iterations = 1000
 concurrency = 10
