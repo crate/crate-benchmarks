@@ -24,6 +24,22 @@ warmup = 1
 concurrency = 1
 iterations = 3
 
+[[queries]]
+name = "union-correlated-sys.summits"
+statement = """
+    SELECT
+        (SELECT t1.mountain)
+    FROM
+        sys.summits t1
+    UNION ALL
+    SELECT
+        (SELECT t2.mountain)
+    FROM sys.summits t2
+    ORDER BY 1 DESC
+    LIMIT 4
+"""
+iterations = 500
+
 
 [teardown]
 statements = ["drop table if exists uservisits"]
