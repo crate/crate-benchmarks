@@ -27,12 +27,6 @@ min_version = '3.0.0'
 concurrency = 5
 
 [[queries]]
-statement = 'select t1."sourceIP" from uservisits_large t1 inner join uservisits_small t2 on t1."sourceIP" = t2."sourceIP" order by t1."sourceIP" limit 1000'
-iterations = 20
-min_version = '3.0.0'
-concurrency = 14
-
-[[queries]]
 statement = 'select t1."sourceIP" from uservisits_large t1 inner join uservisits_small t2 on t1."sourceIP" = t2."sourceIP" limit 1000000'
 iterations = 20
 min_version = '3.0.0'
