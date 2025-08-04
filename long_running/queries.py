@@ -52,6 +52,12 @@ def get_queries():
             'concurrency': 10,
             'duration': 1 * 60 * 60
         },
+        {
+            'statement': ('SELECT name, count(*) FROM lrt.t1 '
+                          'GROUP BY name ORDER BY 2 DESC LIMIT 500'),
+            'concurrency': 25,
+            'duration': 1 * 60 * 60
+        }
     )
 
 
