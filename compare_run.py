@@ -14,6 +14,7 @@ import subprocess
 import tempfile
 from functools import partial
 from uuid import uuid4
+from typing import Optional, Dict, Any
 
 from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
@@ -22,7 +23,13 @@ from compare_measures import Diff, print_diff
 from util import dict_from_kw_args
 
 
-def compare_results(results_v1, metrics_v1, results_v2, metrics_v2, show_plot):
+def compare_results(results_v1,
+                    metrics_v1,
+                    stat_resultv1: Dict[str, Any],
+                    results_v2,
+                    metrics_v2,
+                    stat_resultv2: Dict[str, Any],
+                    show_plot):
     print('')
     print('')
     print('# Results (server side duration in ms)')
@@ -89,6 +96,39 @@ System/JVM Metrics (durations in ms, byte-values in MB)
     for frame in metrics_v2['alloc']['top_frames_by_count']:
         print('    ' + frame)
 
+    if metrics_v1:
+        print("")
+        print("perf stat")
+        print("  v1")
+        max_digits = max(
+            len(str(int(float(x.get("metric-value", x.get("counter-value", 0))))))
+            for x in stat_resultv1.values()
+        )
+        max_keylen = max(
+            len(x)
+            for x in stat_resultv1.keys()
+        )
+        for k, v in stat_resultv1.items():
+            print("    " + format_perf_stat_value(k, v, max_digits, max_keylen))
+        print("  v2")
+        for k, v in stat_resultv2.items():
+            print("    " + format_perf_stat_value(k, v, max_digits, max_keylen))
+
+
+def format_perf_stat_value(k: str, v: Dict[str, Any], max_digits: int, max_keylen: int) -> str:
+    max_digits += 4
+    parts = [
+        f"{k:<{max_keylen}}: "
+    ]
+    if "metric-value" in v:
+        parts.append(f"{float(v["metric-value"]): {max_digits}.2f}")
+    elif "counter-value" in v:
+        parts.append(f"{float(v["counter-value"]): {max_digits}.2f}")
+    unit = v.get("unit", "")
+    if unit:
+        parts.append(unit)
+    return "".join(parts)
+
 
 def jfr_start(pid, tmpdir):
     java_home = os.environ.get('JAVA_HOME')
@@ -113,12 +153,44 @@ def jfr_stop(pid):
     subprocess.check_call([jcmd, str(pid), 'JFR.stop', 'name=rec'])
 
 
-def jfr_extract_metrics(filename):
+def jfr_extract_metrics(filename) -> Dict[str, Any]:
     java_home = os.environ.get('JAVA_HOME')
     java = java_home and os.path.join(java_home, 'bin', 'java') or 'java'
     cmd = [java, 'JfrOverview.java', filename]
     output = subprocess.check_output(cmd, universal_newlines=True)
     return json.loads(output)
+
+
+def perf_stat(pid: int) -> Optional[subprocess.Popen]:
+    cmd = [
+        "perf",
+        "stat",
+        "-j",
+        "-d",
+        "-e", "branches,cache-misses,instructions,faults,context-switches",
+        "-p", str(pid)
+    ]
+    try:
+        return subprocess.Popen(
+            cmd,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+    except FileNotFoundError:
+        return None
+
+
+def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
+    # perf stat -j returns json lines like:
+    # {"counter-value" : "0.445654", "unit" : "msec", "event" : "task-clock", "event-runtime" : 445654, "pcnt-running" : 100.00, "metric-value" : "0.575812", "metric-unit" : "CPUs utilized"}
+    stdout, stderr = proc.communicate()
+    metrics = {}
+    for line in stderr.split("\n"):
+        if line:
+            event_metrics = json.loads(line)
+            metrics[event_metrics["event"]] = event_metrics
+    return metrics
 
 
 def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
@@ -141,6 +213,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
             action='setup'
         )
         jfr_file = jfr_start(n.process.pid, tmpdir)
+        perf_proc = perf_stat(n.process.pid)
         log.result = results.append
         do_run_spec(
             spec=spec,
@@ -159,7 +232,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
             sample_mode='reservoir',
             action='teardown'
         )
-        return (results, jfr_extract_metrics(jfr_file))
+    return (results, jfr_extract_metrics(jfr_file), perf_proc and perf_stat_results(perf_proc) or {})
 
 
 def run_compare(v1,
@@ -178,9 +251,17 @@ def run_compare(v1,
     run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol)
     try:
         for _ in range(forks):
-            results_v1, jfr_metrics1 = run_v1()
-            results_v2, jfr_metrics2 = run_v2()
-            compare_results(results_v1, jfr_metrics1, results_v2, jfr_metrics2, show_plot)
+            results_v1, jfr_metrics1, stat_result1 = run_v1()
+            results_v2, jfr_metrics2, stat_result2 = run_v2()
+            compare_results(
+                results_v1,
+                jfr_metrics1,
+                stat_result1,
+                results_v2,
+                jfr_metrics2,
+                stat_result2,
+                show_plot
+            )
     finally:
         shutil.rmtree(tmpdir, True)
 
