@@ -79,7 +79,7 @@ Looking for more help?
 - Check out our `support channels`_
 
 .. _compare_measures.py: compare_measures.py
-.. _cr8: https://github.com/mfussenegger/cr8
+.. _cr8: https://codeberg.org/mfussenegger/cr8
 .. _Crate.io: http://crate.io/
 .. _CrateDB: https://github.com/crate/crate
 .. _find_regressions.py: find_regressions.py
