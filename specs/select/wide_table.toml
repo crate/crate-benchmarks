@@ -1,9 +1,14 @@
 [setup]
-statement_files = ["../sql/wide.sql"]
+statement_files = ["../sql/wide.sql", "../sql/wide_obj.sql"]
 
     [[setup.data_cmds]]
     target = "wide"
     cmd = ['generators/wide.sh']
+    bulk_size = 500
+
+    [[setup.data_cmds]]
+    target = "wide_obj"
+    cmd = ['generators/wide_obj.sh']
     bulk_size = 500
 
 
@@ -17,6 +22,21 @@ statement = "select x1788, x1200 from wide limit 1500"
 iterations = 800
 concurrency = 10
 
+[[queries]]
+name = "select-obj-cols"
+statement = "select obj['x1788'], obj['x1200'] from wide_obj limit 500"
+iterations = 800
+concurrency = 10
+
+[[queries]]
+name = "select-obj"
+statement = "select obj from wide_obj limit 500"
+iterations = 400
+concurrency = 10
+
 
 [teardown]
-statements = ["drop table if exists wide"]
+statements = [
+  "drop table if exists wide",
+  "drop table if exists wide_obj",
+]
