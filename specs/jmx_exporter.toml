@@ -1,0 +1,24 @@
+# This spec requires that the `crate-jmx-exporter` agent is attached to the CrateDB node and configured to use port 8080
+# Example cmd:
+# ./compare_run.py --spec specs/jmx_exporter.toml --env '
+#   CRATE_JAVA_OPTS=-javaagent:/Users/smu/Downloads/crate-jmx-exporter-1.2.1.jar=8080
+#   -Dcom.sun.management.jmxremote
+#   -Dcom.sun.management.jmxremote.port=7979
+#   -Dcom.sun.management.jmxremote.ssl=false
+#   -Dcom.sun.management.jmxremote.authenticate=false'
+#   --v1 <V1> --v2 <V2>
+
+[setup]
+statements = [
+    "create table t_shards (id int, name string, value float) clustered into 500 shards with (number_of_replicas=0)",
+    "create blob table b_t_shards clustered into 100 shards with (number_of_replicas=0)",
+    "create table p_t_shards (id int, p1 string, p2 int) clustered into 100 shards partitioned by (p1, p2) with (number_of_replicas=0)",
+    "insert into p_t_shards (id, p1, p2) values (1, '1', 12), (2, '2', 22)",
+    "refresh table p_t_shards",
+]
+
+[[queries]]
+endpoint = '/metrics'
+port = 8080
+iterations = 10000
+concurrency = 1
