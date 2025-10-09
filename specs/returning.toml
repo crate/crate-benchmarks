@@ -1,0 +1,36 @@
+[setup]
+statements = [
+  """
+  create table t (
+      a int,
+      b int as a+1,
+      c int default -1,
+      o object as (
+          a2 int,
+          b2 int as a+1,
+          c2 int default -1,
+          o2 object as (
+              a3 int,
+              b3 int as a+1,
+              c3 int default -1
+          )
+      )
+  )
+  """
+]
+
+
+[[queries]]
+# We are measuring the performance of INSERT ... RETURNING because returning objects
+# with generated/default sub-columns require extra merging logic of the insert values
+# and the synthetic values
+# i.e. see below query, given o2={a3=10}, RETURNING must return o2={a3=10, b3=11, c3=-1}
+# Also see https://github.com/crate/crate/pull/18457 for more details
+
+statement = "insert into t(a,o) values (10, {a2=10, o2={a3=10}}) returning *"
+iterations = 2000
+concurrency = 1
+
+
+[teardown]
+statements = ["drop table if exists t"]
