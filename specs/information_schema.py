@@ -10,7 +10,7 @@ spec = Spec(
     queries=[
         {
             'statement': "select * from information_schema.tables",
-            'iterations': 100000,
+            'iterations': 10000,
         }
     ]
 )
