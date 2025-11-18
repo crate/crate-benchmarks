@@ -6,6 +6,7 @@ compare the disk space requirements.
 """
 
 import argparse
+import asyncio
 from uuid import uuid4
 from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
@@ -32,12 +33,12 @@ WHERE
         cursor.execute(f'optimize table "{schema}"."{table}" with (flush = true, max_num_segments = 1)')
 
 
-def run(version, spec, env, settings):
+async def run(version, spec, env, settings):
     crate_dir = get_crate(version)
     settings.setdefault('cluster.name', str(uuid4()))
     with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
         n.start()
-        do_run_spec(
+        await do_run_spec(
             spec=spec,
             log=log,
             sample_mode='reservoir',
@@ -49,16 +50,16 @@ def run(version, spec, env, settings):
         return gather_sizes(n.data_path)
 
 
-def run_comparison(version1,
-                   version2,
-                   spec,
-                   result_hosts,
-                   env_v1,
-                   env_v2,
-                   settings_v1,
-                   settings_v2):
-    v1 = run(version1, spec, env_v1, settings_v1)
-    v2 = run(version2, spec, env_v2, settings_v2)
+async def run_comparison(version1,
+                         version2,
+                         spec,
+                         result_hosts,
+                         env_v1,
+                         env_v2,
+                         settings_v1,
+                         settings_v2):
+    v1 = await run(version1, spec, env_v1, settings_v1)
+    v2 = await run(version2, spec, env_v2, settings_v2)
     print(f'Version1: {version1}')
     print(f'Version2: {version2}')
     headers = ('Description', 'Version 1', 'Unit', 'Version 2', 'Unit', 'Diff')
@@ -143,7 +144,7 @@ def main():
     settings_v2 = settings.copy()
     settings_v2.update(dict_from_kw_args(args.setting_v2))
 
-    run_comparison(
+    asyncio.run(run_comparison(
         args.v1,
         args.v2,
         args.spec,
@@ -152,7 +153,7 @@ def main():
         env_v2=env_v2,
         settings_v1=settings_v1,
         settings_v2=settings_v2
-    )
+    ))
 
 
 if __name__ == '__main__':

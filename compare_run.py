@@ -12,6 +12,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import asyncio
 from functools import partial
 from uuid import uuid4
 from typing import Optional, Dict, Any
@@ -193,7 +194,7 @@ def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
     return metrics
 
 
-def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
+async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
     crate_dir = get_crate(version)
     settings.setdefault('cluster.name', str(uuid4()))
     results = []
@@ -204,7 +205,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
             pg_address = n.addresses['psql']
             benchmark_hosts = f'asyncpg://{pg_address.host}:{pg_address.port}'
         print(f'Running benchmark using protocol={protocol}, benchmark_hosts={benchmark_hosts}')
-        do_run_spec(
+        await do_run_spec(
             spec=spec,
             benchmark_hosts=benchmark_hosts,
             log=log,
@@ -215,7 +216,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
         jfr_file = jfr_start(n.process.pid, tmpdir)
         perf_proc = perf_stat(n.process.pid)
         log.result = results.append
-        do_run_spec(
+        await do_run_spec(
             spec=spec,
             benchmark_hosts=n.http_url,
             log=log,
@@ -224,7 +225,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
             action=['queries', 'load_data']
         )
         jfr_stop(n.process.pid)
-        do_run_spec(
+        await do_run_spec(
             spec=spec,
             benchmark_hosts=n.http_url,
             log=log,
@@ -235,7 +236,7 @@ def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
     return (results, jfr_extract_metrics(jfr_file), perf_proc and perf_stat_results(perf_proc) or {})
 
 
-def run_compare(v1,
+async def run_compare(v1,
                 v2,
                 spec,
                 result_hosts,
@@ -251,8 +252,8 @@ def run_compare(v1,
     run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol)
     try:
         for _ in range(forks):
-            results_v1, jfr_metrics1, stat_result1 = run_v1()
-            results_v2, jfr_metrics2, stat_result2 = run_v2()
+            results_v1, jfr_metrics1, stat_result1 = await run_v1()
+            results_v2, jfr_metrics2, stat_result2 = await run_v2()
             compare_results(
                 results_v1,
                 jfr_metrics1,
@@ -309,7 +310,7 @@ def main():
     settings_v2 = settings.copy()
     settings_v2.update(dict_from_kw_args(args.setting_v2))
     try:
-        run_compare(
+        asyncio.run(run_compare(
             args.v1,
             args.v2,
             args.spec,
@@ -321,7 +322,7 @@ def main():
             settings_v2=settings_v2,
             show_plot=args.show_plot,
             protocol=args.protocol,
-        )
+        ))
     except KeyboardInterrupt:
         print('Exiting..')
 

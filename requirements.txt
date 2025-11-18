@@ -11,7 +11,7 @@ attrs==25.4.0
 babel==2.17.0
 colorama==0.4.6
 contourpy==1.3.3
-cr8==0.28.0
+cr8==0.29.0
 cramjam==2.11.0
 crash==0.31.5
 crate==2.0.0
