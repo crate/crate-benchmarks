@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def dict_from_kw_args(args):
+def dict_from_kw_args(args: list[str]) -> dict[str, str]:
     """ Return a dictionary based on ['key=val'] entries
 
     >>> dict_from_kw_args(['x=10', 'y=foo'])
