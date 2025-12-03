@@ -14,22 +14,26 @@ import subprocess
 import tempfile
 import asyncio
 from functools import partial
-from uuid import uuid4
 from typing import Optional, Dict, Any
+from uuid import uuid4
 
+from cr8.log import Logger
 from cr8.run_crate import get_crate, CrateNode
 from cr8.run_spec import do_run_spec
-from cr8.log import Logger
+
 from compare_measures import Diff, print_diff
+from indexing_stats import report_indexing_stats, collect_indexing_metrics
 from util import dict_from_kw_args
 
 
 def compare_results(results_v1,
                     metrics_v1,
                     stat_resultv1: Dict[str, Any],
+                    indexing_metrics_v1: Dict[str, Any],
                     results_v2,
                     metrics_v2,
                     stat_resultv2: Dict[str, Any],
+                    indexing_metrics_v2: Dict[str, Any],
                     show_plot):
     print('')
     print('')
@@ -115,6 +119,9 @@ System/JVM Metrics (durations in ms, byte-values in MB)
         for k, v in stat_resultv2.items():
             print("    " + format_perf_stat_value(k, v, max_digits, max_keylen))
 
+    if indexing_metrics_v1:
+        report_indexing_stats(indexing_metrics_v1, indexing_metrics_v2)
+
 
 def format_perf_stat_value(k: str, v: Dict[str, Any], max_digits: int, max_keylen: int) -> str:
     max_digits += 4
@@ -194,7 +201,7 @@ def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
     return metrics
 
 
-async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol):
+async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol, report_indexing):
     crate_dir = get_crate(version)
     settings.setdefault('cluster.name', str(uuid4()))
     results = []
@@ -225,6 +232,7 @@ async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol
             action=['queries', 'load_data']
         )
         jfr_stop(n.process.pid)
+        indexing_metrics = collect_indexing_metrics(benchmark_hosts, report_indexing)
         await do_run_spec(
             spec=spec,
             benchmark_hosts=n.http_url,
@@ -233,7 +241,7 @@ async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol
             sample_mode='reservoir',
             action='teardown'
         )
-    return (results, jfr_extract_metrics(jfr_file), perf_proc and perf_stat_results(perf_proc) or {})
+    return (results, jfr_extract_metrics(jfr_file), perf_proc and perf_stat_results(perf_proc) or {}, indexing_metrics)
 
 
 async def run_compare(v1,
@@ -246,21 +254,24 @@ async def run_compare(v1,
                 settings_v1,
                 settings_v2,
                 show_plot,
-                protocol):
+                protocol,
+                report_indexing):
     tmpdir = tempfile.mkdtemp()
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol)
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing)
     try:
         for _ in range(forks):
-            results_v1, jfr_metrics1, stat_result1 = await run_v1()
-            results_v2, jfr_metrics2, stat_result2 = await run_v2()
+            results_v1, jfr_metrics1, stat_result1, indexing_metrics1 = await run_v1()
+            results_v2, jfr_metrics2, stat_result2, indexing_metrics2 = await run_v2()
             compare_results(
                 results_v1,
                 jfr_metrics1,
                 stat_result1,
+                indexing_metrics1,
                 results_v2,
                 jfr_metrics2,
                 stat_result2,
+                indexing_metrics2,
                 show_plot
             )
     finally:
@@ -298,6 +309,8 @@ def main():
     p.add_argument('--show-plot', type=bool, default=False)
     p.add_argument('--protocol', type=str, default='http',
                    help='Define which protocol to use, choices are (http, pg). Defaults to: http')
+    p.add_argument('--report-indexing', action='store_true',
+                   help='Whether to report shard indexing statistics. Mostly useful when running indexing benchmarks. Disabled by default.')
     args = p.parse_args()
     env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
@@ -322,6 +335,7 @@ def main():
             settings_v2=settings_v2,
             show_plot=args.show_plot,
             protocol=args.protocol,
+            report_indexing=args.report_indexing,
         ))
     except KeyboardInterrupt:
         print('Exiting..')
