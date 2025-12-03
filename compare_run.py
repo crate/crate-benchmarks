@@ -96,7 +96,7 @@ System/JVM Metrics (durations in ms, byte-values in MB)
     for frame in metrics_v2['alloc']['top_frames_by_count']:
         print('    ' + frame)
 
-    if metrics_v1:
+    if stat_resultv1:
         print("")
         print("perf stat")
         print("  v1")
