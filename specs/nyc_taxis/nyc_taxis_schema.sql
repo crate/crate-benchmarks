@@ -1,0 +1,27 @@
+CREATE TABLE IF NOT EXISTS "nyc_taxi"."trips" (
+    "id" TEXT NOT NULL AS gen_random_text_uuid(),
+    "Airport_fee" FLOAT,
+    "VendorID" INTEGER,
+    "tpep_pickup_datetime" TIMESTAMP,
+    "tpep_dropoff_datetime" TIMESTAMP,
+    "passenger_count" FLOAT,
+    "trip_distance" FLOAT,
+    "RatecodeID" FLOAT,
+    "store_and_fwd_flag" TEXT,
+    "PULocationID" INTEGER,
+    "DOLocationID" INTEGER,
+    "payment_type" INTEGER,
+    "fare_amount" FLOAT,
+    "extra" FLOAT,
+    "mta_tax" FLOAT,
+    "tip_amount" FLOAT,
+    "tolls_amount" FLOAT,
+    "improvement_surcharge" FLOAT,
+    "total_amount" FLOAT,
+    "cbd_congestion_fee" FLOAT,
+    "congestion_surcharge" FLOAT,
+    "pickup_year" TIMESTAMP GENERATED ALWAYS AS DATE_TRUNC('year', "tpep_pickup_datetime"),
+    "pickup_month" TIMESTAMP GENERATED ALWAYS AS DATE_TRUNC('month', "tpep_pickup_datetime"),
+    PRIMARY KEY ("id", "pickup_year")
+)
+PARTITIONED BY ("pickup_year");
