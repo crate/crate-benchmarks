@@ -7,9 +7,10 @@ from crate.client.cursor import Cursor
 SEGMENTS_STATS_STMT = '''
 SELECT
     count(*) as cnt,
-    min(size) as min_size,
-    max(size) as max_size,
-    avg(size) as avg_size
+    sum(size) / 1000^2 as size,
+    min(size) / 1000^2 as min_size,
+    max(size) / 1000^2 as max_size,
+    avg(size) / 1000^2 as avg_size
 FROM
     sys.segments
 WHERE
@@ -22,17 +23,17 @@ SHARDS_STATS_STMT = '''
 SELECT
     sum(flush_stats['count']) as flush_count,
     sum(flush_stats['periodic_count']) as flush_periodic_count,
-    sum(flush_stats['total_time_ns']) / 1000 as flush_time,
-    min(flush_stats['total_time_ns']) / 1000 as flush_time_min,
-    max(flush_stats['total_time_ns']) / 1000 as flush_time_max,
-    avg(flush_stats['total_time_ns']) / 1000 as flush_time_avg,
+    sum(flush_stats['total_time_ns']) / 1000^2 as flush_time,
+    min(flush_stats['total_time_ns']) / 1000^2 as flush_time_min,
+    max(flush_stats['total_time_ns']) / 1000^2 as flush_time_max,
+    avg(flush_stats['total_time_ns']) / 1000^2 as flush_time_avg,
 
     sum(refresh_stats['count']) as refresh_count,
     sum(refresh_stats['pending_count']) as refresh_pending_count,
-    sum(refresh_stats['total_time_ns']) / 1000 as refresh_time,
-    min(refresh_stats['total_time_ns']) / 1000 as refresh_time_min,
-    max(refresh_stats['total_time_ns']) / 1000 as refresh_time_max,
-    avg(refresh_stats['total_time_ns']) / 1000 as refresh_time_avg,
+    sum(refresh_stats['total_time_ns']) / 1000^2 as refresh_time,
+    min(refresh_stats['total_time_ns']) / 1000^2 as refresh_time_min,
+    max(refresh_stats['total_time_ns']) / 1000^2 as refresh_time_max,
+    avg(refresh_stats['total_time_ns']) / 1000^2 as refresh_time_avg,
 
     sum(merge_stats['count']) as merge_count,
     sum(merge_stats['total_num_docs']) as merge_num_docs,
@@ -48,7 +49,24 @@ SELECT
     sum(merge_stats['current_count']) as merge_current_count,
     sum(merge_stats['current_num_docs']) as merge_current_num_docs,
     sum(merge_stats['current_size_bytes']) as merge_current_size,
-    sum(merge_stats['bytes_per_sec_auto_throttle']) / 1000^2 as merge_throttle
+    sum(merge_stats['bytes_per_sec_auto_throttle']) / 1000^2 as merge_throttle,
+    
+    sum(translog_stats['size']) / 1000^2 as translog_size,
+    min(translog_stats['size']) / 1000^2 as translog_size_min,
+    max(translog_stats['size']) / 1000^2 as translog_size_max,
+    avg(translog_stats['size']) / 1000^2 as translog_size_avg,
+    sum(translog_stats['uncommitted_size']) / 1000^2 as translog_uncommitted_size,
+    min(translog_stats['uncommitted_size']) / 1000^2 as translog_uncommitted_size_min,
+    max(translog_stats['uncommitted_size']) / 1000^2 as translog_uncommitted_size_max,
+    avg(translog_stats['uncommitted_size']) / 1000^2 as translog_uncommitted_size_avg,
+    sum(translog_stats['number_of_operations']) as translog_ops,
+    min(translog_stats['number_of_operations']) as translog_ops_min,
+    max(translog_stats['number_of_operations']) as translog_ops_max,
+    avg(translog_stats['number_of_operations']) as translog_ops_avg,
+    sum(translog_stats['uncommitted_operations']) as translog_uncommitted_ops,
+    min(translog_stats['uncommitted_operations']) as translog_uncommitted_ops_min,
+    max(translog_stats['uncommitted_operations']) as translog_uncommitted_ops_max,
+    avg(translog_stats['uncommitted_operations']) as translog_uncommitted_ops_avg
 
 FROM
     sys.shards
@@ -74,17 +92,20 @@ def report_indexing_stats(indexing_metrics_v1: Dict[str, Any],
 
 def report_segment_stats(segments_metrics_v1: Dict[str, Any], segments_metrics_v2: Dict[str, Any]):
     cnt_v1 = segments_metrics_v1["cnt"]
+    size_v1 = segments_metrics_v1["size"]
     min_v1 = segments_metrics_v1["min_size"]
     max_v1 = segments_metrics_v1["max_size"]
     avg_v1 = segments_metrics_v1["avg_size"]
     cnt_v2 = segments_metrics_v2["cnt"]
+    size_v2 = segments_metrics_v2["size"]
     min_v2 = segments_metrics_v2["min_size"]
     max_v2 = segments_metrics_v2["max_size"]
     avg_v2 = segments_metrics_v2["avg_size"]
     print(f''' Segments
-     |  cnt      avg_size      min_size      max_size 
-  V1 | {cnt_v1:4.0f} {avg_v1:13.2f} {min_v1:13.2f} {max_v1:13.2f}
-  V2 | {cnt_v2:4.0f} {avg_v2:13.2f} {min_v2:13.2f} {max_v2:13.2f}
+     |        |                Size (MB)        
+     |    cnt |      sum      avg      min      max
+  V1 | {cnt_v1:6.0f} | {size_v1:8.2f} {avg_v1:8.2f} {min_v1:8.2f} {max_v1:8.2f}
+  V2 | {cnt_v2:6.0f} | {size_v2:8.2f} {avg_v2:8.2f} {min_v2:8.2f} {max_v2:8.2f}
     ''')
 
 
@@ -102,7 +123,7 @@ def report_shard_stats(shards_metrics_v1: Dict[str, Any], shards_metrics_v2: Dic
         )
 
     print(f''' Flush                   
-     |      Counts      |                   Times (ms)                
+     |      Counts      |                   Times (sec)                
      | total   periodic |        sum        avg        min        max 
   V1 | {flush_stats[0]}
   V2 | {flush_stats[1]} 
@@ -121,7 +142,7 @@ def report_shard_stats(shards_metrics_v1: Dict[str, Any], shards_metrics_v2: Dic
         )
 
     print(f''' Refresh 
-     |      Counts      |                   Times (ms)                
+     |      Counts      |                   Times (sec)                
      | total    pending |        sum        avg        min        max 
   V1 | {refresh_stats[0]}
   V2 | {refresh_stats[1]} 
@@ -153,6 +174,39 @@ def report_shard_stats(shards_metrics_v1: Dict[str, Any], shards_metrics_v2: Dic
      | total  current |        sum        avg        min        max |        sum        avg        min        max | total   current |  total   current |    in MB
   V1 | {merge_stats[0]}
   V2 | {merge_stats[1]} 
+    ''')
+
+    translog_stats = []
+    for m in (shards_metrics_v1, shards_metrics_v2):
+        size = m['translog_size']
+        size_min = m['translog_size_min']
+        size_max = m['translog_size_max']
+        size_avg = m['translog_size_avg']
+        size_uncommitted = m['translog_uncommitted_size']
+        size_uncommitted_min = m['translog_uncommitted_size_min']
+        size_uncommitted_max = m['translog_uncommitted_size_max']
+        size_uncommitted_avg = m['translog_uncommitted_size_avg']
+        ops = m['translog_ops']
+        ops_min = m['translog_ops_min']
+        ops_max = m['translog_ops_max']
+        ops_avg = m['translog_ops_avg']
+        ops_uncommitted = m['translog_uncommitted_ops']
+        ops_uncommitted_min = m['translog_uncommitted_ops_min']
+        ops_uncommitted_max = m['translog_uncommitted_ops_max']
+        ops_uncommitted_avg = m['translog_uncommitted_ops_avg']
+        size_str = f"{size:8.2f} {size_avg:8.2f} {size_min:8.2f} {size_max:8.2f}"
+        size_uncommitted_str = f"{size_uncommitted:8.2f} {size_uncommitted_avg:8.2f} {size_uncommitted_min:8.2f} {size_uncommitted_max:8.2f}"
+        ops_str = f"{ops:8.0f} {ops_avg:8.0f} {ops_min:8.0f} {ops_max:8.0f}"
+        ops_uncommitted_str = f"{ops_uncommitted:8.0f} {ops_uncommitted_avg:8.0f} {ops_uncommitted_min:8.0f} {ops_uncommitted_max:8.0f}"
+        translog_stats.append(
+            f"{size_str} | {size_uncommitted_str} | {ops_str} | {ops_uncommitted_str}"
+        )
+
+    print(f''' Translog 
+     |                Size (MB)            |          Size Uncommitted (MB)      |                   Ops               |             Ops Uncommitted       
+     |    total      avg      min      max |    total      avg      min      max |    total      avg      min      max |    total      avg      min      max 
+  V1 | {translog_stats[0]}
+  V2 | {translog_stats[1]} 
     ''')
 
 
