@@ -7,3 +7,5 @@ crash
 plotext
 csvkit
 tabulate
+pandas
+fastparquet
