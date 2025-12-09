@@ -1,0 +1,17 @@
+[setup]
+statements = [
+  "create table tbl (p object as (x int, y int))",
+  "insert into tbl (p) (select {x=x, y=x + 1} from generate_series(1, 10000) as t (x))",
+  "refresh table tbl"
+]
+
+[[queries]]
+name = "update"
+statement = """update tbl set p = case when p['x'] < 10 THEN '{"x": 20, "y": 1}' ELSE '{"x": 30, "y": 2}' END"""
+iterations = 200
+
+
+[teardown]
+statements = [
+  "drop table if exists tbl"
+]
