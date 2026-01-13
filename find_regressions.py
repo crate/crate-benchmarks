@@ -163,7 +163,11 @@ def is_stable(diff):
 def find_regressions(hosts, table):
     user = os.getenv('DB_USERNAME')
     password = os.getenv('DB_PASSWORD')
-    with connect(hosts, username=user, password=password) as conn:
+    disable_ssl_verify = "verify_ssl=false" in hosts
+    with connect(hosts,
+                 username=user,
+                 password=password,
+                 verify_ssl_cert=not disable_ssl_verify) as conn:
         c = conn.cursor()
         results = _fetch_results(c, table)
         diffs = find_diffs(results)
