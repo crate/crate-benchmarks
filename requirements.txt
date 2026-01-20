@@ -3,7 +3,7 @@ agate-dbf==0.2.3
 agate-excel==0.4.1
 agate-sql==0.7.2
 aiohappyeyeballs==2.6.1
-aiohttp==3.13.2
+aiohttp==3.13.3
 aiosignal==1.4.0
 argh==0.31.3
 asyncpg==0.31.0
