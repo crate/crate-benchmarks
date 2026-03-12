@@ -34,7 +34,7 @@ multidict==6.7.0
 numpy==2.3.5
 olefile==0.47
 openpyxl==3.1.5
-orjson==3.11.5
+orjson==3.11.6
 packaging==25.0
 pandas==2.3.3
 parsedatetime==2.6
