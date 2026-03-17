@@ -241,39 +241,45 @@ async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol
             sample_mode='reservoir',
             action='teardown'
         )
-    return (results, jfr_extract_metrics(jfr_file), perf_proc and perf_stat_results(perf_proc) or {}, indexing_metrics)
+    return (results, jfr_file, perf_proc and perf_stat_results(perf_proc) or {}, indexing_metrics)
 
 
-async def run_compare(v1,
-                v2,
-                spec,
-                result_hosts,
-                forks,
-                env_v1,
-                env_v2,
-                settings_v1,
-                settings_v2,
-                show_plot,
-                protocol,
-                report_indexing):
+async def run_compare(
+        v1,
+        v2,
+        spec,
+        result_hosts,
+        forks,
+        env_v1,
+        env_v2,
+        settings_v1,
+        settings_v2,
+        show_plot,
+        protocol,
+        report_indexing,
+        diff_jfr: bool):
     tmpdir = tempfile.mkdtemp()
     run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing)
     run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing)
     try:
-        for _ in range(forks):
-            results_v1, jfr_metrics1, stat_result1, indexing_metrics1 = await run_v1()
-            results_v2, jfr_metrics2, stat_result2, indexing_metrics2 = await run_v2()
+        for i in range(forks):
+            results_v1, jfr_file1, stat_result1, indexing_metrics1 = await run_v1()
+            results_v2, jfr_file2, stat_result2, indexing_metrics2 = await run_v2()
             compare_results(
                 results_v1,
-                jfr_metrics1,
+                jfr_extract_metrics(jfr_file1),
                 stat_result1,
                 indexing_metrics1,
                 results_v2,
-                jfr_metrics2,
+                jfr_extract_metrics(jfr_file2),
                 stat_result2,
                 indexing_metrics2,
                 show_plot
             )
+            if diff_jfr:
+                subprocess.check_output(["jfrconv", "--diff", jfr_file1, jfr_file2, f"diff-{i}.html"])
+                subprocess.check_output(["jfrconv", "--diff", jfr_file1, jfr_file2, f"diff-{i}-reverse.html"])
+
     finally:
         shutil.rmtree(tmpdir, True)
 
@@ -311,6 +317,8 @@ def main():
                    help='Define which protocol to use, choices are (http, pg). Defaults to: http')
     p.add_argument('--report-indexing', action='store_true',
                    help='Whether to report shard indexing statistics. Mostly useful when running indexing benchmarks. Disabled by default.')
+    p.add_argument("--diff-jfr", action="store_true",
+                   help="Uses the `jfrconv` CLI to generate a diff from the two profiles")
     args = p.parse_args()
     env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
@@ -336,6 +344,7 @@ def main():
             show_plot=args.show_plot,
             protocol=args.protocol,
             report_indexing=args.report_indexing,
+            diff_jfr=args.diff_jfr,
         ))
     except KeyboardInterrupt:
         print('Exiting..')
