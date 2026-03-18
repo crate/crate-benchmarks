@@ -278,7 +278,7 @@ async def run_compare(
             )
             if diff_jfr:
                 subprocess.check_output(["jfrconv", "--diff", jfr_file1, jfr_file2, f"diff-{i}.html"])
-                subprocess.check_output(["jfrconv", "--diff", jfr_file1, jfr_file2, f"diff-{i}-reverse.html"])
+                subprocess.check_output(["jfrconv", "--diff", jfr_file2, jfr_file1, f"diff-{i}-reverse.html"])
 
     finally:
         shutil.rmtree(tmpdir, True)
