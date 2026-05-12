@@ -1,11 +1,29 @@
 [setup]
-statement_files = ["sql/id_int_value_str.sql", "sql/uservisits.sql"]
+statement_files = [
+  "sql/id_int_value_str.sql",
+  "sql/uservisits.sql"
+]
 statements = [
-  "create table tbl (id integer, value string) with (number_of_replicas = 0)"
+  "create table tbl (id integer, value string) with (number_of_replicas = 0)",
+  "create function f3(integer) returns integer language javascript as 'function f3(x) { return x * 3; }'",
+  """
+  create table udf_gen (
+    id int primary key,
+    value bigint,
+    x generated always as f3(value) check (f3(x) > 0)
+  ) with (number_of_replicas = 0)
+  """
 ]
 
 [[load_data]]
 target = "id_int_value_str"
+source = "data/id_int_value_str.json"
+bulk_size = 1000
+concurrency = 1
+num_records = 1000000
+
+[[load_data]]
+target = "udf_gen"
 source = "data/id_int_value_str.json"
 bulk_size = 1000
 concurrency = 1
@@ -40,4 +58,10 @@ concurrency = 10
 
 
 [teardown]
-statements = ["drop table if exists id_int_value_str", "drop table if exists tbl", "drop table if exists uservisits"]
+statements = [
+  "drop table if exists id_int_value_str",
+  "drop table if exists tbl",
+  "drop table if exists uservisits",
+  "drop table if exists udf_gen",
+  "drop function if exists f3(integer)",
+]
