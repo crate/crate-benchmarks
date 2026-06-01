@@ -34,6 +34,12 @@ concurrency = 15
 iterations = 100
 
 [[queries]]
+name = "group by 1 string key with query"
+statement = '''select "cCode", avg(duration), avg("adRevenue") from uservisits where "cCode" in ('AUT', 'GER') group by "cCode"'''
+concurrency = 1
+iterations = 10
+
+[[queries]]
 statement = '''select min("adRevenue") from uservisits group by "cCode"'''
 concurrency = 15
 iterations = 100
