@@ -34,6 +34,12 @@ concurrency = 15
 iterations = 100
 
 [[queries]]
+name = "count star and group by a single not-null string key"
+statement = '''select "lCode", count(*) from uservisits group by "lCode"'''
+concurrency = 15
+iterations = 100
+
+[[queries]]
 name = "group by 1 string key with query"
 statement = '''select "cCode", avg(duration), avg("adRevenue") from uservisits where "cCode" in ('AUT', 'DEU') group by "cCode"'''
 concurrency = 1

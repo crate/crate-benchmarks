@@ -4,8 +4,8 @@ CREATE TABLE uservisits (
    "visitDate" TIMESTAMP,
    "adRevenue" FLOAT,
    "UserAgent" STRING INDEX USING FULLTEXT,
-   "cCode" STRING,
-   "lCode" STRING,
+   "cCode" varchar(3),
+   "lCode" STRING NOT NULL,
    "searchWord" STRING,
    "duration" INTEGER,
    INDEX uagent_plain USING PLAIN("UserAgent")
