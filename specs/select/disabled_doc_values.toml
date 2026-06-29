@@ -18,6 +18,12 @@ statement = '''select "cCode", count(*) from uservisits_no_doc_values group by "
 iterations = 100
 
 [[queries]]
+name = "group by 1 string key with query"
+statement = '''select "cCode", count(*) from uservisits_no_doc_values where "cCode" in ('AUT', 'DEU') group by "cCode"'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
 statement = '''select * from uservisits_no_doc_values order by "adRevenue" limit 10'''
 iterations = 1000
 
