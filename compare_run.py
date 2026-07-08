@@ -11,6 +11,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 import asyncio
 from functools import partial
@@ -195,9 +196,17 @@ def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
     stdout, stderr = proc.communicate()
     metrics = {}
     for line in stderr.split("\n"):
-        if line:
+        if not line.strip():
+            continue
+        try:
             event_metrics = json.loads(line)
-            metrics[event_metrics["event"]] = event_metrics
+        except json.JSONDecodeError:
+            print(f"perf: skipping non-JSON line: {line!r}", file=sys.stderr)
+            continue
+        if "event" not in event_metrics:
+            print(f"perf: skipping line without 'event' field: {line!r}", file=sys.stderr)
+            continue
+        metrics[event_metrics["event"]] = event_metrics
     return metrics
 
 

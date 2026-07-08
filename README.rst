@@ -71,6 +71,26 @@ where ``--v1 == --v2`` to get a feeling of the stability of the benchmark. If
 there is a large difference, the benchmark should be tuned as it would be too
 unreliable to spot real differences.
 
+Troubleshooting
+===============
+
+perf metrics are missing
+------------------------
+
+``compare_run.py`` uses ``perf stat`` to collect hardware counters from the
+CrateDB process. If the run prints messages like::
+
+    perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+
+then access to perf events is restricted by the ``kernel.perf_event_paranoid``
+sysctl setting. To allow per-process monitoring::
+
+    $ sudo sysctl kernel.perf_event_paranoid=1
+
+See the kernel documentation on `perf security`_ for the available levels and
+how to make the setting permanent. The benchmark itself runs fine without perf
+access; only the perf metrics in the comparison output will be empty.
+
 Help
 ====
 
@@ -79,12 +99,14 @@ Looking for more help?
 - Check out our `support channels`_
 
 .. _compare_measures.py: compare_measures.py
+.. _compare_run.py: compare_run.py
 .. _cr8: https://codeberg.org/mfussenegger/cr8
 .. _Crate.io: http://crate.io/
 .. _CrateDB: https://github.com/crate/crate
 .. _find_regressions.py: find_regressions.py
 .. _jupyter: https://jupyter.org/
 .. _notebooks: notebooks
+.. _perf security: https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
 .. _support channels: https://crate.io/support/
 .. _venv: https://docs.python.org/3/library/venv.html
 .. _toml: https://learnxinyminutes.com/docs/toml/
