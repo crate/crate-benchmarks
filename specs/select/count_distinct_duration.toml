@@ -14,21 +14,40 @@ statements = [
     "refresh table uservisits"
 ]
 
-[[queries]]
-statement = "select count(*) from uservisits"
-iterations = 200
+# [[queries]]
+# name = "count-distinct-cCode-original"
+# statement = '''
+#     select count(distinct "cCode") from uservisits
+# '''
+# concurrency = 15
+# iterations = 300
 
 [[queries]]
-statement = "select count(*) from uservisits AS u"
-iterations = 200
+name = "count-distinct-duration-replaced"
+statement = '''
+    select count("duration") 
+    from (select "duration" from uservisits group by "duration") temp
+'''
+concurrency = 15
+iterations = 300
 
-[[queries]]
-statement = '''select count("cCode") from uservisits'''
-iterations = 50
+# [[queries]]
+# name = "count-distinct-cCode-hacky"
+# statement = '''
+#     select count(c) 
+#     from (select "cCode", count(*) as c from uservisits group by "cCode") temp
+# '''
+# concurrency = 15
+# iterations = 300
 
-[[queries]]
-statement = '''select count(distinct "cCode") from uservisits'''
-iterations = 50
+# [[queries]]
+# name = "count-distinct-cCode-count-ones"
+# statement = '''
+#     select count(*) 
+#     from (select 1 from uservisits group by "cCode") temp
+# '''
+# concurrency = 15
+# iterations = 300
 
 [teardown]
 statements = ["drop table if exists uservisits"]

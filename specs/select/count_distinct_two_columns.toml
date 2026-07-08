@@ -1,0 +1,43 @@
+[setup]
+statement_files = ["../sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00006.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00007.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00008.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00009.gz' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+[[queries]]
+name = "count-two-distinct-original"
+statement = '''
+    SELECT COUNT(DISTINCT "sourceIP"), COUNT(DISTINCT "destinationURL")
+    FROM uservisits;
+'''
+iterations = 5
+
+
+[[queries]]
+name = "count-two-distinct-replaced"
+statement = '''
+  SELECT a.agg1, b.agg2
+  FROM (
+      SELECT COUNT("sourceIP") AS agg1
+      FROM (SELECT "sourceIP" FROM uservisits GROUP BY "sourceIP") t1
+  ) a
+  CROSS JOIN (
+      SELECT COUNT("destinationURL") AS agg2
+      FROM (SELECT "destinationURL" FROM uservisits GROUP BY "destinationURL") t2
+  ) b;
+'''
+iterations = 5
+
+
+[teardown]
+statements = ["drop table if exists uservisits"]
