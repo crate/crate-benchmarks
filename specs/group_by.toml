@@ -9,56 +9,62 @@ statements = [
     "refresh table uservisits"
 ]
 
-[[queries]]
-name = "avg, sum, min and group by a single numeric key"
-statement = '''select avg("adRevenue"), sum("adRevenue"), min("adRevenue") from uservisits group by "duration"'''
-concurrency = 10
-iterations = 1000
+# [[queries]]
+# name = "avg, sum, min and group by a single numeric key"
+# statement = '''select avg("adRevenue"), sum("adRevenue"), min("adRevenue") from uservisits group by "duration"'''
+# concurrency = 10
+# iterations = 1000
+
+# [[queries]]
+# name = "avg and group by a single numeric key"
+# statement = '''select avg("adRevenue") from uservisits group by "duration"'''
+# concurrency = 10
+# iterations = 1000
+
+# [[queries]]
+# name = "avg and group by string and numeric keys"
+# statement = '''select avg("adRevenue") from uservisits group by "cCode", "duration"'''
+# concurrency = 10
+# iterations = 1000
+
+# [[queries]]
+# name = "count star and group by a single string key"
+# statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
+# concurrency = 15
+# iterations = 100
 
 [[queries]]
-name = "avg and group by a single numeric key"
-statement = '''select avg("adRevenue") from uservisits group by "duration"'''
-concurrency = 10
-iterations = 1000
-
-[[queries]]
-name = "avg and group by string and numeric keys"
-statement = '''select avg("adRevenue") from uservisits group by "cCode", "duration"'''
-concurrency = 10
-iterations = 1000
-
-[[queries]]
-name = "count star and group by a single string key"
-statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
+name = "group by a single string key"
+statement = '''select "cCode" from uservisits group by "cCode"'''
 concurrency = 15
 iterations = 100
 
-[[queries]]
-name = "count star and group by a single not-null string key"
-statement = '''select "lCode", count(*) from uservisits group by "lCode"'''
-concurrency = 15
-iterations = 100
+# [[queries]]
+# name = "count star and group by a single not-null string key"
+# statement = '''select "lCode", count(*) from uservisits group by "lCode"'''
+# concurrency = 15
+# iterations = 100
 
-[[queries]]
-name = "group by 1 string key with query"
-statement = '''select "cCode", avg(duration), avg("adRevenue") from uservisits where "cCode" in ('AUT', 'DEU') group by "cCode"'''
-concurrency = 1
-iterations = 100
+# [[queries]]
+# name = "group by 1 string key with query"
+# statement = '''select "cCode", avg(duration), avg("adRevenue") from uservisits where "cCode" in ('AUT', 'DEU') group by "cCode"'''
+# concurrency = 1
+# iterations = 100
 
-[[queries]]
-statement = '''select min("adRevenue") from uservisits group by "cCode"'''
-concurrency = 15
-iterations = 100
+# [[queries]]
+# statement = '''select min("adRevenue") from uservisits group by "cCode"'''
+# concurrency = 15
+# iterations = 100
 
-[[queries]]
-statement = '''select avg("adRevenue") from uservisits group by "cCode", "lCode"'''
-concurrency = 15
-iterations = 100
+# [[queries]]
+# statement = '''select avg("adRevenue") from uservisits group by "cCode", "lCode"'''
+# concurrency = 15
+# iterations = 100
 
-[[queries]]
-statement = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
-concurrency = 5
-iterations = 100
+# [[queries]]
+# statement = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
+# concurrency = 5
+# iterations = 100
 
 [teardown]
 statements = ["drop table if exists uservisits"]
