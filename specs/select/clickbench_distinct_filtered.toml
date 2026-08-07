@@ -4,23 +4,29 @@
 # licensed under Creative Commons, see
 # https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
 #
-# See clickbench_distinct_global.toml for notes on the COPY FROM options. All
-# queries here filter on `<> ''` and therefore need
-# `empty_string_as_null = false` to return rows.
-
+# Restores the `hits` table from the `snapshots_1m` snapshot instead of
+# re-importing the .tsv extract with COPY FROM. Much faster, but the table's
+# schema, shard count and settings come from the snapshot, not from
+# sql/hits.sql -- including the fact that it was loaded with
+# `empty_string_as_null = false`, which the `<> ''` predicates of Q11, Q12,
+# Q14 and Q23 depend on.
+#
+# sql/hits_snapshot_repo.sql only registers the repository -- it must not
+# create the table, because RESTORE fails with RelationAlreadyExists if one of
+# that name is already present. For the same reason a rerun against a
+# long-running instance needs the table dropped first; with compare_run.py
+# each version gets a fresh node, so nothing to do there.
+#
+# The repository also holds `hits` (3M rows) and `snapshots_5m`. To (re)create
+# a snapshot, load the table with COPY FROM once and run:
+#   create snapshot hits_snapshots.<name> table hits
+#     with (wait_for_completion = true)
 [setup]
-statement_files = ["../sql/hits.sql"]
+statement_files = ["../sql/hits_snapshot_repo.sql"]
 statements = [
     '''
-    COPY hits
-    FROM 'file:///home/haris/projects/crate/clickhouse-hits-3M.tsv'
-    WITH (
-        "delimiter" = e'\t',
-        "format" = 'csv',
-        "header" = false,
-        "empty_string_as_null" = false,
-        "fail_fast" = true
-    )
+    restore snapshot hits_snapshots.snapshots_1m table hits
+    with (wait_for_completion = true)
     ''',
     "refresh table hits"
 ]
