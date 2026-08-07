@@ -27,8 +27,8 @@ name = "count-distinct-destinationURL"
 statement = '''
     select count(distinct "destinationURL") from uservisits
 '''
-concurrency = 1
-iterations = 1
+concurrency = 5
+iterations = 150
 
 # [teardown]
 # statements = ["drop table if exists uservisits"]
