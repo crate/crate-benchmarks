@@ -1,13 +1,33 @@
 # All ClickBench distinct-aggregation slow queries in a single spec, so the
-# whole set can be run in one go. The per-group specs
-# (clickbench_distinct_global / _group_by / _multi_agg / _filtered) run the
-# same queries in smaller batches.
+# whole set can be run against one table load.
 # Queries taken from https://benchmark.clickhouse.com (ClickBench Q5, Q6, Q9,
 # Q10, Q11, Q12, Q14, Q23), licensed under Creative Commons, see
 # https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
+#
+# The COPY FROM below reads a local extract of the ClickBench `hits` dataset.
+# Adjust the path to point at your own copy.
+#
+# NOTE: `empty_string_as_null` must stay `false`. With `true`, empty TEXT
+# values become NULL, which violates the `NOT NULL` constraints in
+# sql/hits.sql and makes the `<> ''` predicates of Q11, Q12, Q14 and Q23 match
+# nothing.
 
-# Requires the "hits" table. Load it once with:
-#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+[setup]
+statement_files = ["../sql/hits.sql"]
+statements = [
+    '''
+    COPY hits
+    FROM 'file:///home/haris/projects/crate/clickhouse-hits-3M.tsv'
+    WITH (
+        "delimiter" = e'\t',
+        "format" = 'csv',
+        "header" = false,
+        "empty_string_as_null" = false,
+        "fail_fast" = true
+    )
+    ''',
+    "refresh table hits"
+]
 
 ## Group 1: global aggregations
 
@@ -111,3 +131,6 @@ statement = '''
 '''
 concurrency = 1
 iterations = 20
+
+# [teardown]
+# statements = ["drop table if exists hits"]

@@ -4,11 +4,26 @@
 # licensed under Creative Commons, see
 # https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
 #
-# See _load_hits.toml for the COPY FROM options. All queries here filter on
-# `<> ''` and therefore need `empty_string_as_null = false` to return rows.
+# See clickbench_distinct_global.toml for notes on the COPY FROM options. All
+# queries here filter on `<> ''` and therefore need
+# `empty_string_as_null = false` to return rows.
 
-# Requires the "hits" table. Load it once with:
-#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+[setup]
+statement_files = ["../sql/hits.sql"]
+statements = [
+    '''
+    COPY hits
+    FROM 'file:///home/haris/projects/crate/clickhouse-hits-3M.tsv'
+    WITH (
+        "delimiter" = e'\t',
+        "format" = 'csv',
+        "header" = false,
+        "empty_string_as_null" = false,
+        "fail_fast" = true
+    )
+    ''',
+    "refresh table hits"
+]
 
 # Q11: selective filter, low cardinality group by.
 [[queries]]
@@ -37,3 +52,6 @@ statement = '''
 '''
 concurrency = 1
 iterations = 20
+
+# [teardown]
+# statements = ["drop table if exists hits"]

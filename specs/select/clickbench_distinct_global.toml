@@ -3,10 +3,30 @@
 # licensed under Creative Commons, see
 # https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
 #
-# See _load_hits.toml for the dataset path and the COPY FROM options.
+# The COPY FROM below reads a local extract of the ClickBench `hits` dataset.
+# Adjust the path to point at your own copy.
+#
+# NOTE: `empty_string_as_null` must stay `false`. With `true`, empty TEXT
+# values become NULL, which violates the `NOT NULL` constraints in
+# sql/hits.sql and makes `<> ''` predicates (see
+# clickbench_distinct_filtered.toml) match nothing.
 
-# Requires the "hits" table. Load it once with:
-#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+[setup]
+statement_files = ["../sql/hits.sql"]
+statements = [
+    '''
+    COPY hits
+    FROM 'file:///home/haris/projects/crate/clickhouse-hits-3M.tsv'
+    WITH (
+        "delimiter" = e'\t',
+        "format" = 'csv',
+        "header" = false,
+        "empty_string_as_null" = false,
+        "fail_fast" = true
+    )
+    ''',
+    "refresh table hits"
+]
 
 # Q5: high cardinality distinct count on a BIGINT column.
 [[queries]]
@@ -27,3 +47,6 @@ statement = '''
 '''
 concurrency = 1
 iterations = 20
+
+# [teardown]
+# statements = ["drop table if exists hits"]
