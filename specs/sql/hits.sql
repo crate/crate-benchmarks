@@ -1,5 +1,5 @@
 -- Licensed under creative commons, see https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
-CREATE TABLE hits
+CREATE TABLE IF NOT EXISTS hits
 (
     WatchID BIGINT NOT NULL,
     JavaEnable SMALLINT NOT NULL,

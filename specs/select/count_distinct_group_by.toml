@@ -1,0 +1,49 @@
+# uservisits counterparts to the ClickBench distinct-aggregation slow queries
+# of groups 2 to 4: group by one column, count distinct values of another.
+#
+# NOTE: "sourceIP" is the primary key of uservisits, so its distinct count per
+# group equals count(*) per group. The point of these benchmarks is the cost of
+# building one high cardinality distinct state per group, not the result.
+
+# Requires the "uservisits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_uservisits.toml localhost:4200
+
+# Group 2: low cardinality group by, order by the distinct aggregation.
+[[queries]]
+name = "count-distinct-group-by-cCode"
+statement = '''
+    select "cCode", count(distinct "sourceIP") as src_ip_cnt
+    from uservisits
+    group by "cCode"
+    order by src_ip_cnt desc
+    limit 10
+'''
+concurrency = 1
+iterations = 20
+
+# Group 3: distinct aggregation next to count(*) and sum, order by count(*).
+[[queries]]
+name = "count-distinct-group-by-cCode-mixed-aggregations"
+statement = '''
+    select "cCode", count(*) as c, count(distinct "sourceIP") as src_ip_cnt, sum("adRevenue")
+    from uservisits
+    group by "cCode"
+    order by c
+    limit 10
+'''
+concurrency = 1
+iterations = 20
+
+# Group 4: same as group 2, but with a filter and a higher cardinality group by.
+[[queries]]
+name = "count-distinct-group-by-searchWord-filtered"
+statement = '''
+    select "searchWord", count(distinct "sourceIP") as src_ip_cnt
+    from uservisits
+    where "searchWord" <> ''
+    group by "searchWord"
+    order by src_ip_cnt desc
+    limit 10
+'''
+concurrency = 1
+iterations = 20

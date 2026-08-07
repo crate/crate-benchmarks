@@ -1,0 +1,40 @@
+# ClickBench distinct-aggregation slow queries, group 3: several aggregations
+# next to the distinct aggregation, grouped by a different column and ordered
+# by count(*), with and without a filter.
+# Queries taken from https://benchmark.clickhouse.com (ClickBench Q10, Q23),
+# licensed under Creative Commons, see
+# https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
+#
+# See _load_hits.toml for the COPY FROM options. Q23 needs
+# `empty_string_as_null = false` to return rows, because it filters on
+# `SearchPhrase <> ''`.
+
+# Requires the "hits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+
+# Q10: distinct count mixed with sum/count/avg over a low cardinality group by.
+[[queries]]
+name = "CH-Q10-group-by-regionid-mixed-aggregations"
+statement = '''
+    SELECT RegionID, SUM(AdvEngineID), COUNT(*) AS c, AVG(ResolutionWidth), COUNT(DISTINCT UserID)
+    FROM hits
+    GROUP BY RegionID
+    ORDER BY c DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20
+
+# Q23: same shape, but a selective LIKE filter and a high cardinality group by.
+[[queries]]
+name = "CH-Q23-group-by-searchphrase-mixed-aggregations-filtered"
+statement = '''
+    SELECT SearchPhrase, MIN(URL), MIN(Title), COUNT(*) AS c, COUNT(DISTINCT UserID)
+    FROM hits
+    WHERE Title LIKE '%Google%' AND URL NOT LIKE '%.google.%' AND SearchPhrase <> ''
+    GROUP BY SearchPhrase
+    ORDER BY c DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20

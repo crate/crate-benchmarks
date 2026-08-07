@@ -1,0 +1,24 @@
+# Data loader for the "uservisits_1_shard" table. Run once, then run the query specs
+# against it as often as you like:
+#
+#   venv/bin/cr8 run-spec specs/select/_load_uservisits_1_shard.toml localhost:4200
+#
+# The table is intentionally NOT dropped afterwards. To drop it:
+#
+#   drop table if exists uservisits_1_shard
+
+[setup]
+statement_files = ["../sql/uservisits_1_shard.sql"]
+statements = [
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00006.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00007.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00008.gz' with (compression = 'gzip')",
+    "copy uservisits_1_shard from 'file:///home/haris/projects/crate/test-data/uservisits/part-00009.gz' with (compression = 'gzip')",
+    "refresh table uservisits_1_shard"
+]

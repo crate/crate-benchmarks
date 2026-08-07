@@ -1,0 +1,12 @@
+# Requires the "uservisits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_uservisits.toml localhost:4200
+
+# Low cardinality (~1000 distinct values) counterpart to
+# count-distinct-sourceIP, which is high cardinality (~7.7M distinct values).
+[[queries]]
+name = "count-distinct-searchWord"
+statement = '''
+    select count(distinct "searchWord") from uservisits
+'''
+concurrency = 5
+iterations = 150

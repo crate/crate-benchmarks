@@ -1,0 +1,26 @@
+# Requires the "uservisits_6_shards" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_uservisits_6_shards.toml localhost:4200
+
+[[queries]]
+name = "count-distinct-cCode"
+statement = '''
+    select count(distinct "cCode") from uservisits_6_shards
+'''
+concurrency = 5
+iterations = 150
+
+[[queries]]
+name = "count-distinct-destinationURL"
+statement = '''
+    select count(distinct "destinationURL") from uservisits_6_shards
+'''
+concurrency = 5
+iterations = 150
+
+[[queries]]
+name = "count-distinct-sourceIP"
+statement = '''
+    select count(distinct "sourceIP") from uservisits_6_shards
+'''
+concurrency = 5
+iterations = 150

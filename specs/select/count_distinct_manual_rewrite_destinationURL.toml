@@ -1,0 +1,10 @@
+# Requires the "uservisits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_uservisits.toml localhost:4200
+
+[[queries]]
+name = "count-distinct-destinationURL"
+statement = '''
+    select "destinationURL" from uservisits group by "destinationURL";
+'''
+concurrency = 5
+iterations = 150

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS uservisits (
+CREATE TABLE IF NOT EXISTS uservisits_1_shard (
    "sourceIP" STRING PRIMARY KEY,
    "destinationURL" STRING,
    "visitDate" TIMESTAMP,
@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS uservisits (
    "duration" INTEGER,
    INDEX uagent_plain USING PLAIN("UserAgent")
    -- ^^ used for regex matching ^^ --
-) WITH (
+) clustered into 1 shards
+WITH (
     number_of_replicas = 0,
     refresh_interval = 0
 );

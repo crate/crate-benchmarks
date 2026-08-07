@@ -1,0 +1,33 @@
+# Data loader for the ClickBench `hits` table. Run once, then run the
+# clickbench_distinct_*.toml query specs against it as often as you like:
+#
+#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+#
+# The COPY FROM below reads a local extract of the ClickBench `hits` dataset.
+# Adjust the path to point at your own copy.
+#
+# NOTE: `empty_string_as_null` must stay `false`. With `true`, empty TEXT
+# values become NULL, which violates the `NOT NULL` constraints in
+# sql/hits.sql and makes the `<> ''` predicates of Q11, Q12, Q14 and Q23 match
+# nothing.
+#
+# The table is intentionally NOT dropped afterwards. To drop it:
+#
+#   drop table if exists hits
+
+[setup]
+statement_files = ["../sql/hits.sql"]
+statements = [
+    '''
+    COPY hits
+    FROM 'file:///home/haris/projects/crate/clickhouse-hits-3M.tsv'
+    WITH (
+        "delimiter" = e'\t',
+        "format" = 'csv',
+        "header" = false,
+        "empty_string_as_null" = false,
+        "fail_fast" = true
+    )
+    ''',
+    "refresh table hits"
+]

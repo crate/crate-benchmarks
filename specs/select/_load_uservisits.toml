@@ -1,3 +1,12 @@
+# Data loader for the "uservisits" table. Run once, then run the query specs
+# against it as often as you like:
+#
+#   venv/bin/cr8 run-spec specs/select/_load_uservisits.toml localhost:4200
+#
+# The table is intentionally NOT dropped afterwards. To drop it:
+#
+#   drop table if exists uservisits
+
 [setup]
 statement_files = ["../sql/uservisits.sql"]
 statements = [
@@ -13,20 +22,3 @@ statements = [
     "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00009.gz' with (compression = 'gzip')",
     "refresh table uservisits"
 ]
-
-[[queries]]
-name = "count-distinct-cCode-original"
-statement = '''
-    select max(distinct "duration") from uservisits
-'''
-iterations = 1000
-
-[[queries]]
-name = "count-distinct-cCode-replaced"
-statement = '''
-    select max("duration") from uservisits
-'''
-iterations = 1000
-
-[teardown]
-statements = ["drop table if exists uservisits"]

@@ -1,0 +1,113 @@
+# All ClickBench distinct-aggregation slow queries in a single spec, so the
+# whole set can be run in one go. The per-group specs
+# (clickbench_distinct_global / _group_by / _multi_agg / _filtered) run the
+# same queries in smaller batches.
+# Queries taken from https://benchmark.clickhouse.com (ClickBench Q5, Q6, Q9,
+# Q10, Q11, Q12, Q14, Q23), licensed under Creative Commons, see
+# https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
+
+# Requires the "hits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+
+## Group 1: global aggregations
+
+[[queries]]
+name = "CH-Q5-count-distinct-userid"
+statement = '''
+    SELECT COUNT(DISTINCT UserID)
+    FROM hits
+'''
+concurrency = 1
+iterations = 20
+
+[[queries]]
+name = "CH-Q6-count-distinct-searchphrase"
+statement = '''
+    SELECT COUNT(DISTINCT SearchPhrase)
+    FROM hits
+'''
+concurrency = 1
+iterations = 20
+
+## Group 2: group by a different column, order by the distinct aggregation
+
+[[queries]]
+name = "CH-Q9-group-by-regionid-order-by-count-distinct"
+statement = '''
+    SELECT RegionID, COUNT(DISTINCT UserID) AS u
+    FROM hits
+    GROUP BY RegionID
+    ORDER BY u DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20
+
+## Group 3: multiple aggregations, order by count(*), with and without filter
+
+[[queries]]
+name = "CH-Q10-group-by-regionid-mixed-aggregations"
+statement = '''
+    SELECT RegionID, SUM(AdvEngineID), COUNT(*) AS c, AVG(ResolutionWidth), COUNT(DISTINCT UserID)
+    FROM hits
+    GROUP BY RegionID
+    ORDER BY c DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20
+
+[[queries]]
+name = "CH-Q23-group-by-searchphrase-mixed-aggregations-filtered"
+statement = '''
+    SELECT SearchPhrase, MIN(URL), MIN(Title), COUNT(*) AS c, COUNT(DISTINCT UserID)
+    FROM hits
+    WHERE Title LIKE '%Google%' AND URL NOT LIKE '%.google.%' AND SearchPhrase <> ''
+    GROUP BY SearchPhrase
+    ORDER BY c DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20
+
+## Group 4: group by a different column, order by the distinct aggregation,
+## with a filter
+
+[[queries]]
+name = "CH-Q11-group-by-mobilephonemodel-count-distinct"
+statement = '''
+    SELECT MobilePhoneModel, COUNT(DISTINCT UserID) AS u
+    FROM hits
+    WHERE MobilePhoneModel <> ''
+    GROUP BY MobilePhoneModel
+    ORDER BY u DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20
+
+[[queries]]
+name = "CH-Q12-group-by-mobilephone-model-count-distinct"
+statement = '''
+    SELECT MobilePhone, MobilePhoneModel, COUNT(DISTINCT UserID) AS u
+    FROM hits
+    WHERE MobilePhoneModel <> ''
+    GROUP BY MobilePhone, MobilePhoneModel
+    ORDER BY u DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20
+
+[[queries]]
+name = "CH-Q14-group-by-searchphrase-count-distinct"
+statement = '''
+    SELECT SearchPhrase, COUNT(DISTINCT UserID) AS u
+    FROM hits
+    WHERE SearchPhrase <> ''
+    GROUP BY SearchPhrase
+    ORDER BY u DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20

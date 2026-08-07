@@ -1,0 +1,24 @@
+# ClickBench distinct-aggregation slow queries, group 2: group by a low
+# cardinality column, order by the distinct aggregation.
+# Query taken from https://benchmark.clickhouse.com (ClickBench Q9),
+# licensed under Creative Commons, see
+# https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
+#
+# See _load_hits.toml for the COPY FROM options.
+
+# Requires the "hits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+
+# Q9: one distinct-count state per group, ordered by the distinct count.
+# The LIMIT cannot be pushed down, all groups have to be aggregated first.
+[[queries]]
+name = "CH-Q9-group-by-regionid-order-by-count-distinct"
+statement = '''
+    SELECT RegionID, COUNT(DISTINCT UserID) AS u
+    FROM hits
+    GROUP BY RegionID
+    ORDER BY u DESC
+    LIMIT 10
+'''
+concurrency = 1
+iterations = 20

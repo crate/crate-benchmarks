@@ -1,0 +1,29 @@
+# ClickBench distinct-aggregation slow queries, group 1: global aggregations.
+# Queries taken from https://benchmark.clickhouse.com (ClickBench Q5, Q6),
+# licensed under Creative Commons, see
+# https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
+#
+# See _load_hits.toml for the dataset path and the COPY FROM options.
+
+# Requires the "hits" table. Load it once with:
+#   venv/bin/cr8 run-spec specs/select/_load_hits.toml localhost:4200
+
+# Q5: high cardinality distinct count on a BIGINT column.
+[[queries]]
+name = "CH-Q5-count-distinct-userid"
+statement = '''
+    SELECT COUNT(DISTINCT UserID)
+    FROM hits
+'''
+concurrency = 1
+iterations = 20
+
+# Q6: high cardinality distinct count on a TEXT column.
+[[queries]]
+name = "CH-Q6-count-distinct-searchphrase"
+statement = '''
+    SELECT COUNT(DISTINCT SearchPhrase)
+    FROM hits
+'''
+concurrency = 1
+iterations = 20
