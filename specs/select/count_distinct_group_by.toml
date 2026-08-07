@@ -5,19 +5,27 @@
 # group equals count(*) per group. The point of these benchmarks is the cost of
 # building one high cardinality distinct state per group, not the result.
 
+# Restores the `uservisits` table from a snapshot instead of re-importing the
+# ten .gz parts with COPY FROM. Much faster, but the table's schema, shard
+# count and settings come from the snapshot, not from sql/uservisits.sql.
+#
+# sql/uservisits_snapshot_repo.sql only registers the repository -- it must
+# not create the table, because RESTORE fails with RelationAlreadyExists if
+# one of that name is already present. For the same reason a rerun against a
+# long-running instance needs the table dropped first; with compare_run.py
+# each version gets a fresh node, so nothing to do there.
+#
+# Nothing in this repo produces the snapshot any more. To (re)create it, load
+# the table with COPY FROM once and run:
+#   create snapshot uservisits_snapshots.uservisits table uservisits
+#     with (wait_for_completion = true)
 [setup]
-statement_files = ["../sql/uservisits.sql"]
+statement_files = ["../sql/uservisits_snapshot_repo.sql"]
 statements = [
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00000.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00006.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00007.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00008.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00009.gz' with (compression = 'gzip')",
+    '''
+    restore snapshot uservisits_snapshots.uservisits table uservisits
+    with (wait_for_completion = true)
+    ''',
     "refresh table uservisits"
 ]
 
