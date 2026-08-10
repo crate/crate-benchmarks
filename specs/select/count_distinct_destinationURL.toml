@@ -28,7 +28,7 @@ statement = '''
     select count(distinct "destinationURL") from uservisits
 '''
 concurrency = 5
-iterations = 150
+iterations = 300
 
 # [teardown]
 # statements = ["drop table if exists uservisits"]

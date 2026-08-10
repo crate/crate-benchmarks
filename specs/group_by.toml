@@ -1,11 +1,10 @@
 [setup]
-statement_files = ["sql/uservisits.sql"]
+statement_files = ["./sql/uservisits_snapshot_repo.sql"]
 statements = [
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
+    '''
+    restore snapshot uservisits_snapshots.uservisits table uservisits
+    with (wait_for_completion = true)
+    ''',
     "refresh table uservisits"
 ]
 
@@ -27,17 +26,23 @@ statements = [
 # concurrency = 10
 # iterations = 1000
 
-# [[queries]]
-# name = "count star and group by a single string key"
-# statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
-# concurrency = 15
-# iterations = 100
+[[queries]]
+name = "count star and group by a single string key"
+statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
+concurrency = 10
+iterations = 500
 
 [[queries]]
-name = "group by a single string key"
-statement = '''select "cCode" from uservisits group by "cCode"'''
-concurrency = 15
-iterations = 100
+name = "count and group by a single string key and where filter"
+statement = '''select "cCode", count("sourceIP") from uservisits WHERE "adRevenue" > 0.2 group by "cCode"'''
+concurrency = 10
+iterations = 500
+
+# [[queries]]
+# name = "group by a single string key"
+# statement = '''select "cCode" from uservisits group by "cCode"'''
+# concurrency = 15
+# iterations = 100
 
 # [[queries]]
 # name = "count star and group by a single not-null string key"

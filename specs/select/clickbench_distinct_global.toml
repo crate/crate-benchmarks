@@ -38,7 +38,7 @@ statement = '''
     FROM hits
 '''
 concurrency = 1
-iterations = 20
+iterations = 50
 
 # Q6: high cardinality distinct count on a TEXT column.
 [[queries]]
@@ -48,7 +48,7 @@ statement = '''
     FROM hits
 '''
 concurrency = 1
-iterations = 20
+iterations = 50
 
 # [teardown]
 # statements = ["drop table if exists hits"]
