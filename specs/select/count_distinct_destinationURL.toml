@@ -30,5 +30,5 @@ statement = '''
 concurrency = 5
 iterations = 300
 
-# [teardown]
-# statements = ["drop table if exists uservisits"]
+[teardown]
+statements = ["drop table if exists uservisits"]

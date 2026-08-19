@@ -1,0 +1,12 @@
+# started:  2026-08-19T09:47:43
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /usr/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_destinationURL.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-18-13-51-fcd878f.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-18-16-47-90e5f6f.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Traceback (most recent call last):
+  File "/home/haris/projects/crate/crate-benchmarks/compare_run.py", line 21, in <module>
+    from cr8.log import Logger
+ModuleNotFoundError: No module named 'cr8'
+
+# ended:    2026-08-19T09:47:43
+# duration: 0:00:00.100802
+# exit:     1

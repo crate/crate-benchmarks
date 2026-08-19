@@ -1,0 +1,243 @@
+# started:  2026-08-17T17:16:49
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_destinationURL.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-14-14-35-d89c17a.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-17-15-01-a21eb0d.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+327187:
+Started recording 1.
+
+Use jcmd 327187 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-destinationURL
+   Statement:
+         select "destinationURL" from uservisits group by "destinationURL";
+
+   Concurrency: 1
+   Iterations: 50
+
+  0%|          | 0/50 [00:00<?, ? requests/s]
+  2%|▏         | 1/50 [00:04<03:40,  4.49s/ requests]
+  4%|▍         | 2/50 [00:08<03:28,  4.34s/ requests]
+  6%|▌         | 3/50 [00:12<03:13,  4.12s/ requests]
+  8%|▊         | 4/50 [00:16<03:02,  3.97s/ requests]
+ 10%|█         | 5/50 [00:19<02:56,  3.91s/ requests]
+ 12%|█▏        | 6/50 [00:22<02:45,  3.75s/ requests]
+ 14%|█▍        | 7/50 [00:26<02:41,  3.75s/ requests]
+ 16%|█▌        | 8/50 [00:30<02:37,  3.75s/ requests]
+ 18%|█▊        | 9/50 [00:34<02:33,  3.75s/ requests]
+ 20%|██        | 10/50 [00:37<02:26,  3.66s/ requests]
+ 22%|██▏       | 11/50 [00:41<02:23,  3.68s/ requests]
+ 24%|██▍       | 12/50 [00:44<02:17,  3.61s/ requests]
+ 26%|██▌       | 13/50 [00:47<02:13,  3.62s/ requests]
+ 28%|██▊       | 14/50 [00:52<02:14,  3.75s/ requests]
+ 30%|███       | 15/50 [00:56<02:12,  3.78s/ requests]
+ 32%|███▏      | 16/50 [00:59<02:05,  3.70s/ requests]
+ 34%|███▍      | 17/50 [01:03<02:01,  3.69s/ requests]
+ 36%|███▌      | 18/50 [01:06<01:56,  3.63s/ requests]
+ 38%|███▊      | 19/50 [01:10<01:53,  3.66s/ requests]
+ 40%|████      | 20/50 [01:13<01:48,  3.63s/ requests]
+ 42%|████▏     | 21/50 [01:18<01:48,  3.75s/ requests]
+ 44%|████▍     | 22/50 [01:23<01:47,  3.84s/ requests]
+ 46%|████▌     | 23/50 [01:27<01:44,  3.87s/ requests]
+ 48%|████▊     | 24/50 [01:30<01:40,  3.85s/ requests]
+ 50%|█████     | 25/50 [01:34<01:35,  3.82s/ requests]
+ 52%|█████▏    | 26/50 [01:38<01:31,  3.79s/ requests]
+ 54%|█████▍    | 27/50 [01:41<01:27,  3.78s/ requests]
+ 56%|█████▌    | 28/50 [01:45<01:23,  3.78s/ requests]
+ 58%|█████▊    | 29/50 [01:48<01:18,  3.74s/ requests]
+ 60%|██████    | 30/50 [01:52<01:15,  3.75s/ requests]
+ 62%|██████▏   | 31/50 [01:57<01:13,  3.85s/ requests]
+ 64%|██████▍   | 32/50 [02:01<01:08,  3.83s/ requests]
+ 66%|██████▌   | 33/50 [02:04<01:05,  3.83s/ requests]
+ 68%|██████▊   | 34/50 [02:08<01:00,  3.81s/ requests]
+ 70%|███████   | 35/50 [02:12<00:56,  3.78s/ requests]
+ 72%|███████▏  | 36/50 [02:15<00:52,  3.76s/ requests]
+ 74%|███████▍  | 37/50 [02:19<00:48,  3.74s/ requests]
+ 76%|███████▌  | 38/50 [02:22<00:44,  3.72s/ requests]
+ 78%|███████▊  | 39/50 [02:26<00:41,  3.73s/ requests]
+ 80%|████████  | 40/50 [02:30<00:37,  3.73s/ requests]
+ 82%|████████▏ | 41/50 [02:33<00:33,  3.69s/ requests]
+ 84%|████████▍ | 42/50 [02:37<00:29,  3.69s/ requests]
+ 86%|████████▌ | 43/50 [02:40<00:25,  3.65s/ requests]
+ 88%|████████▊ | 44/50 [02:44<00:21,  3.66s/ requests]
+ 90%|█████████ | 45/50 [02:47<00:18,  3.62s/ requests]
+ 92%|█████████▏| 46/50 [02:51<00:14,  3.63s/ requests]
+ 94%|█████████▍| 47/50 [02:54<00:10,  3.61s/ requests]
+ 96%|█████████▌| 48/50 [02:59<00:07,  3.74s/ requests]
+ 98%|█████████▊| 49/50 [03:03<00:03,  3.70s/ requests]
+100%|██████████| 50/50 [03:06<00:00,  3.69s/ requests]
+100%|██████████| 50/50 [03:06<00:00,  3.73s/ requests]
+327187:
+Stopped recording "rec", 2.9 MB written to:
+
+/tmp/tmpk264jiu7/dae87a93-70c9-4d6e-929b-bc5578039dbd.jfr
+# Running benchmark
+# Running tearDown
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+330506:
+Started recording 1.
+
+Use jcmd 330506 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-destinationURL
+   Statement:
+         select "destinationURL" from uservisits group by "destinationURL";
+
+   Concurrency: 1
+   Iterations: 50
+
+  0%|          | 0/50 [00:00<?, ? requests/s]
+  2%|▏         | 1/50 [00:06<05:24,  6.63s/ requests]
+  4%|▍         | 2/50 [00:11<04:41,  5.87s/ requests]
+  6%|▌         | 3/50 [00:17<04:24,  5.63s/ requests]
+  8%|▊         | 4/50 [00:22<04:11,  5.46s/ requests]
+ 10%|█         | 5/50 [00:27<04:02,  5.38s/ requests]
+ 12%|█▏        | 6/50 [00:33<04:05,  5.59s/ requests]
+ 14%|█▍        | 7/50 [00:37<03:49,  5.35s/ requests]
+ 16%|█▌        | 8/50 [00:42<03:42,  5.29s/ requests]
+ 18%|█▊        | 9/50 [00:47<03:32,  5.18s/ requests]
+ 20%|██        | 10/50 [00:52<03:25,  5.13s/ requests]
+ 22%|██▏       | 11/50 [00:56<03:16,  5.05s/ requests]
+ 24%|██▍       | 12/50 [01:02<03:12,  5.06s/ requests]
+ 26%|██▌       | 13/50 [01:07<03:08,  5.10s/ requests]
+ 28%|██▊       | 14/50 [01:12<03:03,  5.09s/ requests]
+ 30%|███       | 15/50 [01:17<02:57,  5.09s/ requests]
+ 32%|███▏      | 16/50 [01:23<02:56,  5.18s/ requests]
+ 34%|███▍      | 17/50 [01:29<02:56,  5.34s/ requests]
+ 36%|███▌      | 18/50 [01:35<02:50,  5.32s/ requests]
+ 38%|███▊      | 19/50 [01:40<02:44,  5.31s/ requests]
+ 40%|████      | 20/50 [01:44<02:36,  5.21s/ requests]
+ 42%|████▏     | 21/50 [01:49<02:29,  5.17s/ requests]
+ 44%|████▍     | 22/50 [01:54<02:23,  5.13s/ requests]
+ 46%|████▌     | 23/50 [01:59<02:17,  5.10s/ requests]
+ 48%|████▊     | 24/50 [02:04<02:11,  5.06s/ requests]
+ 50%|█████     | 25/50 [02:10<02:09,  5.19s/ requests]
+ 52%|█████▏    | 26/50 [02:14<02:03,  5.14s/ requests]
+ 54%|█████▍    | 27/50 [02:19<01:57,  5.11s/ requests]
+ 56%|█████▌    | 28/50 [02:24<01:51,  5.07s/ requests]
+ 58%|█████▊    | 29/50 [02:29<01:45,  5.04s/ requests]
+ 60%|██████    | 30/50 [02:34<01:40,  5.05s/ requests]
+ 62%|██████▏   | 31/50 [02:39<01:34,  5.00s/ requests]
+ 64%|██████▍   | 32/50 [02:44<01:30,  5.03s/ requests]
+ 66%|██████▌   | 33/50 [02:49<01:25,  5.02s/ requests]
+ 68%|██████▊   | 34/50 [02:54<01:20,  5.00s/ requests]
+ 70%|███████   | 35/50 [02:59<01:14,  4.99s/ requests]
+ 72%|███████▏  | 36/50 [03:03<01:09,  4.98s/ requests]
+ 74%|███████▍  | 37/50 [03:08<01:04,  4.94s/ requests]
+ 76%|███████▌  | 38/50 [03:14<01:00,  5.07s/ requests]
+ 78%|███████▊  | 39/50 [03:19<00:55,  5.08s/ requests]
+ 80%|████████  | 40/50 [03:25<00:51,  5.14s/ requests]
+ 82%|████████▏ | 41/50 [03:30<00:46,  5.12s/ requests]
+ 84%|████████▍ | 42/50 [03:35<00:41,  5.15s/ requests]
+ 86%|████████▌ | 43/50 [03:41<00:36,  5.16s/ requests]
+ 88%|████████▊ | 44/50 [03:46<00:30,  5.16s/ requests]
+ 90%|█████████ | 45/50 [03:51<00:25,  5.20s/ requests]
+ 92%|█████████▏| 46/50 [03:58<00:21,  5.30s/ requests]
+ 94%|█████████▍| 47/50 [04:03<00:15,  5.33s/ requests]
+ 96%|█████████▌| 48/50 [04:09<00:10,  5.35s/ requests]
+ 98%|█████████▊| 49/50 [04:15<00:05,  5.44s/ requests]
+100%|██████████| 50/50 [04:19<00:00,  5.34s/ requests]
+100%|██████████| 50/50 [04:19<00:00,  5.20s/ requests]
+330506:
+Stopped recording "rec", 3.1 MB written to:
+
+/tmp/tmpk264jiu7/1a6748a6-593f-4b12-bc0b-eef4213a1c05.jfr
+# Running benchmark
+# Running tearDown
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-d89c17a76148dc0fa7d0f4d0910137516565fb14
+V2: 6.5.0-a21eb0d708355fa2a6004c90b9c8791ba12c20d3
+
+Q:     select "destinationURL" from uservisits group by "destinationURL";
+
+C: 1
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |     3319.228 ±  401.749 |   2725.445 |   3275.977 |   3397.064 |   4509.440 |
+|   V2    |     4770.169 ±  555.148 |   3954.303 |   4661.102 |   5036.274 |   6224.462 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               +  35.87%                           +  34.90%   
+There is a 100.00% probability that the observed difference is not random, and the best estimate of that difference is 35.87%
+The test has statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |   81   209.70   291.13 |    9   567.27   604.20 |    17180     3230 |   318.22      59480
+ V2 |   71   228.53   357.46 |    9   581.03   909.02 |    17180     4807 |   239.87      62444
+    
+Top allocation frames
+  V1
+    BytesRef.utf8ToString() total=23722436816, count=10161
+    StringUTF16.compress(...) total=11655551560, count=4889
+    ArrayUtil.copyOfSubArray(...) total=10492670032, count=4791
+    HashMap.newNode(...) total=5169912379, count=2386
+    BytesRef.deepCopyOf(BytesRef) total=3593366843, count=1659
+    HashMap.resize() total=2323766902, count=2356
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=713597912, count=146
+    GroupingCollector.reduce(Map, Row) total=711957795, count=546
+    DirectMethodHandle.allocateInstance(Object) total=548017912, count=154
+    AbstractQueuedSynchronizer$ConditionObject.newConditionNode() total=529096744, count=45
+  V2
+    BytesRef.utf8ToString() total=23821261706, count=9868
+    ArrayUtil.copyOfSubArray(...) total=11605407368, count=5437
+    StringUTF16.compress(...) total=11132059176, count=4752
+    ObjectLongHashMap.allocateBuffers(int) total=8361410241, count=1126
+    BytesRef.deepCopyOf(BytesRef) total=4181496681, count=1999
+    HashMap.newNode(...) total=1113297528, count=709
+    GroupingCollector.reduce(Map, Row) total=782843879, count=603
+    HashMap.resize() total=704542132, count=548
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=391673232, count=137
+    DirectMethodHandle.allocateInstance(Object) total=224745848, count=131
+
+Top frames (by count)
+  V1
+    BytesRef.utf8ToString() total=23722436816, count=10161
+    HashMap.getNode(Object) total=7388, count=7388
+    StringUTF16.compress(...) total=11655551560, count=4889
+    ArrayUtil.copyOfSubArray(...) total=10492670032, count=4791
+    HashMap.newNode(...) total=5169912379, count=2386
+    HashMap.resize() total=2323766902, count=2356
+    UnicodeUtil.UTF8toUTF16(...) total=2254, count=2254
+    BytesRef.deepCopyOf(BytesRef) total=3593366843, count=1659
+    StringHelper.murmurhash3_x86_32(...) total=1442, count=1442
+    ReferencePipeline$3$1.accept(Object) total=1015, count=1015
+  V2
+    BytesRef.utf8ToString() total=23821261706, count=9868
+    HashMap.getNode(Object) total=6453, count=6453
+    ArrayUtil.copyOfSubArray(...) total=11605407368, count=5437
+    StringUTF16.compress(...) total=11132059176, count=4752
+    ObjectLongHashMap.rehash(...) total=4612, count=4612
+    UnicodeUtil.UTF8toUTF16(...) total=4573, count=4573
+    ObjectLongHashMap.containsKey(Object) total=4446, count=4446
+    StringHelper.murmurhash3_x86_32(...) total=3575, count=3575
+    BytesRef.deepCopyOf(BytesRef) total=4181496681, count=1999
+    ObjectLongHashMap.allocateBuffers(int) total=8361410241, count=1126
+
+perf stat
+  v1
+    branches        :  166067469701.00
+    cache-misses    :    5323880396.00
+    instructions    :  979390555178.00
+    faults          :       3034495.00
+    context-switches:        135446.00
+  v2
+    branches        :  175665712185.00
+    cache-misses    :    8464447565.00
+    instructions    :  1068288643721.00
+    faults          :       3452662.00
+    context-switches:        192161.00
+
+# ended:    2026-08-17T17:28:06
+# duration: 0:11:17.410815
+# exit:     0

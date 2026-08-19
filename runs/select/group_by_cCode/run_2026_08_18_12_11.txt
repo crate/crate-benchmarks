@@ -1,0 +1,257 @@
+# started:  2026-08-18T12:11:39
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_cCode.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-14-14-35-d89c17a.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-17-17-58-bf89125.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+109253:
+Started recording 1.
+
+Use jcmd 109253 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-cCode
+   Statement:
+         select "cCode" from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<00:42,  4.73 requests/s]
+ 14%|█▍        | 29/200 [00:00<00:01, 99.14 requests/s]
+ 32%|███▎      | 65/200 [00:00<00:00, 169.33 requests/s]
+ 54%|█████▎    | 107/200 [00:00<00:00, 226.60 requests/s]
+ 76%|███████▌  | 152/200 [00:00<00:00, 271.05 requests/s]
+ 98%|█████████▊| 197/200 [00:00<00:00, 302.48 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 273.37 requests/s]
+
+## Running Query:
+   Name: count-distinct-cCode
+   Statement:
+         select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<00:56,  3.52 requests/s]
+ 22%|██▏       | 44/200 [00:00<00:01, 123.06 requests/s]
+ 41%|████      | 82/200 [00:00<00:00, 183.37 requests/s]
+ 64%|██████▎   | 127/200 [00:00<00:00, 237.94 requests/s]
+ 84%|████████▎ | 167/200 [00:00<00:00, 267.85 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 261.16 requests/s]
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+ 12%|█▏        | 23/200 [00:00<00:00, 215.36 requests/s]
+ 36%|███▌      | 71/200 [00:00<00:00, 345.08 requests/s]
+ 63%|██████▎   | 126/200 [00:00<00:00, 413.44 requests/s]
+ 88%|████████▊ | 177/200 [00:00<00:00, 436.31 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 429.05 requests/s]
+109253:
+Stopped recording "rec", 1007.3 kB written to:
+
+/tmp/tmpse1cm7g_/1aaefb9d-536e-4647-954a-677c315162ed.jfr
+# Running benchmark
+# Running tearDown
+perf: skipping non-JSON line: 'Error:'
+perf: skipping non-JSON line: 'No supported events found.'
+perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+perf: skipping non-JSON line: 'Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open'
+perf: skipping non-JSON line: 'access to performance monitoring and observability operations for processes'
+perf: skipping non-JSON line: 'without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.'
+perf: skipping non-JSON line: "More information can be found at 'Perf events and tool security' document:"
+perf: skipping non-JSON line: 'https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html'
+perf: skipping non-JSON line: 'perf_event_paranoid setting is 4:'
+perf: skipping non-JSON line: '  -1: Allow use of (almost) all events by all users'
+perf: skipping non-JSON line: '      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK'
+perf: skipping non-JSON line: '>= 0: Disallow raw and ftrace function tracepoint access'
+perf: skipping non-JSON line: '>= 1: Disallow CPU event access'
+perf: skipping non-JSON line: '>= 2: Disallow kernel profiling'
+perf: skipping non-JSON line: 'To make the adjusted perf_event_paranoid setting permanent preserve it'
+perf: skipping non-JSON line: 'in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)'
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+110392:
+Started recording 1.
+
+Use jcmd 110392 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-cCode
+   Statement:
+         select "cCode" from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<00:38,  5.16 requests/s]
+ 16%|█▌        | 32/200 [00:00<00:01, 113.59 requests/s]
+ 30%|███       | 60/200 [00:00<00:00, 156.39 requests/s]
+ 46%|████▋     | 93/200 [00:00<00:00, 195.18 requests/s]
+ 63%|██████▎   | 126/200 [00:00<00:00, 221.97 requests/s]
+ 80%|████████  | 160/200 [00:00<00:00, 243.02 requests/s]
+ 99%|█████████▉| 198/200 [00:00<00:00, 266.21 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 244.27 requests/s]
+
+## Running Query:
+   Name: count-distinct-cCode
+   Statement:
+         select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<01:06,  3.00 requests/s]
+ 20%|██        | 41/200 [00:00<00:01, 101.13 requests/s]
+ 40%|████      | 80/200 [00:00<00:00, 162.90 requests/s]
+ 60%|█████▉    | 119/200 [00:00<00:00, 206.16 requests/s]
+ 82%|████████▏ | 164/200 [00:00<00:00, 248.75 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 245.23 requests/s]
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+ 20%|██        | 41/200 [00:00<00:00, 402.86 requests/s]
+ 50%|█████     | 100/200 [00:00<00:00, 498.17 requests/s]
+ 78%|███████▊  | 155/200 [00:00<00:00, 507.59 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 523.65 requests/s]
+110392:
+Stopped recording "rec", 1.1 MB written to:
+
+/tmp/tmpse1cm7g_/a1bbda2b-2c53-442b-bb93-1b7cbd3cc537.jfr
+# Running benchmark
+# Running tearDown
+perf: skipping non-JSON line: 'Error:'
+perf: skipping non-JSON line: 'No supported events found.'
+perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+perf: skipping non-JSON line: 'Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open'
+perf: skipping non-JSON line: 'access to performance monitoring and observability operations for processes'
+perf: skipping non-JSON line: 'without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.'
+perf: skipping non-JSON line: "More information can be found at 'Perf events and tool security' document:"
+perf: skipping non-JSON line: 'https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html'
+perf: skipping non-JSON line: 'perf_event_paranoid setting is 4:'
+perf: skipping non-JSON line: '  -1: Allow use of (almost) all events by all users'
+perf: skipping non-JSON line: '      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK'
+perf: skipping non-JSON line: '>= 0: Disallow raw and ftrace function tracepoint access'
+perf: skipping non-JSON line: '>= 1: Disallow CPU event access'
+perf: skipping non-JSON line: '>= 2: Disallow kernel profiling'
+perf: skipping non-JSON line: 'To make the adjusted perf_event_paranoid setting permanent preserve it'
+perf: skipping non-JSON line: 'in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)'
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-d89c17a76148dc0fa7d0f4d0910137516565fb14
+V2: 6.5.0-bf8912508034a4d40055fe2996d8b17f6a1212ba
+
+Q:     select "cCode" from uservisits group by "cCode";
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        8.220 ±   24.307 |      2.578 |      4.720 |      6.347 |    204.196 |
+|   V2    |        9.373 ±   21.822 |      3.524 |      6.412 |      7.723 |    187.168 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               +  13.10%                           +  30.39%   
+There is a 38.19% probability that the observed difference is not random, and the best estimate of that difference is 13.10%
+The test has no statistical significance
+
+Q:     select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        8.962 ±   33.519 |      2.731 |      4.499 |      5.484 |    279.690 |
+|   V2    |        9.983 ±   39.063 |      2.645 |      4.974 |      5.851 |    326.169 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               +  10.78%                           +  10.02%   
+There is a 22.09% probability that the observed difference is not random, and the best estimate of that difference is 10.78%
+The test has no statistical significance
+
+Q:     select "cCode", count(*) from uservisits group by "cCode";
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        4.737 ±    4.117 |      2.171 |      3.992 |      4.913 |     36.770 |
+|   V2    |        3.563 ±    1.752 |      1.633 |      3.178 |      3.853 |     14.530 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -  28.29%                           -  22.70%   
+There is a 99.98% probability that the observed difference is not random, and the best estimate of that difference is 28.29%
+The test has statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   179.36        207
+ V2 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   282.89        319
+    
+Top allocation frames
+  V1
+    ParserATNSimulator.getEpsilonTarget(...) total=17811857, count=59
+    ArrayList.grow(int) total=14511264, count=8
+    BytesRef.utf8ToString() total=14206136, count=3
+    Unsafe.allocateUninitializedArray(Class, int) total=11517520, count=40
+    SegmentTermsEnum.getFrame(int) total=10383112, count=3
+    EntryMap.<init>(int, float) total=7223608, count=7
+    String.encodeUTF8(...) total=6892760, count=18
+    FieldReader.iterator() total=6312536, count=1
+    BufferRecycler.calloc(int) total=5146768, count=6
+    BufferRecycler.balloc(int) total=4761312, count=9
+  V2
+    BytesRef.utf8ToString() total=71340800, count=19
+    BufferRecycler.calloc(int) total=51841240, count=6
+    Unsafe.allocateUninitializedArray(Class, int) total=24510288, count=16
+    StringUTF16.compress(...) total=15777192, count=4
+    Long.valueOf(long) total=15311096, count=5
+    SegmentTermsEnumFrame.loadBlock() total=12581129, count=4
+    Unsafe.allocateInstance(Class) total=11835353, count=13
+    String.encodeUTF8(...) total=8171296, count=5
+    ParserATNSimulator.getEpsilonTarget(...) total=6382553, count=57
+    DirectMethodHandle.allocateInstance(Object) total=5444885, count=9
+
+Top frames (by count)
+  V1
+    ParserATNSimulator.getEpsilonTarget(...) total=17811857, count=59
+    Unsafe.allocateUninitializedArray(Class, int) total=11517520, count=40
+    String.encodeUTF8(...) total=6892760, count=18
+    FlexibleHashMap.put(...) total=4025344, count=16
+    HashMap.newNode(...) total=4491808, count=14
+    IdentityHashMap.init(int) total=4232680, count=14
+    LinkedList.listIterator(int) total=3327936, count=11
+    Unsafe.allocateInstance(Class) total=3061496, count=10
+    HashMap.resize() total=2631240, count=10
+    ATNConfigSet$AbstractConfigHashSet.createBucket(int) total=3050552, count=10
+  V2
+    ParserATNSimulator.getEpsilonTarget(...) total=6382553, count=57
+    BytesRef.utf8ToString() total=71340800, count=19
+    Unsafe.allocateUninitializedArray(Class, int) total=24510288, count=16
+    LinkedList.listIterator(int) total=1726113, count=16
+    Arrays.copyOf(...) total=2540800, count=14
+    ParserATNSimulator.closure_(...) total=14, count=14
+    Unsafe.allocateInstance(Class) total=11835353, count=13
+    HashMap.resize() total=2543075, count=12
+    IdentityHashMap.init(int) total=2307720, count=12
+    GroupByOptimizedIterator.getCountsByKey(...) total=10, count=10
+
+# ended:    2026-08-18T12:15:31
+# duration: 0:03:51.364368
+# exit:     0

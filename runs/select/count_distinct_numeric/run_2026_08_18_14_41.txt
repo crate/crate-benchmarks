@@ -1,0 +1,633 @@
+# started:  2026-08-18T14:41:05
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/count_distinct_numeric.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-18-12-20-e3f69c6.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-18-12-28-17178ec.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+237338:
+Started recording 1.
+
+Use jcmd 237338 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: count-distinct-adRevenue
+   Statement:
+         select count(distinct "adRevenue") from uservisits
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:07<23:30,  7.09s/ requests]
+  2%|▏         | 4/200 [00:11<09:23,  2.88s/ requests]
+  3%|▎         | 6/200 [00:12<06:18,  1.95s/ requests]
+  4%|▎         | 7/200 [00:16<07:32,  2.34s/ requests]
+  5%|▌         | 10/200 [00:21<06:34,  2.08s/ requests]
+  6%|▌         | 11/200 [00:22<06:01,  1.91s/ requests]
+  6%|▌         | 12/200 [00:22<05:21,  1.71s/ requests]
+  6%|▋         | 13/200 [00:29<07:10,  2.30s/ requests]
+  8%|▊         | 16/200 [00:33<06:20,  2.07s/ requests]
+  9%|▉         | 18/200 [00:34<05:29,  1.81s/ requests]
+ 10%|▉         | 19/200 [00:38<05:48,  1.93s/ requests]
+ 10%|█         | 20/200 [00:38<05:22,  1.79s/ requests]
+ 10%|█         | 21/200 [00:40<05:17,  1.78s/ requests]
+ 11%|█         | 22/200 [00:42<05:19,  1.80s/ requests]
+ 12%|█▏        | 23/200 [00:43<05:10,  1.75s/ requests]
+ 12%|█▏        | 24/200 [00:44<05:06,  1.74s/ requests]
+ 12%|█▎        | 25/200 [00:48<05:32,  1.90s/ requests]
+ 13%|█▎        | 26/200 [00:49<05:24,  1.86s/ requests]
+ 14%|█▎        | 27/200 [00:52<05:27,  1.89s/ requests]
+ 14%|█▍        | 28/200 [00:52<05:00,  1.75s/ requests]
+ 14%|█▍        | 29/200 [00:55<05:14,  1.84s/ requests]
+ 15%|█▌        | 30/200 [00:58<05:39,  2.00s/ requests]
+ 16%|█▌        | 32/200 [01:00<05:08,  1.84s/ requests]
+ 16%|█▋        | 33/200 [01:03<05:16,  1.90s/ requests]
+ 17%|█▋        | 34/200 [01:03<04:48,  1.74s/ requests]
+ 18%|█▊        | 35/200 [01:04<04:41,  1.71s/ requests]
+ 18%|█▊        | 36/200 [01:06<04:42,  1.72s/ requests]
+ 18%|█▊        | 37/200 [01:07<04:23,  1.61s/ requests]
+ 19%|█▉        | 38/200 [01:08<04:16,  1.59s/ requests]
+ 20%|█▉        | 39/200 [01:09<04:11,  1.56s/ requests]
+ 20%|██        | 40/200 [01:10<03:50,  1.44s/ requests]
+ 20%|██        | 41/200 [01:12<03:57,  1.49s/ requests]
+ 21%|██        | 42/200 [01:14<04:01,  1.53s/ requests]
+ 22%|██▏       | 43/200 [01:14<03:40,  1.41s/ requests]
+ 22%|██▏       | 44/200 [01:17<04:05,  1.57s/ requests]
+ 22%|██▎       | 45/200 [01:21<04:37,  1.79s/ requests]
+ 24%|██▎       | 47/200 [01:23<04:15,  1.67s/ requests]
+ 24%|██▍       | 48/200 [01:26<04:28,  1.77s/ requests]
+ 24%|██▍       | 49/200 [01:27<04:22,  1.74s/ requests]
+ 25%|██▌       | 50/200 [01:29<04:26,  1.78s/ requests]
+ 26%|██▌       | 51/200 [01:31<04:24,  1.77s/ requests]
+ 26%|██▌       | 52/200 [01:31<04:01,  1.63s/ requests]
+ 26%|██▋       | 53/200 [01:34<04:07,  1.68s/ requests]
+ 27%|██▋       | 54/200 [01:36<04:16,  1.75s/ requests]
+ 28%|██▊       | 55/200 [01:37<03:57,  1.64s/ requests]
+ 28%|██▊       | 56/200 [01:39<04:10,  1.74s/ requests]
+ 28%|██▊       | 57/200 [01:41<04:11,  1.76s/ requests]
+ 29%|██▉       | 58/200 [01:43<04:08,  1.75s/ requests]
+ 30%|██▉       | 59/200 [01:45<04:09,  1.77s/ requests]
+ 30%|███       | 60/200 [01:46<04:01,  1.73s/ requests]
+ 30%|███       | 61/200 [01:48<03:56,  1.70s/ requests]
+ 31%|███       | 62/200 [01:50<04:00,  1.74s/ requests]
+ 32%|███▏      | 63/200 [01:50<03:37,  1.58s/ requests]
+ 32%|███▏      | 64/200 [01:52<03:48,  1.68s/ requests]
+ 32%|███▎      | 65/200 [01:57<04:19,  1.93s/ requests]
+ 34%|███▎      | 67/200 [01:59<03:55,  1.77s/ requests]
+ 34%|███▍      | 68/200 [02:01<04:00,  1.82s/ requests]
+ 34%|███▍      | 69/200 [02:02<03:50,  1.76s/ requests]
+ 35%|███▌      | 70/200 [02:03<03:43,  1.72s/ requests]
+ 36%|███▌      | 71/200 [02:05<03:37,  1.69s/ requests]
+ 36%|███▌      | 72/200 [02:06<03:31,  1.66s/ requests]
+ 36%|███▋      | 73/200 [02:08<03:30,  1.66s/ requests]
+ 37%|███▋      | 74/200 [02:10<03:30,  1.67s/ requests]
+ 38%|███▊      | 75/200 [02:10<03:14,  1.55s/ requests]
+ 38%|███▊      | 76/200 [02:13<03:25,  1.66s/ requests]
+ 38%|███▊      | 77/200 [02:15<03:32,  1.73s/ requests]
+ 39%|███▉      | 78/200 [02:17<03:28,  1.71s/ requests]
+ 40%|███▉      | 79/200 [02:18<03:27,  1.71s/ requests]
+ 40%|████      | 80/200 [02:20<03:21,  1.68s/ requests]
+ 40%|████      | 81/200 [02:21<03:12,  1.61s/ requests]
+ 41%|████      | 82/200 [02:22<03:06,  1.58s/ requests]
+ 42%|████▏     | 83/200 [02:23<03:00,  1.54s/ requests]
+ 42%|████▏     | 84/200 [02:24<02:52,  1.48s/ requests]
+ 42%|████▎     | 85/200 [02:26<02:49,  1.48s/ requests]
+ 43%|████▎     | 86/200 [02:27<02:42,  1.43s/ requests]
+ 44%|████▎     | 87/200 [02:27<02:29,  1.32s/ requests]
+ 44%|████▍     | 88/200 [02:30<02:46,  1.48s/ requests]
+ 44%|████▍     | 89/200 [02:30<02:31,  1.36s/ requests]
+ 45%|████▌     | 90/200 [02:33<02:41,  1.47s/ requests]
+ 46%|████▌     | 91/200 [02:34<02:43,  1.50s/ requests]
+ 46%|████▌     | 92/200 [02:36<02:38,  1.47s/ requests]
+ 46%|████▋     | 93/200 [02:37<02:36,  1.46s/ requests]
+ 47%|████▋     | 94/200 [02:38<02:30,  1.42s/ requests]
+ 48%|████▊     | 95/200 [02:39<02:25,  1.38s/ requests]
+ 48%|████▊     | 96/200 [02:41<02:29,  1.43s/ requests]
+ 48%|████▊     | 97/200 [02:43<02:37,  1.53s/ requests]
+ 49%|████▉     | 98/200 [02:45<02:37,  1.55s/ requests]
+ 50%|████▉     | 99/200 [02:47<02:44,  1.63s/ requests]
+ 50%|█████     | 100/200 [02:49<02:40,  1.60s/ requests]
+ 50%|█████     | 101/200 [02:51<02:40,  1.62s/ requests]
+ 51%|█████     | 102/200 [02:53<02:42,  1.66s/ requests]
+ 52%|█████▏    | 103/200 [02:54<02:39,  1.64s/ requests]
+ 52%|█████▏    | 104/200 [02:56<02:35,  1.62s/ requests]
+ 52%|█████▎    | 105/200 [02:58<02:38,  1.67s/ requests]
+ 53%|█████▎    | 106/200 [02:59<02:36,  1.66s/ requests]
+ 54%|█████▎    | 107/200 [03:01<02:31,  1.63s/ requests]
+ 54%|█████▍    | 108/200 [03:03<02:38,  1.72s/ requests]
+ 55%|█████▍    | 109/200 [03:04<02:24,  1.59s/ requests]
+ 55%|█████▌    | 110/200 [03:05<02:22,  1.59s/ requests]
+ 56%|█████▌    | 111/200 [03:12<03:06,  2.09s/ requests]
+ 56%|█████▋    | 113/200 [03:15<02:56,  2.03s/ requests]
+ 57%|█████▋    | 114/200 [03:17<02:55,  2.04s/ requests]
+ 57%|█████▊    | 115/200 [03:19<02:52,  2.03s/ requests]
+ 58%|█████▊    | 116/200 [03:22<02:56,  2.10s/ requests]
+ 58%|█████▊    | 117/200 [03:23<02:45,  2.00s/ requests]
+ 59%|█████▉    | 118/200 [03:24<02:34,  1.89s/ requests]
+ 60%|█████▉    | 119/200 [03:29<02:59,  2.21s/ requests]
+ 60%|██████    | 120/200 [03:29<02:41,  2.02s/ requests]
+ 60%|██████    | 121/200 [03:32<02:42,  2.06s/ requests]
+ 61%|██████    | 122/200 [03:35<02:52,  2.21s/ requests]
+ 62%|██████▏   | 124/200 [03:37<02:30,  1.98s/ requests]
+ 62%|██████▎   | 125/200 [03:40<02:31,  2.02s/ requests]
+ 64%|██████▎   | 127/200 [03:44<02:28,  2.03s/ requests]
+ 64%|██████▍   | 128/200 [03:46<02:29,  2.08s/ requests]
+ 65%|██████▌   | 130/200 [03:50<02:21,  2.02s/ requests]
+ 66%|██████▌   | 131/200 [03:51<02:16,  1.98s/ requests]
+ 66%|██████▌   | 132/200 [03:52<02:05,  1.84s/ requests]
+ 66%|██████▋   | 133/200 [03:53<01:59,  1.79s/ requests]
+ 67%|██████▋   | 134/200 [03:54<01:55,  1.75s/ requests]
+ 68%|██████▊   | 135/200 [03:55<01:47,  1.66s/ requests]
+ 68%|██████▊   | 136/200 [03:56<01:45,  1.64s/ requests]
+ 68%|██████▊   | 137/200 [03:58<01:43,  1.64s/ requests]
+ 69%|██████▉   | 138/200 [03:59<01:40,  1.62s/ requests]
+ 70%|██████▉   | 139/200 [04:01<01:40,  1.64s/ requests]
+ 70%|███████   | 140/200 [04:03<01:36,  1.60s/ requests]
+ 70%|███████   | 141/200 [04:03<01:29,  1.51s/ requests]
+ 71%|███████   | 142/200 [04:07<01:38,  1.70s/ requests]
+ 72%|███████▏  | 143/200 [04:08<01:34,  1.66s/ requests]
+ 72%|███████▏  | 144/200 [04:08<01:26,  1.55s/ requests]
+ 72%|███████▎  | 145/200 [04:11<01:32,  1.68s/ requests]
+ 73%|███████▎  | 146/200 [04:12<01:26,  1.59s/ requests]
+ 74%|███████▎  | 147/200 [04:13<01:21,  1.55s/ requests]
+ 74%|███████▍  | 148/200 [04:16<01:28,  1.70s/ requests]
+ 74%|███████▍  | 149/200 [04:18<01:28,  1.73s/ requests]
+ 76%|███████▌  | 151/200 [04:22<01:26,  1.77s/ requests]
+ 76%|███████▌  | 152/200 [04:24<01:23,  1.75s/ requests]
+ 76%|███████▋  | 153/200 [04:24<01:15,  1.60s/ requests]
+ 77%|███████▋  | 154/200 [04:27<01:20,  1.74s/ requests]
+ 78%|███████▊  | 155/200 [04:29<01:18,  1.75s/ requests]
+ 78%|███████▊  | 156/200 [04:29<01:11,  1.62s/ requests]
+ 78%|███████▊  | 157/200 [04:33<01:17,  1.80s/ requests]
+ 79%|███████▉  | 158/200 [04:35<01:16,  1.81s/ requests]
+ 80%|███████▉  | 159/200 [04:36<01:10,  1.72s/ requests]
+ 80%|████████  | 160/200 [04:38<01:09,  1.74s/ requests]
+ 80%|████████  | 161/200 [04:39<01:08,  1.74s/ requests]
+ 81%|████████  | 162/200 [04:40<01:00,  1.60s/ requests]
+ 82%|████████▏ | 163/200 [04:41<01:00,  1.63s/ requests]
+ 82%|████████▏ | 164/200 [04:43<00:57,  1.60s/ requests]
+ 82%|████████▎ | 165/200 [04:43<00:51,  1.47s/ requests]
+ 83%|████████▎ | 166/200 [04:45<00:51,  1.52s/ requests]
+ 84%|████████▎ | 167/200 [04:46<00:49,  1.50s/ requests]
+ 84%|████████▍ | 168/200 [04:47<00:44,  1.39s/ requests]
+ 84%|████████▍ | 169/200 [04:49<00:44,  1.44s/ requests]
+ 85%|████████▌ | 170/200 [04:53<00:52,  1.75s/ requests]
+ 86%|████████▌ | 171/200 [04:55<00:52,  1.80s/ requests]
+ 86%|████████▌ | 172/200 [04:57<00:49,  1.77s/ requests]
+ 86%|████████▋ | 173/200 [04:59<00:48,  1.78s/ requests]
+ 87%|████████▋ | 174/200 [05:01<00:48,  1.87s/ requests]
+ 88%|████████▊ | 175/200 [05:04<00:47,  1.91s/ requests]
+ 88%|████████▊ | 176/200 [05:06<00:46,  1.94s/ requests]
+ 88%|████████▊ | 177/200 [05:08<00:45,  1.99s/ requests]
+ 89%|████████▉ | 178/200 [05:09<00:41,  1.89s/ requests]
+ 90%|████████▉ | 179/200 [05:11<00:38,  1.85s/ requests]
+ 90%|█████████ | 180/200 [05:12<00:36,  1.81s/ requests]
+ 90%|█████████ | 181/200 [05:14<00:34,  1.80s/ requests]
+ 91%|█████████ | 182/200 [05:16<00:32,  1.78s/ requests]
+ 92%|█████████▏| 183/200 [05:17<00:29,  1.75s/ requests]
+ 92%|█████████▏| 184/200 [05:20<00:29,  1.85s/ requests]
+ 92%|█████████▎| 185/200 [05:22<00:27,  1.86s/ requests]
+ 93%|█████████▎| 186/200 [05:23<00:24,  1.78s/ requests]
+ 94%|█████████▎| 187/200 [05:25<00:23,  1.78s/ requests]
+ 94%|█████████▍| 188/200 [05:26<00:20,  1.70s/ requests]
+ 94%|█████████▍| 189/200 [05:26<00:17,  1.59s/ requests]
+ 95%|█████████▌| 190/200 [05:27<00:15,  1.55s/ requests]
+ 96%|█████████▌| 191/200 [05:28<00:13,  1.47s/ requests]
+ 96%|█████████▌| 192/200 [05:30<00:11,  1.49s/ requests]
+ 96%|█████████▋| 193/200 [05:32<00:10,  1.55s/ requests]
+ 97%|█████████▋| 194/200 [05:33<00:09,  1.53s/ requests]
+ 98%|█████████▊| 195/200 [05:34<00:07,  1.49s/ requests]
+ 98%|█████████▊| 196/200 [05:36<00:06,  1.53s/ requests]
+ 98%|█████████▊| 197/200 [05:38<00:04,  1.51s/ requests]
+ 99%|█████████▉| 198/200 [05:39<00:03,  1.51s/ requests]
+100%|█████████▉| 199/200 [05:40<00:01,  1.47s/ requests]
+100%|██████████| 200/200 [05:41<00:00,  1.35s/ requests]
+100%|██████████| 200/200 [05:41<00:00,  1.71s/ requests]
+
+## Running Query:
+   Name: count-distinct-duration
+   Statement:
+         select count(distinct "duration") from uservisits
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<01:13,  2.71 requests/s]
+  2%|▏         | 4/200 [00:00<00:25,  7.76 requests/s]
+  4%|▎         | 7/200 [00:00<00:17, 11.01 requests/s]
+  5%|▌         | 10/200 [00:00<00:14, 13.22 requests/s]
+  6%|▋         | 13/200 [00:00<00:12, 14.69 requests/s]
+  8%|▊         | 16/200 [00:01<00:11, 16.48 requests/s]
+ 10%|▉         | 19/200 [00:01<00:10, 17.40 requests/s]
+ 11%|█         | 22/200 [00:01<00:09, 18.09 requests/s]
+ 12%|█▎        | 25/200 [00:01<00:09, 18.05 requests/s]
+ 14%|█▍        | 28/200 [00:01<00:09, 18.13 requests/s]
+ 16%|█▌        | 31/200 [00:01<00:09, 18.55 requests/s]
+ 17%|█▋        | 34/200 [00:01<00:08, 18.58 requests/s]
+ 18%|█▊        | 37/200 [00:02<00:08, 19.13 requests/s]
+ 20%|██        | 40/200 [00:02<00:08, 19.09 requests/s]
+ 22%|██▏       | 43/200 [00:02<00:08, 19.06 requests/s]
+ 23%|██▎       | 46/200 [00:02<00:08, 19.04 requests/s]
+ 24%|██▍       | 48/200 [00:02<00:08, 18.00 requests/s]
+ 26%|██▌       | 51/200 [00:02<00:08, 18.38 requests/s]
+ 27%|██▋       | 54/200 [00:03<00:07, 18.66 requests/s]
+ 28%|██▊       | 57/200 [00:03<00:07, 18.93 requests/s]
+ 30%|███       | 60/200 [00:03<00:07, 19.36 requests/s]
+ 32%|███▏      | 63/200 [00:03<00:07, 19.56 requests/s]
+ 33%|███▎      | 66/200 [00:03<00:06, 19.40 requests/s]
+ 34%|███▍      | 69/200 [00:03<00:06, 19.34 requests/s]
+ 36%|███▌      | 72/200 [00:03<00:06, 19.29 requests/s]
+ 38%|███▊      | 75/200 [00:04<00:06, 19.59 requests/s]
+ 39%|███▉      | 78/200 [00:04<00:06, 19.48 requests/s]
+ 40%|████      | 81/200 [00:04<00:06, 19.28 requests/s]
+ 42%|████▏     | 83/200 [00:04<00:06, 19.29 requests/s]
+ 42%|████▎     | 85/200 [00:04<00:06, 18.91 requests/s]
+ 44%|████▍     | 88/200 [00:04<00:05, 19.02 requests/s]
+ 46%|████▌     | 91/200 [00:04<00:05, 19.19 requests/s]
+ 47%|████▋     | 94/200 [00:05<00:05, 19.59 requests/s]
+ 48%|████▊     | 97/200 [00:05<00:05, 19.89 requests/s]
+ 50%|█████     | 100/200 [00:05<00:05, 19.54 requests/s]
+ 52%|█████▏    | 103/200 [00:05<00:04, 20.05 requests/s]
+ 53%|█████▎    | 106/200 [00:05<00:04, 20.06 requests/s]
+ 55%|█████▍    | 109/200 [00:05<00:04, 19.80 requests/s]
+ 56%|█████▌    | 112/200 [00:05<00:04, 20.04 requests/s]
+ 57%|█████▊    | 115/200 [00:06<00:04, 19.82 requests/s]
+ 59%|█████▉    | 118/200 [00:06<00:04, 19.68 requests/s]
+ 60%|██████    | 121/200 [00:06<00:04, 19.25 requests/s]
+ 62%|██████▏   | 124/200 [00:06<00:03, 19.35 requests/s]
+ 63%|██████▎   | 126/200 [00:06<00:03, 19.02 requests/s]
+ 64%|██████▍   | 128/200 [00:06<00:03, 19.04 requests/s]
+ 66%|██████▌   | 131/200 [00:06<00:03, 19.24 requests/s]
+ 67%|██████▋   | 134/200 [00:07<00:03, 17.74 requests/s]
+ 68%|██████▊   | 136/200 [00:07<00:03, 17.50 requests/s]
+ 69%|██████▉   | 138/200 [00:07<00:04, 15.48 requests/s]
+ 70%|███████   | 140/200 [00:08<00:04, 13.70 requests/s]
+ 72%|███████▏  | 143/200 [00:08<00:04, 13.82 requests/s]
+ 72%|███████▎  | 145/200 [00:08<00:04, 13.53 requests/s]
+ 74%|███████▎  | 147/200 [00:08<00:04, 12.89 requests/s]
+ 76%|███████▌  | 151/200 [00:08<00:03, 13.74 requests/s]
+ 77%|███████▋  | 154/200 [00:08<00:03, 14.53 requests/s]
+ 78%|███████▊  | 157/200 [00:09<00:02, 15.35 requests/s]
+ 80%|████████  | 160/200 [00:09<00:02, 16.02 requests/s]
+ 82%|████████▎ | 165/200 [00:09<00:01, 18.01 requests/s]
+ 84%|████████▍ | 168/200 [00:09<00:01, 18.48 requests/s]
+ 86%|████████▋ | 173/200 [00:09<00:01, 19.77 requests/s]
+ 88%|████████▊ | 176/200 [00:09<00:01, 20.41 requests/s]
+ 90%|█████████ | 180/200 [00:09<00:00, 21.62 requests/s]
+ 92%|█████████▏| 183/200 [00:09<00:00, 22.17 requests/s]
+ 93%|█████████▎| 186/200 [00:09<00:00, 22.55 requests/s]
+ 94%|█████████▍| 189/200 [00:10<00:00, 22.93 requests/s]
+ 96%|█████████▋| 193/200 [00:10<00:00, 24.15 requests/s]
+ 98%|█████████▊| 196/200 [00:10<00:00, 24.33 requests/s]
+100%|██████████| 200/200 [00:10<00:00, 19.25 requests/s]
+237338:
+Stopped recording "rec", 7.2 MB written to:
+
+/tmp/tmpmg3l35wy/2decea1b-0516-4699-beb0-d1b8c82f642a.jfr
+# Running benchmark
+# Running tearDown
+perf: skipping non-JSON line: 'Error:'
+perf: skipping non-JSON line: 'No supported events found.'
+perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+perf: skipping non-JSON line: 'Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open'
+perf: skipping non-JSON line: 'access to performance monitoring and observability operations for processes'
+perf: skipping non-JSON line: 'without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.'
+perf: skipping non-JSON line: "More information can be found at 'Perf events and tool security' document:"
+perf: skipping non-JSON line: 'https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html'
+perf: skipping non-JSON line: 'perf_event_paranoid setting is 4:'
+perf: skipping non-JSON line: '  -1: Allow use of (almost) all events by all users'
+perf: skipping non-JSON line: '      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK'
+perf: skipping non-JSON line: '>= 0: Disallow raw and ftrace function tracepoint access'
+perf: skipping non-JSON line: '>= 1: Disallow CPU event access'
+perf: skipping non-JSON line: '>= 2: Disallow kernel profiling'
+perf: skipping non-JSON line: 'To make the adjusted perf_event_paranoid setting permanent preserve it'
+perf: skipping non-JSON line: 'in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)'
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+241385:
+Started recording 1.
+
+Use jcmd 241385 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: count-distinct-adRevenue
+   Statement:
+         select count(distinct "adRevenue") from uservisits
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:03<11:00,  3.32s/ requests]
+  2%|▏         | 4/200 [00:05<03:57,  1.21s/ requests]
+  4%|▎         | 7/200 [00:07<03:10,  1.02 requests/s]
+  4%|▍         | 8/200 [00:07<02:46,  1.15 requests/s]
+  5%|▌         | 10/200 [00:09<02:51,  1.11 requests/s]
+  6%|▌         | 11/200 [00:09<02:35,  1.21 requests/s]
+  6%|▌         | 12/200 [00:13<03:31,  1.13s/ requests]
+  6%|▋         | 13/200 [00:16<04:16,  1.37s/ requests]
+  7%|▋         | 14/200 [00:16<03:51,  1.25s/ requests]
+  8%|▊         | 16/200 [00:18<03:35,  1.17s/ requests]
+  8%|▊         | 17/200 [00:18<03:18,  1.09s/ requests]
+ 10%|▉         | 19/200 [00:21<03:20,  1.11s/ requests]
+ 10%|█         | 20/200 [00:21<03:05,  1.03s/ requests]
+ 10%|█         | 21/200 [00:21<02:50,  1.05 requests/s]
+ 11%|█         | 22/200 [00:24<03:18,  1.11s/ requests]
+ 12%|█▏        | 23/200 [00:24<03:06,  1.05s/ requests]
+ 12%|█▏        | 24/200 [00:24<02:50,  1.03 requests/s]
+ 12%|█▎        | 25/200 [00:28<03:31,  1.21s/ requests]
+ 13%|█▎        | 26/200 [00:29<03:22,  1.16s/ requests]
+ 14%|█▎        | 27/200 [00:29<03:05,  1.07s/ requests]
+ 14%|█▍        | 28/200 [00:32<03:34,  1.25s/ requests]
+ 14%|█▍        | 29/200 [00:32<03:15,  1.14s/ requests]
+ 15%|█▌        | 30/200 [00:32<02:59,  1.06s/ requests]
+ 16%|█▌        | 31/200 [00:34<03:20,  1.19s/ requests]
+ 16%|█▌        | 32/200 [00:35<03:04,  1.10s/ requests]
+ 16%|█▋        | 33/200 [00:36<03:00,  1.08s/ requests]
+ 17%|█▋        | 34/200 [00:38<03:20,  1.21s/ requests]
+ 18%|█▊        | 35/200 [00:38<03:03,  1.11s/ requests]
+ 18%|█▊        | 36/200 [00:38<02:46,  1.02s/ requests]
+ 18%|█▊        | 37/200 [00:40<03:00,  1.11s/ requests]
+ 19%|█▉        | 38/200 [00:41<02:51,  1.06s/ requests]
+ 20%|█▉        | 39/200 [00:41<02:34,  1.04 requests/s]
+ 20%|██        | 40/200 [00:43<02:44,  1.03s/ requests]
+ 20%|██        | 41/200 [00:43<02:29,  1.06 requests/s]
+ 21%|██        | 42/200 [00:43<02:15,  1.17 requests/s]
+ 22%|██▏       | 43/200 [00:46<02:44,  1.05s/ requests]
+ 22%|██▎       | 45/200 [00:46<02:14,  1.15 requests/s]
+ 23%|██▎       | 46/200 [00:48<02:30,  1.02 requests/s]
+ 24%|██▍       | 48/200 [00:48<02:05,  1.21 requests/s]
+ 24%|██▍       | 49/200 [00:50<02:17,  1.10 requests/s]
+ 26%|██▌       | 51/200 [00:50<01:55,  1.28 requests/s]
+ 26%|██▌       | 52/200 [00:52<02:12,  1.12 requests/s]
+ 26%|██▋       | 53/200 [00:52<02:02,  1.20 requests/s]
+ 28%|██▊       | 55/200 [00:55<02:12,  1.09 requests/s]
+ 28%|██▊       | 56/200 [00:56<02:07,  1.13 requests/s]
+ 29%|██▉       | 58/200 [00:59<02:21,  1.01 requests/s]
+ 30%|███       | 60/200 [00:59<02:03,  1.13 requests/s]
+ 30%|███       | 61/200 [01:02<02:16,  1.02 requests/s]
+ 32%|███▏      | 63/200 [01:02<02:00,  1.14 requests/s]
+ 32%|███▏      | 64/200 [01:05<02:17,  1.01s/ requests]
+ 33%|███▎      | 66/200 [01:05<02:01,  1.10 requests/s]
+ 34%|███▎      | 67/200 [01:07<02:13,  1.00s/ requests]
+ 34%|███▍      | 69/200 [01:09<02:04,  1.05 requests/s]
+ 35%|███▌      | 70/200 [01:11<02:17,  1.05s/ requests]
+ 36%|███▌      | 71/200 [01:12<02:15,  1.05s/ requests]
+ 36%|███▌      | 72/200 [01:13<02:10,  1.02s/ requests]
+ 36%|███▋      | 73/200 [01:15<02:18,  1.09s/ requests]
+ 37%|███▋      | 74/200 [01:15<02:12,  1.05s/ requests]
+ 38%|███▊      | 75/200 [01:16<02:06,  1.01s/ requests]
+ 38%|███▊      | 76/200 [01:17<02:10,  1.05s/ requests]
+ 38%|███▊      | 77/200 [01:18<02:06,  1.03s/ requests]
+ 39%|███▉      | 78/200 [01:19<01:59,  1.02 requests/s]
+ 40%|███▉      | 79/200 [01:20<02:02,  1.01s/ requests]
+ 40%|████      | 80/200 [01:20<01:56,  1.03 requests/s]
+ 40%|████      | 81/200 [01:21<01:50,  1.07 requests/s]
+ 41%|████      | 82/200 [01:23<01:57,  1.00 requests/s]
+ 42%|████▏     | 83/200 [01:24<02:00,  1.03s/ requests]
+ 42%|████▏     | 84/200 [01:25<02:00,  1.04s/ requests]
+ 42%|████▎     | 85/200 [01:27<02:03,  1.08s/ requests]
+ 43%|████▎     | 86/200 [01:27<01:58,  1.04s/ requests]
+ 44%|████▎     | 87/200 [01:28<01:58,  1.05s/ requests]
+ 44%|████▍     | 88/200 [01:29<01:51,  1.00 requests/s]
+ 44%|████▍     | 89/200 [01:30<01:49,  1.01 requests/s]
+ 45%|████▌     | 90/200 [01:30<01:43,  1.06 requests/s]
+ 46%|████▌     | 91/200 [01:31<01:42,  1.06 requests/s]
+ 46%|████▌     | 92/200 [01:32<01:36,  1.12 requests/s]
+ 46%|████▋     | 93/200 [01:33<01:36,  1.11 requests/s]
+ 47%|████▋     | 94/200 [01:33<01:30,  1.17 requests/s]
+ 48%|████▊     | 95/200 [01:34<01:30,  1.16 requests/s]
+ 48%|████▊     | 96/200 [01:35<01:27,  1.19 requests/s]
+ 48%|████▊     | 97/200 [01:36<01:31,  1.13 requests/s]
+ 49%|████▉     | 98/200 [01:37<01:28,  1.16 requests/s]
+ 50%|████▉     | 99/200 [01:38<01:31,  1.10 requests/s]
+ 50%|█████     | 100/200 [01:39<01:30,  1.10 requests/s]
+ 50%|█████     | 101/200 [01:40<01:33,  1.06 requests/s]
+ 51%|█████     | 102/200 [01:41<01:28,  1.11 requests/s]
+ 52%|█████▏    | 103/200 [01:41<01:22,  1.17 requests/s]
+ 52%|█████▏    | 104/200 [01:42<01:23,  1.16 requests/s]
+ 52%|█████▎    | 105/200 [01:43<01:19,  1.19 requests/s]
+ 53%|█████▎    | 106/200 [01:44<01:22,  1.14 requests/s]
+ 54%|█████▎    | 107/200 [01:45<01:20,  1.16 requests/s]
+ 54%|█████▍    | 108/200 [01:46<01:23,  1.10 requests/s]
+ 55%|█████▍    | 109/200 [01:47<01:21,  1.12 requests/s]
+ 55%|█████▌    | 110/200 [01:48<01:25,  1.05 requests/s]
+ 56%|█████▌    | 111/200 [01:49<01:20,  1.10 requests/s]
+ 56%|█████▌    | 112/200 [01:50<01:24,  1.04 requests/s]
+ 56%|█████▋    | 113/200 [01:51<01:21,  1.07 requests/s]
+ 57%|█████▋    | 114/200 [01:52<01:22,  1.05 requests/s]
+ 57%|█████▊    | 115/200 [01:53<01:20,  1.05 requests/s]
+ 58%|█████▊    | 116/200 [01:55<01:28,  1.05s/ requests]
+ 58%|█████▊    | 117/200 [01:55<01:23,  1.01s/ requests]
+ 59%|█████▉    | 118/200 [01:57<01:30,  1.10s/ requests]
+ 60%|█████▉    | 119/200 [01:58<01:25,  1.06s/ requests]
+ 60%|██████    | 120/200 [02:00<01:31,  1.15s/ requests]
+ 60%|██████    | 121/200 [02:01<01:27,  1.11s/ requests]
+ 61%|██████    | 122/200 [02:02<01:26,  1.11s/ requests]
+ 62%|██████▏   | 123/200 [02:03<01:23,  1.08s/ requests]
+ 62%|██████▏   | 124/200 [02:03<01:19,  1.04s/ requests]
+ 62%|██████▎   | 125/200 [02:04<01:13,  1.03 requests/s]
+ 63%|██████▎   | 126/200 [02:05<01:13,  1.00 requests/s]
+ 64%|██████▎   | 127/200 [02:05<01:07,  1.08 requests/s]
+ 64%|██████▍   | 128/200 [02:06<01:05,  1.10 requests/s]
+ 64%|██████▍   | 129/200 [02:07<01:07,  1.05 requests/s]
+ 65%|██████▌   | 130/200 [02:08<01:01,  1.13 requests/s]
+ 66%|██████▌   | 131/200 [02:08<00:56,  1.21 requests/s]
+ 66%|██████▌   | 132/200 [02:09<00:59,  1.14 requests/s]
+ 66%|██████▋   | 133/200 [02:10<00:54,  1.22 requests/s]
+ 67%|██████▋   | 134/200 [02:10<00:53,  1.24 requests/s]
+ 68%|██████▊   | 135/200 [02:12<00:55,  1.17 requests/s]
+ 68%|██████▊   | 136/200 [02:12<00:51,  1.25 requests/s]
+ 68%|██████▊   | 137/200 [02:12<00:47,  1.34 requests/s]
+ 69%|██████▉   | 138/200 [02:14<00:53,  1.15 requests/s]
+ 70%|██████▉   | 139/200 [02:14<00:48,  1.26 requests/s]
+ 70%|███████   | 140/200 [02:15<00:47,  1.28 requests/s]
+ 70%|███████   | 141/200 [02:16<00:50,  1.17 requests/s]
+ 71%|███████   | 142/200 [02:17<00:46,  1.26 requests/s]
+ 72%|███████▏  | 143/200 [02:18<00:45,  1.24 requests/s]
+ 72%|███████▏  | 144/200 [02:19<00:46,  1.19 requests/s]
+ 72%|███████▎  | 145/200 [02:19<00:42,  1.29 requests/s]
+ 73%|███████▎  | 146/200 [02:20<00:43,  1.26 requests/s]
+ 74%|███████▎  | 147/200 [02:21<00:42,  1.26 requests/s]
+ 74%|███████▍  | 148/200 [02:21<00:38,  1.35 requests/s]
+ 74%|███████▍  | 149/200 [02:22<00:38,  1.32 requests/s]
+ 75%|███████▌  | 150/200 [02:23<00:39,  1.25 requests/s]
+ 76%|███████▌  | 151/200 [02:23<00:36,  1.35 requests/s]
+ 76%|███████▌  | 152/200 [02:24<00:36,  1.30 requests/s]
+ 76%|███████▋  | 153/200 [02:25<00:36,  1.30 requests/s]
+ 77%|███████▋  | 154/200 [02:25<00:33,  1.37 requests/s]
+ 78%|███████▊  | 155/200 [02:27<00:35,  1.28 requests/s]
+ 78%|███████▊  | 156/200 [02:29<00:40,  1.09 requests/s]
+ 78%|███████▊  | 157/200 [02:29<00:38,  1.12 requests/s]
+ 79%|███████▉  | 158/200 [02:30<00:37,  1.11 requests/s]
+ 80%|███████▉  | 159/200 [02:32<00:40,  1.00 requests/s]
+ 80%|████████  | 160/200 [02:32<00:36,  1.09 requests/s]
+ 80%|████████  | 161/200 [02:34<00:37,  1.04 requests/s]
+ 81%|████████  | 162/200 [02:36<00:39,  1.05s/ requests]
+ 82%|████████▏ | 163/200 [02:36<00:35,  1.04 requests/s]
+ 82%|████████▏ | 164/200 [02:36<00:33,  1.08 requests/s]
+ 82%|████████▎ | 165/200 [02:38<00:35,  1.02s/ requests]
+ 83%|████████▎ | 166/200 [02:38<00:31,  1.07 requests/s]
+ 84%|████████▎ | 167/200 [02:40<00:31,  1.04 requests/s]
+ 84%|████████▍ | 168/200 [02:41<00:33,  1.04s/ requests]
+ 84%|████████▍ | 169/200 [02:42<00:30,  1.03 requests/s]
+ 85%|████████▌ | 170/200 [02:42<00:27,  1.07 requests/s]
+ 86%|████████▌ | 171/200 [02:44<00:29,  1.01s/ requests]
+ 86%|████████▌ | 172/200 [02:44<00:26,  1.06 requests/s]
+ 86%|████████▋ | 173/200 [02:46<00:27,  1.02s/ requests]
+ 87%|████████▋ | 174/200 [02:48<00:28,  1.09s/ requests]
+ 88%|████████▊ | 175/200 [02:48<00:25,  1.00s/ requests]
+ 88%|████████▊ | 176/200 [02:49<00:23,  1.02 requests/s]
+ 88%|████████▊ | 177/200 [02:50<00:23,  1.04s/ requests]
+ 89%|████████▉ | 178/200 [02:51<00:21,  1.04 requests/s]
+ 90%|████████▉ | 179/200 [02:52<00:20,  1.00 requests/s]
+ 90%|█████████ | 180/200 [02:54<00:21,  1.06s/ requests]
+ 90%|█████████ | 181/200 [02:54<00:18,  1.02 requests/s]
+ 91%|█████████ | 182/200 [02:55<00:17,  1.04 requests/s]
+ 92%|█████████▏| 183/200 [02:57<00:18,  1.08s/ requests]
+ 92%|█████████▏| 184/200 [02:57<00:15,  1.01 requests/s]
+ 92%|█████████▎| 185/200 [02:59<00:15,  1.06s/ requests]
+ 93%|█████████▎| 186/200 [03:00<00:15,  1.13s/ requests]
+ 94%|█████████▎| 187/200 [03:01<00:13,  1.04s/ requests]
+ 94%|█████████▍| 188/200 [03:01<00:12,  1.02s/ requests]
+ 94%|█████████▍| 189/200 [03:04<00:12,  1.12s/ requests]
+ 95%|█████████▌| 190/200 [03:04<00:11,  1.10s/ requests]
+ 96%|█████████▌| 191/200 [03:06<00:09,  1.10s/ requests]
+ 96%|█████████▌| 192/200 [03:06<00:08,  1.08s/ requests]
+ 96%|█████████▋| 193/200 [03:08<00:07,  1.08s/ requests]
+ 97%|█████████▋| 194/200 [03:08<00:05,  1.00 requests/s]
+ 98%|█████████▊| 195/200 [03:09<00:05,  1.01s/ requests]
+ 98%|█████████▊| 196/200 [03:09<00:03,  1.04 requests/s]
+ 98%|█████████▊| 197/200 [03:10<00:02,  1.07 requests/s]
+ 99%|█████████▉| 198/200 [03:11<00:01,  1.10 requests/s]
+100%|█████████▉| 199/200 [03:12<00:00,  1.10 requests/s]
+100%|██████████| 200/200 [03:12<00:00,  1.19 requests/s]
+100%|██████████| 200/200 [03:12<00:00,  1.04 requests/s]
+
+## Running Query:
+   Name: count-distinct-duration
+   Statement:
+         select count(distinct "duration") from uservisits
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+ 10%|█         | 20/200 [00:00<00:00, 181.18 requests/s]
+ 26%|██▌       | 51/200 [00:00<00:00, 243.79 requests/s]
+ 52%|█████▏    | 103/200 [00:00<00:00, 341.56 requests/s]
+ 78%|███████▊  | 156/200 [00:00<00:00, 392.87 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 401.19 requests/s]
+241385:
+Stopped recording "rec", 4.4 MB written to:
+
+/tmp/tmpmg3l35wy/d92193ea-356a-48ea-a03f-cb08ec69e869.jfr
+# Running benchmark
+# Running tearDown
+perf: skipping non-JSON line: 'Error:'
+perf: skipping non-JSON line: 'No supported events found.'
+perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+perf: skipping non-JSON line: 'Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open'
+perf: skipping non-JSON line: 'access to performance monitoring and observability operations for processes'
+perf: skipping non-JSON line: 'without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.'
+perf: skipping non-JSON line: "More information can be found at 'Perf events and tool security' document:"
+perf: skipping non-JSON line: 'https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html'
+perf: skipping non-JSON line: 'perf_event_paranoid setting is 4:'
+perf: skipping non-JSON line: '  -1: Allow use of (almost) all events by all users'
+perf: skipping non-JSON line: '      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK'
+perf: skipping non-JSON line: '>= 0: Disallow raw and ftrace function tracepoint access'
+perf: skipping non-JSON line: '>= 1: Disallow CPU event access'
+perf: skipping non-JSON line: '>= 2: Disallow kernel profiling'
+perf: skipping non-JSON line: 'To make the adjusted perf_event_paranoid setting permanent preserve it'
+perf: skipping non-JSON line: 'in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)'
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-e3f69c683be76e9bbc51edc7512a1c869dce415c
+V2: 6.5.0-17178ec90d9380923b04e6af39bf8da4e120eb11
+
+Q:     select count(distinct "adRevenue") from uservisits
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |     5104.766 ± 1261.918 |   2516.447 |   5018.593 |   5818.245 |  10119.219 |
+|   V2    |     2878.233 ±  803.380 |   1719.379 |   2704.024 |   3316.019 |   6925.554 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -  55.78%                           -  59.94%   
+There is a 100.00% probability that the observed difference is not random, and the best estimate of that difference is 55.78%
+The test has statistical significance
+
+Q:     select count(distinct "duration") from uservisits
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |      152.810 ±   61.744 |     70.830 |    142.569 |    161.004 |    412.181 |
+|   V2    |        6.073 ±    4.391 |      2.660 |      4.482 |      6.630 |     33.940 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               - 184.71%                           - 187.81%   
+There is a 100.00% probability that the observed difference is not random, and the best estimate of that difference is 184.71%
+The test has statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |  204   572.22   702.62 |   27  5508.07  5396.43 |    17180     8147 |   489.86     172920
+ V2 |  106   447.54   343.97 |   12  2016.21  2954.19 |    17180     6736 |   450.01      86973
+    
+Top allocation frames
+  V1
+    HashMap.newNode(...) total=66962319130, count=25328
+    HashMap.resize() total=32464844009, count=13497
+    Float.valueOf(float) total=26401348439, count=9727
+    DocValuesGroupByOptimizedIterator$GroupByIterator.applyAggregatesGroupedByKey(...) total=23576198739, count=10475
+    GroupingCollector.reduce(Map, Row) total=20652985087, count=10103
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=974716008, count=333
+    HashMap.replacementNode(...) total=830717816, count=108
+    DirectMethodHandle.allocateInstance(Object) total=419910496, count=563
+    AbstractQueuedSynchronizer$ConditionObject.newConditionNode() total=247240185, count=106
+    Long.valueOf(long) total=143208872, count=45
+  V2
+    HashMap.newNode(...) total=29854631112, count=10674
+    Float.valueOf(float) total=23837247720, count=8497
+    GroupingCollector.reduce(Map, Row) total=20182869662, count=9072
+    HashMap.resize() total=11887622390, count=3602
+    HashMap.replacementTreeNode(...) total=321512744, count=106
+    DirectMethodHandle.allocateInstance(Object) total=281464384, count=211
+    HashMap.replacementNode(...) total=177994440, count=52
+    Long.valueOf(long) total=122532736, count=36
+    ArrayUtil.growExact(...) total=75810432, count=3863
+    EntryMap.<init>(int, float) total=47616040, count=6
+
+Top frames (by count)
+  V1
+    HashMap.newNode(...) total=66962319130, count=25328
+    HashMap.putVal(...) total=20214, count=20214
+    HashMap.resize() total=32464844009, count=13497
+    DocValuesGroupByOptimizedIterator$GroupByIterator.applyAggregatesGroupedByKey(...) total=23576198739, count=10475
+    GroupingCollector.reduce(Map, Row) total=20652985087, count=10103
+    Float.valueOf(float) total=26401348439, count=9727
+    HashMap.getNode(Object) total=7250, count=7250
+    ReferencePipeline$3$1.accept(Object) total=3960, count=3960
+    HashMap$EntrySpliterator.tryAdvance(Consumer) total=2733, count=2733
+    CollectingBatchIterator.moveNext() total=2466, count=2466
+  V2
+    HashMap.getNode(Object) total=13254, count=13254
+    HashMap.newNode(...) total=29854631112, count=10674
+    GroupingCollector.reduce(Map, Row) total=20182869662, count=9072
+    Float.valueOf(float) total=23837247720, count=8497
+    PriorityQueue.siftDownUsingComparator(...) total=4845, count=4845
+    ArrayUtil.growExact(...) total=75810432, count=3863
+    HashMap.resize() total=11887622390, count=3602
+    PriorityQueue.siftUpUsingComparator(...) total=3227, count=3227
+    BKDReader$BKDPointTree.visitCompressedDocValues(...) total=2751, count=2751
+    HashMap$HashIterator.nextNode() total=2612, count=2612
+
+# ended:    2026-08-18T14:52:48
+# duration: 0:11:42.814135
+# exit:     0

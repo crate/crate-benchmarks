@@ -1,0 +1,43 @@
+[setup]
+statement_files = ["../sql/uservisits.sql"]
+statements = [
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00006.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00007.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00008.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00009.gz' with (compression = 'gzip')",
+    "refresh table uservisits"
+]
+
+# [[queries]]
+# name = "select-distinct-cCode"
+# statement = '''
+#     select "cCode" from uservisits group by "cCode";
+# '''
+# concurrency = 3
+# iterations = 200
+
+
+# [[queries]]
+# name = "count-distinct-cCode"
+# statement = '''
+#     select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+# '''
+# concurrency = 3
+# iterations = 200
+
+[[queries]]
+name = "group-by-with-key-count-star"
+statement = '''
+    select "cCode", count(*) from uservisits group by "cCode";
+'''
+concurrency = 10
+iterations = 1000
+
+[teardown]
+statements = ["drop table if exists uservisits"]

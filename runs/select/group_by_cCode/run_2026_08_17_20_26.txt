@@ -1,0 +1,243 @@
+# started:  2026-08-17T20:26:07
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_cCode.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-14-14-35-d89c17a.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-17-17-58-bf89125.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+461248:
+Started recording 1.
+
+Use jcmd 461248 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-cCode
+   Statement:
+         select "cCode" from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<00:22,  8.77 requests/s]
+ 26%|██▌       | 51/200 [00:00<00:00, 249.74 requests/s]
+ 54%|█████▎    | 107/200 [00:00<00:00, 358.40 requests/s]
+ 78%|███████▊  | 155/200 [00:00<00:00, 390.69 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 407.66 requests/s]
+
+## Running Query:
+   Name: count-distinct-cCode
+   Statement:
+         select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<01:13,  2.72 requests/s]
+ 14%|█▍        | 29/200 [00:00<00:02, 66.84 requests/s]
+ 22%|██▏       | 44/200 [00:00<00:01, 83.64 requests/s]
+ 30%|██▉       | 59/200 [00:00<00:01, 91.86 requests/s]
+ 37%|███▋      | 74/200 [00:00<00:01, 95.87 requests/s]
+ 46%|████▋     | 93/200 [00:00<00:00, 108.28 requests/s]
+ 57%|█████▊    | 115/200 [00:01<00:00, 123.14 requests/s]
+ 70%|███████   | 140/200 [00:01<00:00, 139.58 requests/s]
+ 80%|████████  | 161/200 [00:01<00:00, 146.19 requests/s]
+ 96%|█████████▌| 191/200 [00:01<00:00, 164.75 requests/s]
+100%|██████████| 200/200 [00:01<00:00, 143.77 requests/s]
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  3%|▎         | 6/200 [00:00<00:03, 50.50 requests/s]
+ 13%|█▎        | 26/200 [00:00<00:01, 119.04 requests/s]
+ 26%|██▌       | 52/200 [00:00<00:00, 163.26 requests/s]
+ 36%|███▋      | 73/200 [00:00<00:00, 174.38 requests/s]
+ 50%|█████     | 101/200 [00:00<00:00, 196.93 requests/s]
+ 64%|██████▍   | 129/200 [00:00<00:00, 212.14 requests/s]
+ 81%|████████  | 162/200 [00:00<00:00, 232.36 requests/s]
+ 96%|█████████▋| 193/200 [00:00<00:00, 244.63 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 231.41 requests/s]
+461248:
+Stopped recording "rec", 1.1 MB written to:
+
+/tmp/tmpz6rnywy6/28104d00-a5d0-4ce2-be3d-ec665f1f16a6.jfr
+# Running benchmark
+# Running tearDown
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+462622:
+Started recording 1.
+
+Use jcmd 462622 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-cCode
+   Statement:
+         select "cCode" from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<00:24,  8.24 requests/s]
+ 19%|█▉        | 38/200 [00:00<00:00, 178.51 requests/s]
+ 38%|███▊      | 77/200 [00:00<00:00, 250.71 requests/s]
+ 62%|██████▎   | 125/200 [00:00<00:00, 310.88 requests/s]
+ 86%|████████▌ | 172/200 [00:00<00:00, 345.82 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 338.95 requests/s]
+
+## Running Query:
+   Name: count-distinct-cCode
+   Statement:
+         select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+  0%|          | 1/200 [00:00<00:51,  3.86 requests/s]
+ 26%|██▋       | 53/200 [00:00<00:00, 157.69 requests/s]
+ 52%|█████▏    | 103/200 [00:00<00:00, 241.48 requests/s]
+ 80%|████████  | 161/200 [00:00<00:00, 313.80 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 314.83 requests/s]
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 3
+   Iterations: 200
+
+  0%|          | 0/200 [00:00<?, ? requests/s]
+ 26%|██▌       | 52/200 [00:00<00:00, 514.10 requests/s]
+ 58%|█████▊    | 116/200 [00:00<00:00, 576.22 requests/s]
+ 94%|█████████▍| 188/200 [00:00<00:00, 627.17 requests/s]
+100%|██████████| 200/200 [00:00<00:00, 630.26 requests/s]
+462622:
+Stopped recording "rec", 1008.0 kB written to:
+
+/tmp/tmpz6rnywy6/ef4728a4-1d49-4eb8-8726-dc6d24258fb2.jfr
+# Running benchmark
+# Running tearDown
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-d89c17a76148dc0fa7d0f4d0910137516565fb14
+V2: 6.5.0-bf8912508034a4d40055fe2996d8b17f6a1212ba
+
+Q:     select "cCode" from uservisits group by "cCode";
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        5.239 ±   12.819 |      1.937 |      3.525 |      4.110 |    108.592 |
+|   V2    |        6.588 ±   13.808 |      2.794 |      4.558 |      5.506 |    117.686 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               +  22.82%                           +  25.57%   
+There is a 68.83% probability that the observed difference is not random, and the best estimate of that difference is 22.82%
+The test has no statistical significance
+
+Q:     select count("cCode") from (select "cCode" from uservisits group by "cCode") tmp;
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |       13.692 ±   42.917 |      2.694 |      6.913 |     10.506 |    358.529 |
+|   V2    |        7.400 ±   30.676 |      2.099 |      3.394 |      4.099 |    255.435 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -  59.67%                           -  68.29%   
+There is a 90.76% probability that the observed difference is not random, and the best estimate of that difference is 59.67%
+The test has no statistical significance
+
+Q:     select "cCode", count(*) from uservisits group by "cCode";
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        7.950 ±    6.489 |      2.036 |      5.623 |      9.143 |     41.533 |
+|   V2    |        2.858 ±    1.487 |      1.405 |      2.602 |      3.142 |     13.143 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -  94.22%                           -  73.44%   
+There is a 100.00% probability that the observed difference is not random, and the best estimate of that difference is 94.22%
+The test has statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   100.80        216
+ V2 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   328.55        268
+    
+Top allocation frames
+  V1
+    ParserATNSimulator.getEpsilonTarget(...) total=38073979, count=58
+    BufferRecycler.calloc(int) total=16414744, count=16
+    Unsafe.allocateUninitializedArray(Class, int) total=15063777, count=81
+    ObjectLongHashMap.allocateBuffers(int) total=8772560, count=3
+    BytesRef.utf8ToString() total=8387112, count=3
+    HashMap.resize() total=8138674, count=16
+    String.encodeUTF8(...) total=6571624, count=56
+    BytesRef.deepCopyOf(BytesRef) total=6441096, count=2
+    SegmentTermsEnumFrame.loadBlock() total=6139513, count=3
+    Unsafe.allocateInstance(Class) total=5683240, count=15
+  V2
+    BytesRef.utf8ToString() total=41886016, count=15
+    Unsafe.allocateUninitializedArray(Class, int) total=29834929, count=49
+    ParserATNSimulator.getEpsilonTarget(...) total=27315466, count=92
+    Long.valueOf(long) total=18394673, count=6
+    StringUTF16.compress(...) total=15167016, count=4
+    Unsafe.allocateInstance(Class) total=10466312, count=9
+    String.encodeUTF8(...) total=7908960, count=18
+    SegmentTermsEnumFrame.loadBlock() total=7710768, count=3
+    ATNConfigSet$AbstractConfigHashSet.createBucket(int) total=5972936, count=18
+    IdentityHashMap.init(int) total=5924432, count=13
+
+Top frames (by count)
+  V1
+    Unsafe.allocateUninitializedArray(Class, int) total=15063777, count=81
+    ParserATNSimulator.getEpsilonTarget(...) total=38073979, count=58
+    String.encodeUTF8(...) total=6571624, count=56
+    ArrayList.grow(int) total=1749848, count=23
+    IdentityHashMap.init(int) total=3976176, count=22
+    Arrays.copyOf(...) total=4391576, count=21
+    BufferRecycler.calloc(int) total=16414744, count=16
+    HashMap.resize() total=8138674, count=16
+    EntryMap.<init>(int, float) total=4063416, count=16
+    Unsafe.allocateInstance(Class) total=5683240, count=15
+  V2
+    ParserATNSimulator.getEpsilonTarget(...) total=27315466, count=92
+    Unsafe.allocateUninitializedArray(Class, int) total=29834929, count=49
+    ATNConfigSet$AbstractConfigHashSet.createBucket(int) total=5972936, count=18
+    String.encodeUTF8(...) total=7908960, count=18
+    LinkedList.linkLast(Object) total=5243176, count=15
+    HashMap.resize() total=3638153, count=15
+    BytesRef.utf8ToString() total=41886016, count=15
+    Arrays.copyOf(...) total=5602401, count=14
+    LinkedList.listIterator(int) total=4535224, count=13
+    IdentityHashMap.init(int) total=5924432, count=13
+
+perf stat
+  v1
+    branches        :   5652212310.00
+    cache-misses    :    152059681.00
+    instructions    :  27702366839.00
+    faults          :         7258.00
+    context-switches:        13491.00
+  v2
+    branches        :   5032547912.00
+    cache-misses    :    112725147.00
+    instructions    :  24718163725.00
+    faults          :         7072.00
+    context-switches:         9695.00
+
+# ended:    2026-08-17T20:29:05
+# duration: 0:02:58.087775
+# exit:     0

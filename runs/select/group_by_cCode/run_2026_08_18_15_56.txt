@@ -1,0 +1,162 @@
+# started:  2026-08-18T15:56:07
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_cCode.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-18-12-20-e3f69c6.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-18-13-51-fcd878f.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Removing from cache: crate-6.5.0-2026-08-11-13-00-4dd8e15 (last use: 2026-08-11 15:16)
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+283992:
+Started recording 1.
+
+Use jcmd 283992 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 5
+   Iterations: 500
+
+  0%|          | 0/500 [00:00<?, ? requests/s]
+  0%|          | 1/500 [00:00<03:20,  2.49 requests/s]
+  9%|▉         | 45/500 [00:00<00:04, 96.07 requests/s]
+ 21%|██        | 104/500 [00:00<00:02, 188.89 requests/s]
+ 31%|███       | 154/500 [00:00<00:01, 243.09 requests/s]
+ 41%|████      | 206/500 [00:00<00:01, 286.10 requests/s]
+ 54%|█████▍    | 269/500 [00:00<00:00, 336.40 requests/s]
+ 66%|██████▌   | 330/500 [00:01<00:00, 373.87 requests/s]
+ 80%|███████▉  | 398/500 [00:01<00:00, 415.16 requests/s]
+ 94%|█████████▍| 469/500 [00:01<00:00, 454.06 requests/s]
+100%|██████████| 500/500 [00:01<00:00, 393.31 requests/s]
+283992:
+Stopped recording "rec", 929.9 kB written to:
+
+/tmp/tmpxl9x_gyv/9fb5f195-97db-4f3e-a716-f0c1108591fc.jfr
+# Running benchmark
+# Running tearDown
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+284708:
+Started recording 1.
+
+Use jcmd 284708 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 5
+   Iterations: 500
+
+  0%|          | 0/500 [00:00<?, ? requests/s]
+  3%|▎         | 13/500 [00:00<00:03, 125.13 requests/s]
+ 11%|█         | 54/500 [00:00<00:01, 264.78 requests/s]
+ 21%|██        | 103/500 [00:00<00:01, 341.13 requests/s]
+ 31%|███       | 156/500 [00:00<00:00, 384.94 requests/s]
+ 43%|████▎     | 214/500 [00:00<00:00, 429.96 requests/s]
+ 54%|█████▍    | 270/500 [00:00<00:00, 452.92 requests/s]
+ 67%|██████▋   | 337/500 [00:00<00:00, 492.92 requests/s]
+ 79%|███████▉  | 396/500 [00:00<00:00, 508.12 requests/s]
+ 93%|█████████▎| 465/500 [00:00<00:00, 533.66 requests/s]
+100%|██████████| 500/500 [00:00<00:00, 514.44 requests/s]
+284708:
+Stopped recording "rec", 662.6 kB written to:
+
+/tmp/tmpxl9x_gyv/f50e0c81-6f22-47e4-8f0f-fad503a7bbe5.jfr
+# Running benchmark
+# Running tearDown
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-e3f69c683be76e9bbc51edc7512a1c869dce415c
+V2: 6.5.0-fcd878fc151e791062a0ad02850105fe450aceb3
+
+Q:     select "cCode", count(*) from uservisits group by "cCode";
+
+C: 5
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        9.043 ±   39.040 |      2.305 |      4.579 |      6.119 |    396.743 |
+|   V2    |        6.315 ±    6.457 |      1.835 |      5.138 |      6.976 |     66.379 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -  35.53%                           +  11.50%   
+There is a 87.65% probability that the observed difference is not random, and the best estimate of that difference is 35.53%
+The test has no statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   495.39        195
+ V2 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   465.27        239
+    
+Top allocation frames
+  V1
+    ParserATNSimulator.getEpsilonTarget(...) total=25798386, count=40
+    Unsafe.allocateUninitializedArray(Class, int) total=19160448, count=24
+    BytesRef.utf8ToString() total=16774896, count=4
+    String.encodeUTF8(...) total=8578352, count=14
+    EntryMap.<init>(int, float) total=7219856, count=10
+    BufferRecycler.balloc(int) total=6695568, count=12
+    Multiset.<init>() total=6688624, count=2
+    LinkedList.listIterator(int) total=6120633, count=10
+    Arrays.copyOf(...) total=6073696, count=9
+    FlexibleHashMap.put(...) total=5001648, count=7
+  V2
+    BytesRef.utf8ToString() total=56503360, count=20
+    Unsafe.allocateInstance(Class) total=38916233, count=18
+    Long.valueOf(long) total=19145496, count=6
+    Unsafe.allocateUninitializedArray(Class, int) total=18431672, count=32
+    Lucene104PostingsReader.newTermState() total=10567856, count=3
+    SegmentTermsEnum.<init>(...) total=10429608, count=3
+    SegmentTermsEnum.getFrame(int) total=9647689, count=4
+    SegmentTermsEnumFrame.loadBlock() total=7643992, count=3
+    StringUTF16.compress(...) total=5050152, count=2
+    String.encodeUTF8(...) total=4702736, count=11
+
+Top frames (by count)
+  V1
+    ParserATNSimulator.getEpsilonTarget(...) total=25798386, count=40
+    Unsafe.allocateUninitializedArray(Class, int) total=19160448, count=24
+    String.encodeUTF8(...) total=8578352, count=14
+    BufferRecycler.balloc(int) total=6695568, count=12
+    ParserATNSimulator.closure_(...) total=12, count=12
+    EntryMap.<init>(int, float) total=7219856, count=10
+    LinkedList.listIterator(int) total=6120633, count=10
+    ObjectLongHashMap.containsKey(Object) total=9, count=9
+    Arrays.copyOf(...) total=6073696, count=9
+    ATNConfigSet$AbstractConfigHashSet.createBucket(int) total=3569185, count=7
+  V2
+    Unsafe.allocateUninitializedArray(Class, int) total=18431672, count=32
+    BytesRef.utf8ToString() total=56503360, count=20
+    Unsafe.allocateInstance(Class) total=38916233, count=18
+    GroupByOptimizedIterator.getCountsByKey(...) total=242991, count=16
+    String.encodeUTF8(...) total=4702736, count=11
+    BufferRecycler.calloc(int) total=3854712, count=8
+    DataInput.readVLong() total=7, count=7
+    DirectMethodHandle.allocateInstance(Object) total=3221131, count=7
+    BufferRecycler.balloc(int) total=2484480, count=6
+    Long.valueOf(long) total=19145496, count=6
+
+perf stat
+  v1
+    branches        :   3943536334.00
+    cache-misses    :     79513642.00
+    instructions    :  19600124942.00
+    faults          :         5789.00
+    context-switches:         7855.00
+  v2
+    branches        :   3576364406.00
+    cache-misses    :     78369657.00
+    instructions    :  17634097269.00
+    faults          :         5121.00
+    context-switches:         7001.00
+
+# ended:    2026-08-18T15:58:55
+# duration: 0:02:48.517904
+# exit:     0

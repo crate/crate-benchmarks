@@ -1,0 +1,161 @@
+# started:  2026-08-18T16:27:27
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_cCode.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-18-13-51-fcd878f.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-18-14-17-be36354.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+305965:
+Started recording 1.
+
+Use jcmd 305965 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 5
+   Iterations: 500
+
+  0%|          | 0/500 [00:00<?, ? requests/s]
+  0%|          | 1/500 [00:00<03:03,  2.71 requests/s]
+  9%|▉         | 47/500 [00:00<00:04, 107.76 requests/s]
+ 20%|█▉        | 99/500 [00:00<00:02, 191.43 requests/s]
+ 30%|███       | 152/500 [00:00<00:01, 253.69 requests/s]
+ 41%|████▏     | 207/500 [00:00<00:00, 302.12 requests/s]
+ 53%|█████▎    | 267/500 [00:00<00:00, 348.29 requests/s]
+ 66%|██████▌   | 330/500 [00:00<00:00, 385.93 requests/s]
+ 79%|███████▉  | 396/500 [00:01<00:00, 420.77 requests/s]
+ 96%|█████████▌| 480/500 [00:01<00:00, 475.77 requests/s]
+100%|██████████| 500/500 [00:01<00:00, 411.83 requests/s]
+305965:
+Stopped recording "rec", 887.5 kB written to:
+
+/tmp/tmp5akx90j2/737b6003-496c-4435-ba74-1a4a344fc1ff.jfr
+# Running benchmark
+# Running tearDown
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+306702:
+Started recording 1.
+
+Use jcmd 306702 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: group-by-with-key-count-star
+   Statement:
+         select "cCode", count(*) from uservisits group by "cCode";
+
+   Concurrency: 5
+   Iterations: 500
+
+  0%|          | 0/500 [00:00<?, ? requests/s]
+  0%|          | 1/500 [00:00<02:46,  3.00 requests/s]
+ 11%|█         | 54/500 [00:00<00:03, 134.43 requests/s]
+ 22%|██▏       | 110/500 [00:00<00:01, 226.46 requests/s]
+ 34%|███▍      | 169/500 [00:00<00:01, 296.68 requests/s]
+ 46%|████▌     | 229/500 [00:00<00:00, 349.88 requests/s]
+ 59%|█████▉    | 294/500 [00:00<00:00, 397.86 requests/s]
+ 72%|███████▏  | 362/500 [00:00<00:00, 438.24 requests/s]
+ 85%|████████▌ | 426/500 [00:01<00:00, 467.13 requests/s]
+100%|██████████| 500/500 [00:01<00:00, 504.61 requests/s]
+100%|██████████| 500/500 [00:01<00:00, 436.95 requests/s]
+306702:
+Stopped recording "rec", 920.3 kB written to:
+
+/tmp/tmp5akx90j2/98c2b39a-de7a-46cb-930e-88b717f12e84.jfr
+# Running benchmark
+# Running tearDown
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-fcd878fc151e791062a0ad02850105fe450aceb3
+V2: 6.5.0-be36354be74d1b6c5f678fd2cb74d44a6c259b0c
+
+Q:     select "cCode", count(*) from uservisits group by "cCode";
+
+C: 5
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |        8.773 ±   35.641 |      1.642 |      4.699 |      6.470 |    365.279 |
+|   V2    |        8.162 ±   32.044 |      2.043 |      4.490 |      5.939 |    327.886 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -   7.22%                           -   4.54%   
+There is a 22.45% probability that the observed difference is not random, and the best estimate of that difference is 7.22%
+The test has no statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   498.29        292
+ V2 |    0     0.00     0.00 |    0     0.00     0.00 |    17180        0 |   822.45        210
+    
+Top allocation frames
+  V1
+    BytesRef.utf8ToString() total=56935544, count=13
+    Long.valueOf(long) total=30059112, count=8
+    ParserATNSimulator.getEpsilonTarget(...) total=22597778, count=27
+    HashMap.newNode(...) total=20738344, count=13
+    Unsafe.allocateInstance(Class) total=16772491, count=8
+    StringUTF16.compress(...) total=15531912, count=4
+    Unsafe.allocateUninitializedArray(Class, int) total=10148592, count=13
+    BufferRecycler.balloc(int) total=7486200, count=11
+    HashMap.resize() total=7484729, count=7
+    SegmentTermsEnum.getFrame(int) total=6440176, count=2
+  V2
+    ParserATNSimulator.getEpsilonTarget(...) total=20014912, count=24
+    SegmentTermsEnumFrame.loadBlock() total=13305544, count=4
+    Long.valueOf(long) total=12581160, count=3
+    BytesRef.utf8ToString() total=10540744, count=3
+    HashMap.resize() total=9290066, count=8
+    ATNConfigSet$AbstractConfigHashSet.createBucket(int) total=8380752, count=10
+    Unsafe.allocateUninitializedArray(Class, int) total=8230281, count=14
+    String.encodeUTF8(...) total=7476760, count=12
+    PredictionMode.getConflictingAltSubsets(...) total=6333737, count=8
+    FlexibleHashMap.put(...) total=6333720, count=7
+
+Top frames (by count)
+  V1
+    ParserATNSimulator.getEpsilonTarget(...) total=22597778, count=27
+    HashMap.newNode(...) total=20738344, count=13
+    BytesRef.utf8ToString() total=56935544, count=13
+    Unsafe.allocateUninitializedArray(Class, int) total=10148592, count=13
+    BufferRecycler.balloc(int) total=7486200, count=11
+    ParserATNSimulator.closure_(...) total=11, count=11
+    GroupByOptimizedIterator.getCountsByKey(...) total=9, count=9
+    Unsafe.allocateInstance(Class) total=16772491, count=8
+    Long.valueOf(long) total=30059112, count=8
+    HashMap.resize() total=7484729, count=7
+  V2
+    ParserATNSimulator.getEpsilonTarget(...) total=20014912, count=24
+    Unsafe.allocateUninitializedArray(Class, int) total=8230281, count=14
+    String.encodeUTF8(...) total=7476760, count=12
+    GroupByOptimizedIterator.getCountsByKey(...) total=10, count=10
+    ATNConfigSet$AbstractConfigHashSet.createBucket(int) total=8380752, count=10
+    HashMap.resize() total=9290066, count=8
+    ParserATNSimulator.closure_(...) total=8, count=8
+    PredictionMode.getConflictingAltSubsets(...) total=6333737, count=8
+    LinkedList.listIterator(int) total=5090482, count=8
+    LinkedList.linkLast(Object) total=5384824, count=7
+
+perf stat
+  v1
+    branches        :   4076473425.00
+    cache-misses    :     76577322.00
+    instructions    :  20286874282.00
+    faults          :         6358.00
+    context-switches:         8169.00
+  v2
+    branches        :   4167112413.00
+    cache-misses    :     78848596.00
+    instructions    :  20591130722.00
+    faults          :         8506.00
+    context-switches:         7995.00
+
+# ended:    2026-08-18T16:30:07
+# duration: 0:02:40.887743
+# exit:     0

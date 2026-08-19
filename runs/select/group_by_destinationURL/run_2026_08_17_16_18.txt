@@ -1,0 +1,261 @@
+# started:  2026-08-17T16:18:57
+# cwd:      /home/haris/projects/crate/crate-benchmarks
+# command:  /home/haris/projects/crate/crate-benchmarks/venv/bin/python3 /home/haris/projects/crate/crate-benchmarks/compare_run.py --spec specs/select/group_by_destinationURL.toml --v1 /home/haris/apps/crate/crate-6.5.0-2026-08-14-14-35-d89c17a.tar.gz --v2 /home/haris/apps/crate/crate-6.5.0-2026-08-17-14-10-455b044.tar.gz --forks 1 --env CRATE_HEAP_SIZE=16g
+
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+278064:
+Started recording 1.
+
+Use jcmd 278064 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-destinationURL
+   Statement:
+         select "destinationURL" from uservisits group by "destinationURL";
+
+   Concurrency: 1
+   Iterations: 50
+
+  0%|          | 0/50 [00:00<?, ? requests/s]
+  2%|▏         | 1/50 [00:05<04:13,  5.17s/ requests]
+  4%|▍         | 2/50 [00:09<03:44,  4.68s/ requests]
+  6%|▌         | 3/50 [00:13<03:24,  4.35s/ requests]
+  8%|▊         | 4/50 [00:17<03:19,  4.35s/ requests]
+ 10%|█         | 5/50 [00:22<03:19,  4.43s/ requests]
+ 12%|█▏        | 6/50 [00:27<03:19,  4.52s/ requests]
+ 14%|█▍        | 7/50 [00:30<03:06,  4.35s/ requests]
+ 16%|█▌        | 8/50 [00:34<02:58,  4.24s/ requests]
+ 18%|█▊        | 9/50 [00:37<02:48,  4.11s/ requests]
+ 20%|██        | 10/50 [00:42<02:46,  4.17s/ requests]
+ 22%|██▏       | 11/50 [00:46<02:40,  4.11s/ requests]
+ 24%|██▍       | 12/50 [00:50<02:39,  4.20s/ requests]
+ 26%|██▌       | 13/50 [00:54<02:34,  4.18s/ requests]
+ 28%|██▊       | 14/50 [00:59<02:30,  4.17s/ requests]
+ 30%|███       | 15/50 [01:03<02:25,  4.15s/ requests]
+ 32%|███▏      | 16/50 [01:07<02:21,  4.15s/ requests]
+ 34%|███▍      | 17/50 [01:11<02:16,  4.12s/ requests]
+ 36%|███▌      | 18/50 [01:14<02:10,  4.07s/ requests]
+ 38%|███▊      | 19/50 [01:18<02:03,  3.98s/ requests]
+ 40%|████      | 20/50 [01:21<01:57,  3.92s/ requests]
+ 42%|████▏     | 21/50 [01:24<01:50,  3.81s/ requests]
+ 44%|████▍     | 22/50 [01:27<01:45,  3.76s/ requests]
+ 46%|████▌     | 23/50 [01:30<01:39,  3.69s/ requests]
+ 48%|████▊     | 24/50 [01:34<01:35,  3.67s/ requests]
+ 50%|█████     | 25/50 [01:37<01:29,  3.59s/ requests]
+ 52%|█████▏    | 26/50 [01:40<01:25,  3.57s/ requests]
+ 54%|█████▍    | 27/50 [01:44<01:23,  3.62s/ requests]
+ 56%|█████▌    | 28/50 [01:48<01:18,  3.59s/ requests]
+ 58%|█████▊    | 29/50 [01:51<01:14,  3.54s/ requests]
+ 60%|██████    | 30/50 [01:54<01:11,  3.55s/ requests]
+ 62%|██████▏   | 31/50 [01:58<01:06,  3.50s/ requests]
+ 64%|██████▍   | 32/50 [02:01<01:02,  3.47s/ requests]
+ 66%|██████▌   | 33/50 [02:04<00:58,  3.45s/ requests]
+ 68%|██████▊   | 34/50 [02:07<00:55,  3.46s/ requests]
+ 70%|███████   | 35/50 [02:11<00:51,  3.46s/ requests]
+ 72%|███████▏  | 36/50 [02:14<00:48,  3.43s/ requests]
+ 74%|███████▍  | 37/50 [02:17<00:44,  3.41s/ requests]
+ 76%|███████▌  | 38/50 [02:21<00:41,  3.45s/ requests]
+ 78%|███████▊  | 39/50 [02:25<00:37,  3.44s/ requests]
+ 80%|████████  | 40/50 [02:28<00:34,  3.46s/ requests]
+ 82%|████████▏ | 41/50 [02:32<00:31,  3.48s/ requests]
+ 84%|████████▍ | 42/50 [02:35<00:27,  3.49s/ requests]
+ 86%|████████▌ | 43/50 [02:38<00:24,  3.44s/ requests]
+ 88%|████████▊ | 44/50 [02:42<00:20,  3.47s/ requests]
+ 90%|█████████ | 45/50 [02:46<00:17,  3.53s/ requests]
+ 92%|█████████▏| 46/50 [02:50<00:14,  3.56s/ requests]
+ 94%|█████████▍| 47/50 [02:54<00:10,  3.55s/ requests]
+ 96%|█████████▌| 48/50 [02:57<00:07,  3.59s/ requests]
+ 98%|█████████▊| 49/50 [03:01<00:03,  3.55s/ requests]
+100%|██████████| 50/50 [03:05<00:00,  3.60s/ requests]
+100%|██████████| 50/50 [03:05<00:00,  3.70s/ requests]
+278064:
+Stopped recording "rec", 2.8 MB written to:
+
+/tmp/tmpnqia2a5a/c2ce2977-ffa7-4257-917a-dca6dcd49d98.jfr
+# Running benchmark
+# Running tearDown
+perf: skipping non-JSON line: 'Error:'
+perf: skipping non-JSON line: 'No supported events found.'
+perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+perf: skipping non-JSON line: 'Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open'
+perf: skipping non-JSON line: 'access to performance monitoring and observability operations for processes'
+perf: skipping non-JSON line: 'without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.'
+perf: skipping non-JSON line: "More information can be found at 'Perf events and tool security' document:"
+perf: skipping non-JSON line: 'https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html'
+perf: skipping non-JSON line: 'perf_event_paranoid setting is 4:'
+perf: skipping non-JSON line: '  -1: Allow use of (almost) all events by all users'
+perf: skipping non-JSON line: '      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK'
+perf: skipping non-JSON line: '>= 0: Disallow raw and ftrace function tracepoint access'
+perf: skipping non-JSON line: '>= 1: Disallow CPU event access'
+perf: skipping non-JSON line: '>= 2: Disallow kernel profiling'
+perf: skipping non-JSON line: 'To make the adjusted perf_event_paranoid setting permanent preserve it'
+perf: skipping non-JSON line: 'in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)'
+Running benchmark using protocol=http, benchmark_hosts=http://127.0.0.1:4200
+# Running setUp
+# Running benchmark
+281869:
+Started recording 1.
+
+Use jcmd 281869 JFR.dump name=rec to copy recording data to file.
+# Running benchmark
+
+## Running Query:
+   Name: select-distinct-destinationURL
+   Statement:
+         select "destinationURL" from uservisits group by "destinationURL";
+
+   Concurrency: 1
+   Iterations: 50
+
+  0%|          | 0/50 [00:00<?, ? requests/s]
+  2%|▏         | 1/50 [00:03<02:41,  3.30s/ requests]
+  4%|▍         | 2/50 [00:06<02:31,  3.16s/ requests]
+  6%|▌         | 3/50 [00:09<02:25,  3.09s/ requests]
+  8%|▊         | 4/50 [00:12<02:21,  3.08s/ requests]
+ 10%|█         | 5/50 [00:15<02:15,  3.01s/ requests]
+ 12%|█▏        | 6/50 [00:17<02:10,  2.97s/ requests]
+ 14%|█▍        | 7/50 [00:20<02:02,  2.86s/ requests]
+ 16%|█▌        | 8/50 [00:23<02:00,  2.87s/ requests]
+ 18%|█▊        | 9/50 [00:25<01:55,  2.82s/ requests]
+ 20%|██        | 10/50 [00:28<01:54,  2.87s/ requests]
+ 22%|██▏       | 11/50 [00:31<01:49,  2.82s/ requests]
+ 24%|██▍       | 12/50 [00:34<01:48,  2.85s/ requests]
+ 26%|██▌       | 13/50 [00:37<01:43,  2.80s/ requests]
+ 28%|██▊       | 14/50 [00:39<01:41,  2.81s/ requests]
+ 30%|███       | 15/50 [00:42<01:36,  2.75s/ requests]
+ 32%|███▏      | 16/50 [00:45<01:34,  2.79s/ requests]
+ 34%|███▍      | 17/50 [00:47<01:31,  2.78s/ requests]
+ 36%|███▌      | 18/50 [00:50<01:28,  2.76s/ requests]
+ 38%|███▊      | 19/50 [00:52<01:24,  2.71s/ requests]
+ 40%|████      | 20/50 [00:56<01:23,  2.80s/ requests]
+ 42%|████▏     | 21/50 [00:59<01:23,  2.88s/ requests]
+ 44%|████▍     | 22/50 [01:03<01:21,  2.92s/ requests]
+ 46%|████▌     | 23/50 [01:05<01:18,  2.90s/ requests]
+ 48%|████▊     | 24/50 [01:08<01:14,  2.87s/ requests]
+ 50%|█████     | 25/50 [01:11<01:12,  2.89s/ requests]
+ 52%|█████▏    | 26/50 [01:14<01:08,  2.87s/ requests]
+ 54%|█████▍    | 27/50 [01:16<01:05,  2.85s/ requests]
+ 56%|█████▌    | 28/50 [01:19<01:02,  2.82s/ requests]
+ 58%|█████▊    | 29/50 [01:22<00:59,  2.81s/ requests]
+ 60%|██████    | 30/50 [01:25<00:56,  2.81s/ requests]
+ 62%|██████▏   | 31/50 [01:27<00:52,  2.78s/ requests]
+ 64%|██████▍   | 32/50 [01:30<00:49,  2.77s/ requests]
+ 66%|██████▌   | 33/50 [01:32<00:46,  2.74s/ requests]
+ 68%|██████▊   | 34/50 [01:35<00:43,  2.74s/ requests]
+ 70%|███████   | 35/50 [01:38<00:40,  2.72s/ requests]
+ 72%|███████▏  | 36/50 [01:40<00:38,  2.73s/ requests]
+ 74%|███████▍  | 37/50 [01:43<00:35,  2.75s/ requests]
+ 76%|███████▌  | 38/50 [01:46<00:32,  2.73s/ requests]
+ 78%|███████▊  | 39/50 [01:49<00:29,  2.73s/ requests]
+ 80%|████████  | 40/50 [01:51<00:27,  2.71s/ requests]
+ 82%|████████▏ | 41/50 [01:54<00:24,  2.73s/ requests]
+ 84%|████████▍ | 42/50 [01:57<00:22,  2.78s/ requests]
+ 86%|████████▌ | 43/50 [02:00<00:19,  2.75s/ requests]
+ 88%|████████▊ | 44/50 [02:03<00:16,  2.81s/ requests]
+ 90%|█████████ | 45/50 [02:06<00:14,  2.82s/ requests]
+ 92%|█████████▏| 46/50 [02:09<00:11,  2.80s/ requests]
+ 94%|█████████▍| 47/50 [02:12<00:08,  2.81s/ requests]
+ 96%|█████████▌| 48/50 [02:14<00:05,  2.82s/ requests]
+ 98%|█████████▊| 49/50 [02:18<00:02,  2.85s/ requests]
+100%|██████████| 50/50 [02:20<00:00,  2.84s/ requests]
+100%|██████████| 50/50 [02:20<00:00,  2.82s/ requests]
+281869:
+Stopped recording "rec", 2.6 MB written to:
+
+/tmp/tmpnqia2a5a/2015acea-69d1-408f-aab5-ff3dc18d5eca.jfr
+# Running benchmark
+# Running tearDown
+perf: skipping non-JSON line: 'Error:'
+perf: skipping non-JSON line: 'No supported events found.'
+perf: skipping non-JSON line: 'Access to performance monitoring and observability operations is limited.'
+perf: skipping non-JSON line: 'Consider adjusting /proc/sys/kernel/perf_event_paranoid setting to open'
+perf: skipping non-JSON line: 'access to performance monitoring and observability operations for processes'
+perf: skipping non-JSON line: 'without CAP_PERFMON, CAP_SYS_PTRACE or CAP_SYS_ADMIN Linux capability.'
+perf: skipping non-JSON line: "More information can be found at 'Perf events and tool security' document:"
+perf: skipping non-JSON line: 'https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html'
+perf: skipping non-JSON line: 'perf_event_paranoid setting is 4:'
+perf: skipping non-JSON line: '  -1: Allow use of (almost) all events by all users'
+perf: skipping non-JSON line: '      Ignore mlock limit after perf_event_mlock_kb without CAP_IPC_LOCK'
+perf: skipping non-JSON line: '>= 0: Disallow raw and ftrace function tracepoint access'
+perf: skipping non-JSON line: '>= 1: Disallow CPU event access'
+perf: skipping non-JSON line: '>= 2: Disallow kernel profiling'
+perf: skipping non-JSON line: 'To make the adjusted perf_event_paranoid setting permanent preserve it'
+perf: skipping non-JSON line: 'in /etc/sysctl.conf (e.g. kernel.perf_event_paranoid = <setting>)'
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-d89c17a76148dc0fa7d0f4d0910137516565fb14
+V2: 6.5.0-455b044c9247bccc2774a21d054cb4f29559bbf4
+
+Q:     select "destinationURL" from uservisits group by "destinationURL";
+
+C: 1
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |     3247.152 ±  482.756 |   2523.006 |   3211.531 |   3511.148 |   4596.735 |
+|   V2    |     2514.473 ±  266.392 |   2038.462 |   2472.412 |   2699.878 |   3113.403 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               -  25.43%                           -  26.01%   
+There is a 100.00% probability that the observed difference is not random, and the best estimate of that difference is 25.43%
+The test has statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |   74   223.28   198.62 |    6   634.47   668.84 |    17180     2361 |   319.95      59428
+ V2 |   76   160.99   222.11 |    9   499.69   638.56 |    17180     2886 |   421.99      59492
+    
+Top allocation frames
+  V1
+    BytesRef.utf8ToString() total=24076167960, count=9728
+    StringUTF16.compress(...) total=11290516152, count=4663
+    ArrayUtil.copyOfSubArray(...) total=10815037008, count=5364
+    HashMap.newNode(...) total=4736467913, count=2466
+    BytesRef.deepCopyOf(BytesRef) total=3983011348, count=1833
+    HashMap.resize() total=2882336850, count=2410
+    GroupingCollector.reduce(Map, Row) total=577123430, count=480
+    AbstractQueuedSynchronizer$ConditionObject.newConditionNode() total=396604680, count=51
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=359398576, count=139
+    DirectMethodHandle.allocateInstance(Object) total=273070825, count=115
+  V2
+    BytesRef.utf8ToString() total=24144078512, count=8669
+    StringUTF16.compress(...) total=11248631192, count=4156
+    ArrayUtil.copyOfSubArray(...) total=9558895320, count=4537
+    HashMap.newNode(...) total=5076449970, count=2207
+    BytesRef.deepCopyOf(BytesRef) total=4032473370, count=1568
+    HashMap.resize() total=2533753064, count=1915
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=861666472, count=140
+    GroupingCollector.reduce(Map, Row) total=689045524, count=407
+    DirectMethodHandle.allocateInstance(Object) total=643416816, count=165
+    AbstractQueuedSynchronizer$ConditionObject.newConditionNode() total=609716848, count=46
+
+Top frames (by count)
+  V1
+    BytesRef.utf8ToString() total=24076167960, count=9728
+    HashMap.getNode(Object) total=6751, count=6751
+    ArrayUtil.copyOfSubArray(...) total=10815037008, count=5364
+    StringUTF16.compress(...) total=11290516152, count=4663
+    HashMap.newNode(...) total=4736467913, count=2466
+    HashMap.resize() total=2882336850, count=2410
+    UnicodeUtil.UTF8toUTF16(...) total=2321, count=2321
+    BytesRef.deepCopyOf(BytesRef) total=3983011348, count=1833
+    StringHelper.murmurhash3_x86_32(...) total=1077, count=1077
+    UTF8JsonGenerator._verifyValueWrite(String) total=1008, count=1008
+  V2
+    BytesRef.utf8ToString() total=24144078512, count=8669
+    HashMap.getNode(Object) total=5750, count=5750
+    ArrayUtil.copyOfSubArray(...) total=9558895320, count=4537
+    StringUTF16.compress(...) total=11248631192, count=4156
+    HashMap.newNode(...) total=5076449970, count=2207
+    HashMap.resize() total=2533753064, count=1915
+    UnicodeUtil.UTF8toUTF16(...) total=1671, count=1671
+    BytesRef.deepCopyOf(BytesRef) total=4032473370, count=1568
+    ReferencePipeline$3$1.accept(Object) total=979, count=979
+    StringHelper.murmurhash3_x86_32(...) total=807, count=807
+
+# ended:    2026-08-17T16:28:26
+# duration: 0:09:28.996906
+# exit:     0
