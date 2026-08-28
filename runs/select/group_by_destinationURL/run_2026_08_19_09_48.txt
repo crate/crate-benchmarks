@@ -352,3 +352,186 @@ Use jcmd 26992 JFR.dump name=rec to copy recording data to file.
  55%|█████▌    | 110/200 [03:12<02:21,  1.57s/ requests]
  56%|█████▌    | 111/200 [03:17<02:51,  1.93s/ requests]
  56%|█████▌    | 112/200 [03:18<02:41,  1.84s/ requests]
+ 56%|█████▋    | 113/200 [03:19<02:31,  1.74s/ requests]
+ 57%|█████▋    | 114/200 [03:21<02:36,  1.82s/ requests]
+ 57%|█████▊    | 115/200 [03:22<02:26,  1.73s/ requests]
+ 58%|█████▊    | 116/200 [03:23<02:16,  1.63s/ requests]
+ 58%|█████▊    | 117/200 [03:27<02:31,  1.83s/ requests]
+ 59%|█████▉    | 118/200 [03:28<02:24,  1.77s/ requests]
+ 60%|█████▉    | 119/200 [03:29<02:16,  1.69s/ requests]
+ 60%|██████    | 120/200 [03:31<02:19,  1.75s/ requests]
+ 60%|██████    | 121/200 [03:33<02:15,  1.71s/ requests]
+ 61%|██████    | 122/200 [03:33<02:05,  1.61s/ requests]
+ 62%|██████▏   | 123/200 [03:37<02:18,  1.80s/ requests]
+ 62%|██████▏   | 124/200 [03:38<02:12,  1.74s/ requests]
+ 62%|██████▎   | 125/200 [03:39<02:03,  1.64s/ requests]
+ 63%|██████▎   | 126/200 [03:41<02:06,  1.71s/ requests]
+ 64%|██████▎   | 127/200 [03:42<01:57,  1.61s/ requests]
+ 64%|██████▍   | 128/200 [03:42<01:48,  1.50s/ requests]
+ 64%|██████▍   | 129/200 [03:46<02:02,  1.72s/ requests]
+ 65%|██████▌   | 130/200 [03:48<01:59,  1.71s/ requests]
+ 66%|██████▌   | 132/200 [03:51<01:54,  1.68s/ requests]
+ 66%|██████▋   | 133/200 [03:51<01:46,  1.59s/ requests]
+ 67%|██████▋   | 134/200 [03:52<01:40,  1.52s/ requests]
+ 68%|██████▊   | 135/200 [03:56<01:51,  1.72s/ requests]
+ 68%|██████▊   | 136/200 [03:57<01:46,  1.66s/ requests]
+ 68%|██████▊   | 137/200 [03:58<01:40,  1.59s/ requests]
+ 69%|██████▉   | 138/200 [04:01<01:46,  1.72s/ requests]
+ 70%|██████▉   | 139/200 [04:02<01:43,  1.69s/ requests]
+ 70%|███████   | 140/200 [04:03<01:36,  1.61s/ requests]
+ 70%|███████   | 141/200 [04:06<01:40,  1.70s/ requests]
+ 71%|███████   | 142/200 [04:07<01:35,  1.64s/ requests]
+ 72%|███████▏  | 143/200 [04:08<01:28,  1.55s/ requests]
+ 72%|███████▏  | 144/200 [04:10<01:30,  1.62s/ requests]
+ 72%|███████▎  | 145/200 [04:11<01:25,  1.56s/ requests]
+ 73%|███████▎  | 146/200 [04:12<01:20,  1.49s/ requests]
+ 74%|███████▎  | 147/200 [04:14<01:22,  1.57s/ requests]
+ 74%|███████▍  | 148/200 [04:15<01:17,  1.50s/ requests]
+ 74%|███████▍  | 149/200 [04:15<01:11,  1.40s/ requests]
+ 75%|███████▌  | 150/200 [04:18<01:16,  1.54s/ requests]
+ 76%|███████▌  | 151/200 [04:20<01:18,  1.60s/ requests]
+ 76%|███████▌  | 152/200 [04:21<01:13,  1.52s/ requests]
+ 76%|███████▋  | 153/200 [04:24<01:19,  1.69s/ requests]
+ 77%|███████▋  | 154/200 [04:26<01:16,  1.66s/ requests]
+ 78%|███████▊  | 155/200 [04:26<01:10,  1.56s/ requests]
+ 78%|███████▊  | 156/200 [04:29<01:14,  1.70s/ requests]
+ 78%|███████▊  | 157/200 [04:31<01:12,  1.69s/ requests]
+ 79%|███████▉  | 158/200 [04:32<01:06,  1.59s/ requests]
+ 80%|███████▉  | 159/200 [04:35<01:10,  1.73s/ requests]
+ 80%|████████  | 160/200 [04:36<01:08,  1.71s/ requests]
+ 80%|████████  | 161/200 [04:37<01:02,  1.60s/ requests]
+ 81%|████████  | 162/200 [04:40<01:07,  1.77s/ requests]
+ 82%|████████▏ | 163/200 [04:41<01:03,  1.72s/ requests]
+ 82%|████████▏ | 164/200 [04:42<00:59,  1.65s/ requests]
+ 82%|████████▎ | 165/200 [04:47<01:08,  1.96s/ requests]
+ 83%|████████▎ | 166/200 [04:49<01:07,  1.98s/ requests]
+ 84%|████████▎ | 167/200 [04:50<01:00,  1.84s/ requests]
+ 84%|████████▍ | 168/200 [04:53<01:03,  1.99s/ requests]
+ 84%|████████▍ | 169/200 [04:54<00:59,  1.90s/ requests]
+ 85%|████████▌ | 170/200 [04:55<00:54,  1.80s/ requests]
+ 86%|████████▌ | 171/200 [04:58<00:56,  1.93s/ requests]
+ 86%|████████▌ | 172/200 [04:59<00:51,  1.83s/ requests]
+ 86%|████████▋ | 173/200 [05:00<00:46,  1.73s/ requests]
+ 87%|████████▋ | 174/200 [05:03<00:47,  1.84s/ requests]
+ 88%|████████▊ | 175/200 [05:04<00:44,  1.78s/ requests]
+ 88%|████████▊ | 176/200 [05:05<00:40,  1.67s/ requests]
+ 88%|████████▊ | 177/200 [05:08<00:42,  1.84s/ requests]
+ 89%|████████▉ | 178/200 [05:10<00:39,  1.81s/ requests]
+ 90%|████████▉ | 179/200 [05:10<00:35,  1.70s/ requests]
+ 90%|█████████ | 180/200 [05:13<00:35,  1.76s/ requests]
+ 90%|█████████ | 181/200 [05:14<00:33,  1.74s/ requests]
+ 91%|█████████ | 182/200 [05:15<00:30,  1.67s/ requests]
+ 92%|█████████▏| 183/200 [05:17<00:29,  1.72s/ requests]
+ 92%|█████████▏| 184/200 [05:18<00:26,  1.65s/ requests]
+ 92%|█████████▎| 185/200 [05:19<00:22,  1.53s/ requests]
+ 93%|█████████▎| 186/200 [05:22<00:23,  1.71s/ requests]
+ 94%|█████████▎| 187/200 [05:24<00:21,  1.67s/ requests]
+ 94%|█████████▍| 188/200 [05:24<00:18,  1.57s/ requests]
+ 94%|█████████▍| 189/200 [05:26<00:17,  1.64s/ requests]
+ 95%|█████████▌| 190/200 [05:28<00:16,  1.65s/ requests]
+ 96%|█████████▌| 191/200 [05:29<00:13,  1.53s/ requests]
+ 96%|█████████▌| 192/200 [05:31<00:12,  1.58s/ requests]
+ 96%|█████████▋| 193/200 [05:32<00:10,  1.55s/ requests]
+ 97%|█████████▋| 194/200 [05:33<00:08,  1.46s/ requests]
+ 98%|█████████▊| 195/200 [05:35<00:07,  1.54s/ requests]
+ 98%|█████████▊| 196/200 [05:37<00:06,  1.61s/ requests]
+ 98%|█████████▊| 197/200 [05:38<00:04,  1.52s/ requests]
+ 99%|█████████▉| 198/200 [05:40<00:03,  1.58s/ requests]
+100%|█████████▉| 199/200 [05:41<00:01,  1.54s/ requests]
+100%|██████████| 200/200 [05:42<00:00,  1.43s/ requests]
+100%|██████████| 200/200 [05:42<00:00,  1.71s/ requests]
+26992:
+Stopped recording "rec", 8.4 MB written to:
+
+/tmp/tmpibowuxu8/6c8813e5-5523-45d9-ba22-4b642a77a472.jfr
+# Running benchmark
+# Running tearDown
+
+
+# Results (server side duration in ms)
+V1: 6.5.0-fcd878fc151e791062a0ad02850105fe450aceb3
+V2: 6.5.0-90e5f6f365238e075f5369637c258076d9071ab4
+
+Q:     select "destinationURL", count(*) from uservisits group by "destinationURL";
+
+C: 3
+| Version |         Mean ±    Stdev |        Min |     Median |         Q3 |        Max |
+|   V1    |     3310.529 ±  638.129 |   2060.763 |   3253.352 |   3602.073 |   5660.122 |
+|   V2    |     4573.905 ±  888.018 |   2650.613 |   4482.943 |   4947.053 |   8121.593 |
+├---------┴-------------------------┴------------┴------------┴------------┴------------┘
+|               +  32.05%                           +  31.79%   
+There is a 100.00% probability that the observed difference is not random, and the best estimate of that difference is 32.05%
+The test has statistical significance
+
+
+System/JVM Metrics (durations in ms, byte-values in MB)
+    |    YOUNG GC            |       OLD GC           |      HEAP         |     ALLOC     
+    |  cnt      avg      max |  cnt      avg      max |  initial     used |     rate      total
+ V1 |  303   206.56   214.90 |   31  1899.01  2064.35 |    17180     3095 |   837.64     219447
+ V2 |  341   202.94   287.59 |   35  2404.52  2043.54 |    17180     4668 |   739.36     253430
+    
+Top allocation frames
+  V1
+    BytesRef.utf8ToString() total=93689451299, count=23922
+    StringUTF16.compress(...) total=45467489096, count=11311
+    HashMap.newNode(...) total=22114810422, count=5279
+    DirectMethodHandle.allocateInstance(Object) total=18078840337, count=4184
+    HashMap.resize() total=15644139738, count=7570
+    0x0000000015334000.apply(long) total=15614527934, count=5123
+    GroupingCollector.reduce(Map, Row) total=3110149231, count=2511
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=3037038504, count=389
+    AbstractQueuedSynchronizer$ConditionObject.newConditionNode() total=1113559128, count=134
+    HashMap.replacementNode(...) total=821388064, count=29
+  V2
+    BytesRef.utf8ToString() total=94933329980, count=26858
+    StringUTF16.compress(...) total=44976856344, count=12762
+    ArrayUtil.copyOfSubArray(...) total=41333112914, count=12840
+    HashMap.newNode(...) total=19518474297, count=5968
+    BytesRef.deepCopyOf(BytesRef) total=16200271842, count=4586
+    GroupByOptimizedIterator.getCountsByKey(...) total=14097020611, count=14038
+    HashMap.resize() total=13519680355, count=8278
+    CompositeBatchIterator$AsyncCompositeBI.lambda$loadNextBatch$0(int, int) total=3110665152, count=384
+    GroupingCollector.reduce(Map, Row) total=2960847767, count=16187
+    AbstractQueuedSynchronizer$ConditionObject.newConditionNode() total=1274446256, count=132
+
+Top frames (by count)
+  V1
+    BytesRef.utf8ToString() total=93689451299, count=23922
+    StringUTF16.compress(...) total=45467489096, count=11311
+    HashMap.compute(...) total=11297, count=11297
+    HashMap.resize() total=15644139738, count=7570
+    HashMap.newNode(...) total=22114810422, count=5279
+    0x0000000015334000.apply(long) total=15614527934, count=5123
+    Collections$UnmodifiableMap.get(Object) total=4405, count=4405
+    DirectMethodHandle.allocateInstance(Object) total=18078840337, count=4184
+    UnicodeUtil.UTF8toUTF16(...) total=4044, count=4044
+    DataInput.readVLong() total=3570, count=3570
+  V2
+    BytesRef.utf8ToString() total=94933329980, count=26858
+    GroupingCollector.reduce(Map, Row) total=2960847767, count=16187
+    GroupByOptimizedIterator.getCountsByKey(...) total=14097020611, count=14038
+    ArrayUtil.copyOfSubArray(...) total=41333112914, count=12840
+    StringUTF16.compress(...) total=44976856344, count=12762
+    HashMap.resize() total=13519680355, count=8278
+    UnicodeUtil.UTF8toUTF16(...) total=7932, count=7932
+    HashMap.newNode(...) total=19518474297, count=5968
+    BytesRef.deepCopyOf(BytesRef) total=16200271842, count=4586
+    HashMap.putVal(...) total=3839, count=3839
+
+perf stat
+  v1
+    branches        :   719383249120.00
+    cache-misses    :    20327069060.00
+    instructions    :  4132304790516.00
+    faults          :       14940187.00
+    context-switches:         582957.00
+  v2
+    branches        :   884635012511.00
+    cache-misses    :    26230390069.00
+    instructions    :  5216669666328.00
+    faults          :       15626001.00
+    context-switches:         611049.00
+
+# ended:    2026-08-19T10:01:20
+# duration: 0:12:46.799099
+# exit:     0

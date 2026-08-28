@@ -22,7 +22,7 @@ statement = '''
     select count(distinct "adRevenue") from uservisits
 '''
 concurrency = 3
-iterations = 200
+iterations = 500
 
 [[queries]]
 name = "count-distinct-duration"
@@ -30,7 +30,7 @@ statement = '''
     select count(distinct "duration") from uservisits
 '''
 concurrency = 3
-iterations = 200
+iterations = 500
 
 [teardown]
 statements = ["drop table if exists uservisits"]

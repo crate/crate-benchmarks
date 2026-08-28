@@ -21,17 +21,13 @@
 #   create snapshot hits_snapshots.<name> table hits
 #     with (wait_for_completion = true)
 [setup]
-<<<<<<< Updated upstream
 statement_files = ["../sql/hits_snapshot_repo.sql"]
+# statement_files = ["../sql/hits.sql"]
 statements = [
     '''
     restore snapshot hits_snapshots.snapshots_1m table hits
     with (wait_for_completion = true)
     ''',
-=======
-# statement_files = ["../sql/hits.sql"]
-statements = [
->>>>>>> Stashed changes
     "refresh table hits"
 ]
 
@@ -42,20 +38,10 @@ statement = '''
     SELECT COUNT(DISTINCT UserID)
     FROM hits
 '''
-<<<<<<< Updated upstream
 concurrency = 1
 iterations = 50
 
 # Q6: high cardinality distinct count on a TEXT column.
-[[queries]]
-name = "CH-Q6-count-distinct-searchphrase"
-statement = '''
-    SELECT COUNT(DISTINCT SearchPhrase)
-    FROM hits
-'''
-concurrency = 1
-iterations = 50
-=======
 concurrency = 5
 iterations = 200
 
@@ -68,7 +54,6 @@ iterations = 200
 # '''
 # concurrency = 1
 # iterations = 20
->>>>>>> Stashed changes
 
 [teardown]
 statements = ["drop table if exists hits"]

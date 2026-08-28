@@ -20,12 +20,14 @@
 #   create snapshot uservisits_snapshots.uservisits table uservisits
 #     with (wait_for_completion = true)
 [setup]
-statement_files = ["../sql/uservisits_snapshot_repo.sql"]
+statement_files = ["../specs/sql/uservisits.sql"]
 statements = [
-    '''
-    restore snapshot uservisits_snapshots.uservisits table uservisits
-    with (wait_for_completion = true)
-    ''',
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
     "refresh table uservisits"
 ]
 

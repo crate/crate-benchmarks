@@ -210,7 +210,7 @@ def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
     return metrics
 
 
-async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol, report_indexing):
+async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol, report_indexing, re_name):
     crate_dir = get_crate(version)
     settings.setdefault('cluster.name', str(uuid4()))
     results = []
@@ -238,7 +238,8 @@ async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol
             log=log,
             result_hosts=result_hosts,
             sample_mode='reservoir',
-            action=['queries', 'load_data']
+            action=['queries', 'load_data'],
+            re_name=re_name
         )
         jfr_stop(n.process.pid)
         indexing_metrics = collect_indexing_metrics(benchmark_hosts, report_indexing)
@@ -266,10 +267,11 @@ async def run_compare(
         show_plot,
         protocol,
         report_indexing,
-        diff_jfr: bool):
+        diff_jfr: bool,
+        re_name: Optional[str] = None):
     tmpdir = tempfile.mkdtemp()
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing)
+    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing, re_name)
+    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing, re_name)
     try:
         for i in range(forks):
             results_v1, jfr_file1, stat_result1, indexing_metrics1 = await run_v1()
@@ -328,6 +330,8 @@ def main():
                    help='Whether to report shard indexing statistics. Mostly useful when running indexing benchmarks. Disabled by default.')
     p.add_argument("--diff-jfr", action="store_true",
                    help="Uses the `jfrconv` CLI to generate a diff from the two profiles")
+    p.add_argument('--re-name', type=str,
+                   help='Regex to filter queries by name. Only queries with a matching name are run')
     args = p.parse_args()
     env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
@@ -354,6 +358,7 @@ def main():
             protocol=args.protocol,
             report_indexing=args.report_indexing,
             diff_jfr=args.diff_jfr,
+            re_name=args.re_name,
         ))
     except KeyboardInterrupt:
         print('Exiting..')

@@ -22,14 +22,14 @@
 #   create snapshot hits_snapshots.<name> table hits
 #     with (wait_for_completion = true)
 [setup]
-statement_files = ["../sql/hits_snapshot_repo.sql"]
-statements = [
-    '''
-    restore snapshot hits_snapshots.snapshots_1m table hits
-    with (wait_for_completion = true)
-    ''',
-    "refresh table hits"
-]
+# statement_files = ["../sql/hits_snapshot_repo.sql"]
+# statements = [
+#     '''
+#     restore snapshot hits_snapshots.snapshots_1m table hits
+#     with (wait_for_completion = true)
+#     ''',
+#     "refresh table hits"
+# ]
 
 # Q9: one distinct-count state per group, ordered by the distinct count.
 # The LIMIT cannot be pushed down, all groups have to be aggregated first.

@@ -47,3 +47,5 @@ specs/data/huge_arrays.json
 
 join-order-benchmark/imdb/
 join-order-benchmark/imdb.tgz
+
+runs/
