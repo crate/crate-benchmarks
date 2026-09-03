@@ -21,15 +21,15 @@
 # a snapshot, load the table with COPY FROM once and run:
 #   create snapshot hits_snapshots.<name> table hits
 #     with (wait_for_completion = true)
-[setup]
-statement_files = ["../sql/hits_snapshot_repo.sql"]
-statements = [
-    '''
-    restore snapshot hits_snapshots.snapshots_1m table hits
-    with (wait_for_completion = true)
-    ''',
-    "refresh table hits"
-]
+# [setup]
+# statement_files = ["../sql/hits_snapshot_repo.sql"]
+# statements = [
+#     '''
+#     restore snapshot hits_snapshots.snapshots_1m table hits
+#     with (wait_for_completion = true)
+#     ''',
+#     "refresh table hits"
+# ]
 
 ## Group 1: global aggregations
 
@@ -40,7 +40,7 @@ statement = '''
     FROM hits
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 [[queries]]
 name = "CH-Q6-count-distinct-searchphrase"
@@ -49,7 +49,7 @@ statement = '''
     FROM hits
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 ## Group 2: group by a different column, order by the distinct aggregation
 
@@ -63,7 +63,17 @@ statement = '''
     LIMIT 10
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
+
+[[queries]]
+name = "CH-Q9b-count-distinct-userid-group-by-regionid"
+statement = '''
+    SELECT RegionID, COUNT(DISTINCT UserID) AS u
+    FROM hits
+    GROUP BY RegionID
+'''
+concurrency = 1
+iterations = 100
 
 ## Group 3: multiple aggregations, order by count(*), with and without filter
 
@@ -77,7 +87,7 @@ statement = '''
     LIMIT 10
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 [[queries]]
 name = "CH-Q23-group-by-searchphrase-mixed-aggregations-filtered"
@@ -90,7 +100,7 @@ statement = '''
     LIMIT 10
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 ## Group 4: group by a different column, order by the distinct aggregation,
 ## with a filter
@@ -106,7 +116,7 @@ statement = '''
     LIMIT 10
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 [[queries]]
 name = "CH-Q12-group-by-mobilephone-model-count-distinct"
@@ -119,7 +129,7 @@ statement = '''
     LIMIT 10
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 [[queries]]
 name = "CH-Q14-group-by-searchphrase-count-distinct"
@@ -132,7 +142,7 @@ statement = '''
     LIMIT 10
 '''
 concurrency = 1
-iterations = 20
+iterations = 100
 
 # [teardown]
 # statements = ["drop table if exists hits"]

@@ -1,32 +1,31 @@
 [setup]
 statement_files = ["../specs/sql/uservisits.sql"]
 statements = [
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00000.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
-    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
     "refresh table uservisits"
 ]
 
-# [[queries]]
-# name = "avg, sum, min and group by a single numeric key"
-# statement = '''select avg("adRevenue"), sum("adRevenue"), min("adRevenue") from uservisits group by "duration"'''
-# concurrency = 10
-# iterations = 1000
+[[queries]]
+name = "avg, sum, min and group by a single numeric key"
+statement = '''select avg("adRevenue"), sum("adRevenue"), min("adRevenue") from uservisits group by "duration"'''
+concurrency = 10
+iterations = 1000
 
-# [[queries]]
-# name = "avg and group by a single numeric key"
-# statement = '''select avg("adRevenue") from uservisits group by "duration"'''
-# concurrency = 10
-# iterations = 1000
+[[queries]]
+name = "avg and group by a single numeric key"
+statement = '''select avg("adRevenue") from uservisits group by "duration"'''
+concurrency = 10
+iterations = 1000
 
-# [[queries]]
-# name = "avg and group by string and numeric keys"
-# statement = '''select avg("adRevenue") from uservisits group by "cCode", "duration"'''
-# concurrency = 10
-# iterations = 1000
+[[queries]]
+name = "avg and group by string and numeric keys"
+statement = '''select avg("adRevenue") from uservisits group by "cCode", "duration"'''
+concurrency = 10
+iterations = 1000
 
 [[queries]]
 name = "count star and group by a single string key"
@@ -34,44 +33,152 @@ statement = '''select "cCode", count(*) from uservisits group by "cCode"'''
 concurrency = 10
 iterations = 500
 
-# [[queries]]
-# name = "count and group by a single string key and where filter"
-# statement = '''select "cCode", count("sourceIP") from uservisits WHERE "adRevenue" > 0.2 group by "cCode"'''
-# concurrency = 10
-# iterations = 500
+[[queries]]
+name = "count and group by a single string key and where filter"
+statement = '''select "cCode", count("sourceIP") from uservisits WHERE "adRevenue" > 0.2 group by "cCode"'''
+concurrency = 10
+iterations = 500
 
-# [[queries]]
-# name = "group by a single string key"
-# statement = '''select "cCode" from uservisits group by "cCode"'''
-# concurrency = 15
-# iterations = 100
+[[queries]]
+name = "group by a single string key"
+statement = '''select "cCode" from uservisits group by "cCode"'''
+concurrency = 15
+iterations = 100
 
-# [[queries]]
-# name = "count star and group by a single not-null string key"
-# statement = '''select "lCode", count(*) from uservisits group by "lCode"'''
-# concurrency = 15
-# iterations = 100
+[[queries]]
+name = "count star and group by a single not-null string key"
+statement = '''select "lCode", count(*) from uservisits group by "lCode"'''
+concurrency = 15
+iterations = 100
 
-# [[queries]]
-# name = "group by 1 string key with query"
-# statement = '''select "cCode", avg(duration), avg("adRevenue") from uservisits where "cCode" in ('AUT', 'DEU') group by "cCode"'''
-# concurrency = 1
-# iterations = 100
+[[queries]]
+name = "group by 1 string key with query"
+statement = '''select "cCode", avg(duration), avg("adRevenue") from uservisits where "cCode" in ('AUT', 'DEU') group by "cCode"'''
+concurrency = 1
+iterations = 100
 
-# [[queries]]
-# statement = '''select min("adRevenue") from uservisits group by "cCode"'''
-# concurrency = 15
-# iterations = 100
+[[queries]]
+name = "min group by another column"
+statement = '''select min("adRevenue") from uservisits group by "cCode"'''
+concurrency = 15
+iterations = 100
 
-# [[queries]]
-# statement = '''select avg("adRevenue") from uservisits group by "cCode", "lCode"'''
-# concurrency = 15
-# iterations = 100
+[[queries]]
+name = "avg group by two different columns"
+statement = '''select avg("adRevenue") from uservisits group by "cCode", "lCode"'''
+concurrency = 15
+iterations = 100
 
-# [[queries]]
-# statement = '''select count(distinct "searchWord") from uservisits group by "cCode"'''
-# concurrency = 5
-# iterations = 100
+[[queries]]
+name = "Q-11: count distinct group by another column"
+statement = '''
+    select "cCode", count(distinct "searchWord") 
+    from uservisits 
+    group by "cCode"
+'''
+concurrency = 5
+iterations = 100
+
+[[queries]]
+name = "Q-12a: count distinct group by another column (rewritten)"
+statement = '''
+    select "cCode", count("searchWord")
+    from (select distinct "cCode", "searchWord" from uservisits) t
+    group by "cCode"
+'''
+concurrency = 5
+iterations = 100
+
+[[queries]]
+name = "Q-12b: count distinct group by another column (rewritten)"
+statement = '''
+SELECT "cCode", COUNT("searchWord") agg1
+FROM (
+  SELECT "cCode", "searchWord" 
+  FROM uservisits
+  GROUP BY "cCode", "searchWord"
+) tmp
+GROUP BY "cCode"
+'''
+concurrency = 5
+iterations = 100
+
+[[queries]]
+name = "Q-13: group by 2 columns"
+statement = '''
+    select "cCode", "searchWord"
+    from uservisits 
+    group by "cCode", "searchWord";
+'''
+concurrency = 5
+iterations = 100
+
+[[queries]]
+name = "Q-14: two different, distinct aggregations, different group by"
+statement = '''
+    select "cCode", count(distinct "searchWord"), count(distinct "sourceIP")
+    from uservisits 
+    group by "cCode"
+'''
+concurrency = 2
+iterations = 100
+
+[[queries]]
+name = "Q-15: two different, distinct aggregations, different group by (rewritten)"
+statement = '''
+with q1 as (
+          select "cCode", count("searchWord") as agg1
+          from (
+              select "cCode", "searchWord"
+              from uservisits
+              group by "cCode", "searchWord"
+          ) t1
+          group by "cCode"
+      ),
+      q2 as (
+          select "cCode", count("sourceIP") as agg2
+          from (
+              select "cCode", "sourceIP"
+              from uservisits
+              group by "cCode", "sourceIP"
+          ) t2
+          group by "cCode"
+      )
+      select q1."cCode", q1.agg1, q2.agg2
+      from q1
+      join q2 on q1."cCode" = q2."cCode";
+'''
+concurrency = 2
+iterations = 100
+
+[[queries]]
+name = "Q-16: two different, distinct aggregations, global"
+statement = '''
+    select count(distinct "cCode"), count(distinct "sourceIP")                                                                    
+    from uservisits; 
+'''
+concurrency = 2
+iterations = 100
+
+[[queries]]
+name = "Q-16a: two different, distinct aggregations, global"
+statement = '''
+    select
+        (
+            select 
+                count("cCode")
+            from 
+                (select "cCode" from uservisits group by "cCode") t1
+        ),
+        (
+            select 
+                count("sourceIP")
+            from 
+                (select "sourceIP" from uservisits group by "sourceIP") t2
+        );
+'''
+concurrency = 2
+iterations = 100
 
 [teardown]
 statements = ["drop table if exists uservisits"]

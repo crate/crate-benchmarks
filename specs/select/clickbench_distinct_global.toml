@@ -20,16 +20,16 @@
 # a snapshot, load the table with COPY FROM once and run:
 #   create snapshot hits_snapshots.<name> table hits
 #     with (wait_for_completion = true)
-[setup]
-statement_files = ["../sql/hits_snapshot_repo.sql"]
+# [setup]
+# statement_files = ["../sql/hits_snapshot_repo.sql"]
 # statement_files = ["../sql/hits.sql"]
-statements = [
-    '''
-    restore snapshot hits_snapshots.snapshots_1m table hits
-    with (wait_for_completion = true)
-    ''',
-    "refresh table hits"
-]
+# statements = [
+#     '''
+#     restore snapshot hits_snapshots.snapshots_1m table hits
+#     with (wait_for_completion = true)
+#     ''',
+#     "refresh table hits"
+# ]
 
 # Q5: high cardinality distinct count on a BIGINT column.
 [[queries]]
@@ -39,21 +39,17 @@ statement = '''
     FROM hits
 '''
 concurrency = 1
-iterations = 50
+iterations = 100
 
 # Q6: high cardinality distinct count on a TEXT column.
-concurrency = 5
-iterations = 200
+[[queries]]
+name = "CH-Q6-count-distinct-searchphrase"
+statement = '''
+    SELECT COUNT(DISTINCT SearchPhrase)
+    FROM hits
+'''
+concurrency = 1
+iterations = 100
 
-# # Q6: high cardinality distinct count on a TEXT column.
-# [[queries]]
-# name = "CH-Q6-count-distinct-searchphrase"
-# statement = '''
-#     SELECT COUNT(DISTINCT SearchPhrase)
-#     FROM hits
-# '''
-# concurrency = 1
-# iterations = 20
-
-[teardown]
-statements = ["drop table if exists hits"]
+# [teardown]
+# statements = ["drop table if exists hits"]

@@ -212,46 +212,57 @@ def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
 
 async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol, report_indexing, re_name):
     crate_dir = get_crate(version)
+    settings = dict(settings)
     settings.setdefault('cluster.name', str(uuid4()))
+    data_copy = None
+    if 'path.data' in settings:
+        data_copy = os.path.join(tmpdir, f'data-{uuid4()}')
+        print(f"Copying path.data from {settings['path.data']} to {data_copy}")
+        shutil.copytree(settings['path.data'], data_copy)
+        settings['path.data'] = data_copy
     results = []
-    with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
-        n.start()
-        benchmark_hosts = n.http_url
-        if protocol == 'pg':
-            pg_address = n.addresses['psql']
-            benchmark_hosts = f'asyncpg://{pg_address.host}:{pg_address.port}'
-        print(f'Running benchmark using protocol={protocol}, benchmark_hosts={benchmark_hosts}')
-        await do_run_spec(
-            spec=spec,
-            benchmark_hosts=benchmark_hosts,
-            log=log,
-            result_hosts=result_hosts,
-            sample_mode='reservoir',
-            action='setup'
-        )
-        jfr_file = jfr_start(n.process.pid, tmpdir)
-        perf_proc = perf_stat(n.process.pid)
-        log.result = results.append
-        await do_run_spec(
-            spec=spec,
-            benchmark_hosts=n.http_url,
-            log=log,
-            result_hosts=result_hosts,
-            sample_mode='reservoir',
-            action=['queries', 'load_data'],
-            re_name=re_name
-        )
-        jfr_stop(n.process.pid)
-        indexing_metrics = collect_indexing_metrics(benchmark_hosts, report_indexing)
-        await do_run_spec(
-            spec=spec,
-            benchmark_hosts=n.http_url,
-            log=log,
-            result_hosts=result_hosts,
-            sample_mode='reservoir',
-            action='teardown'
-        )
-    return (results, jfr_file, perf_proc and perf_stat_results(perf_proc) or {}, indexing_metrics)
+    try:
+        with Logger() as log, CrateNode(crate_dir=crate_dir, settings=settings, env=env) as n:
+            n.start()
+            benchmark_hosts = n.http_url
+            if protocol == 'pg':
+                pg_address = n.addresses['psql']
+                benchmark_hosts = f'asyncpg://{pg_address.host}:{pg_address.port}'
+            print(f'Running benchmark using protocol={protocol}, benchmark_hosts={benchmark_hosts}')
+            await do_run_spec(
+                spec=spec,
+                benchmark_hosts=benchmark_hosts,
+                log=log,
+                result_hosts=result_hosts,
+                sample_mode='reservoir',
+                action='setup'
+            )
+            jfr_file = jfr_start(n.process.pid, tmpdir)
+            perf_proc = perf_stat(n.process.pid)
+            log.result = results.append
+            await do_run_spec(
+                spec=spec,
+                benchmark_hosts=n.http_url,
+                log=log,
+                result_hosts=result_hosts,
+                sample_mode='reservoir',
+                action=['queries', 'load_data'],
+                re_name=re_name
+            )
+            jfr_stop(n.process.pid)
+            indexing_metrics = collect_indexing_metrics(benchmark_hosts, report_indexing)
+            await do_run_spec(
+                spec=spec,
+                benchmark_hosts=n.http_url,
+                log=log,
+                result_hosts=result_hosts,
+                sample_mode='reservoir',
+                action='teardown'
+            )
+        return (results, jfr_file, perf_proc and perf_stat_results(perf_proc) or {}, indexing_metrics)
+    finally:
+        if data_copy:
+            shutil.rmtree(data_copy, ignore_errors=True)
 
 
 async def run_compare(

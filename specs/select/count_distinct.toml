@@ -13,13 +13,21 @@
 #   create snapshot uservisits_snapshots.uservisits table uservisits
 #     with (wait_for_completion = true)
 [setup]
-statement_files = ["../sql/uservisits_snapshot_repo.sql"]
+statement_files = ["../sql/uservisits.sql"]
 statements = [
-    '''
-    restore snapshot uservisits_snapshots.uservisits table uservisits
-    with (wait_for_completion = true)
-    ''',
-    "refresh table uservisits"
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00000.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00001.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00002.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00003.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00004.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00006.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00007.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00008.gz' with (compression = 'gzip')",
+    "copy uservisits from 'file:///home/haris/projects/crate/test-data/uservisits/part-00009.gz' with (compression = 'gzip')",
+    "refresh table uservisits",
+    "DELETE FROM uservisits WHERE random() < 0.15",
+    "REFRESH TABLE uservisits"
 ]
 
 [[queries]]
@@ -27,7 +35,7 @@ name = "count-distinct-cCode-original"
 statement = '''
     select count(distinct "cCode") from uservisits
 '''
-concurrency = 15
+concurrency = 10
 iterations = 1000
 
 # [[queries]]
