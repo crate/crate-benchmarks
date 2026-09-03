@@ -268,7 +268,8 @@ async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol
 async def run_compare(
         v1,
         v2,
-        spec,
+        spec_v1,
+        spec_v2,
         result_hosts,
         forks,
         env_v1,
@@ -281,8 +282,8 @@ async def run_compare(
         diff_jfr: bool,
         re_name: Optional[str] = None):
     tmpdir = tempfile.mkdtemp()
-    run_v1 = partial(_run_spec, v1, spec, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing, re_name)
-    run_v2 = partial(_run_spec, v2, spec, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing, re_name)
+    run_v1 = partial(_run_spec, v1, spec_v1, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing, re_name)
+    run_v2 = partial(_run_spec, v2, spec_v2, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing, re_name)
     try:
         for i in range(forks):
             results_v1, jfr_file1, stat_result1, indexing_metrics1 = await run_v1()
@@ -318,7 +319,9 @@ def main():
         help='cr8 version identifier or path to tarball (tar.gz)',
         required=True
     )
-    p.add_argument('--spec', help='path to spec file', required=True)
+    p.add_argument('--spec', help='path to spec file. Used for v1 and v2 unless overridden')
+    p.add_argument('--spec-v1', help='path to spec file for v1. Overrides --spec')
+    p.add_argument('--spec-v2', help='path to spec file for v2. Overrides --spec')
     p.add_argument('--result-hosts', type=str)
     p.add_argument('--forks', type=int, default=5,
                    help='Number of times the nodes are launched and the spec re-run')
@@ -344,6 +347,10 @@ def main():
     p.add_argument('--re-name', type=str,
                    help='Regex to filter queries by name. Only queries with a matching name are run')
     args = p.parse_args()
+    if not args.spec and not (args.spec_v1 and args.spec_v2):
+        p.error('either --spec, or both --spec-v1 and --spec-v2, must be given')
+    spec_v1 = args.spec_v1 or args.spec
+    spec_v2 = args.spec_v2 or args.spec
     env = dict_from_kw_args(args.env)
     env_v1 = env.copy()
     env_v1.update(dict_from_kw_args(args.env_v1))
@@ -358,7 +365,8 @@ def main():
         asyncio.run(run_compare(
             args.v1,
             args.v2,
-            args.spec,
+            spec_v1,
+            spec_v2,
             args.result_hosts,
             forks=max(1, args.forks),
             env_v1=env_v1,

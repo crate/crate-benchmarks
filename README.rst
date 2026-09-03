@@ -52,7 +52,8 @@ Scripts to simplify common tasks:
 
 - compare_measures.py_: compare measures read from two files
 
-- compare_run.py_: compare a spec against two different versions of CrateDB.
+- compare_run.py_: compare a spec against two different versions of CrateDB,
+  or two different specs against the same version (``--spec-v1``/``--spec-v2``).
 
 - find_regressions.py_: read benchmark results from a table and compare them for
   regressions.
