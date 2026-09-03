@@ -92,6 +92,14 @@ def main():
     out_file = output_file(args.spec, args.runs_dir)
     started = datetime.now()
 
+    try:
+        subprocess.run(
+            ['sudo', 'sysctl', 'kernel.perf_event_paranoid=1'],
+            check=True,
+        )
+    except (subprocess.CalledProcessError, FileNotFoundError) as e:
+        print(f'Warning: failed to set kernel.perf_event_paranoid=1: {e}', file=sys.stderr)
+
     env = dict(os.environ, PYTHONUNBUFFERED='1')
     print(f'Writing output to {out_file}')
     with open(out_file, 'w', encoding='utf-8') as out:

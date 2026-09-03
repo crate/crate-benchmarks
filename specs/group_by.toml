@@ -157,28 +157,38 @@ statement = '''
     select count(distinct "cCode"), count(distinct "sourceIP")                                                                    
     from uservisits; 
 '''
-concurrency = 2
-iterations = 100
+concurrency = 3
+iterations = 150
 
 [[queries]]
 name = "Q-16a: two different, distinct aggregations, global"
 statement = '''
-    select
-        (
-            select 
-                count("cCode")
-            from 
-                (select "cCode" from uservisits group by "cCode") t1
-        ),
-        (
-            select 
-                count("sourceIP")
-            from 
-                (select "sourceIP" from uservisits group by "sourceIP") t2
-        );
+SELECT
+    (SELECT count("cCode")
+     FROM (SELECT "cCode" FROM uservisits GROUP BY "cCode") t1),
+    (SELECT count("sourceIP")
+     FROM (SELECT "sourceIP" FROM uservisits GROUP BY "sourceIP") t2);
 '''
-concurrency = 2
-iterations = 100
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-16b: two different, distinct aggregations, global"
+statement = '''
+  SELECT
+    COUNT("cCode") FILTER (WHERE cCode_unique) AS "count(DISTINCT cCode)",
+    COUNT("sourceIP") FILTER (WHERE sourceIP_unique) AS "count(DISTINCT sourceIP)"
+  FROM (
+    SELECT
+      "cCode",
+      "sourceIP",
+      row_number() OVER (PARTITION BY "cCode") = 1 AS cCode_unique,
+      row_number() OVER (PARTITION BY "sourceIP") = 1 AS sourceIP_unique
+    FROM uservisits
+  ) t;
+'''
+concurrency = 3
+iterations = 150
 
 [teardown]
 statements = ["drop table if exists uservisits"]
