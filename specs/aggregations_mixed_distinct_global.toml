@@ -10,54 +10,6 @@ statements = [
 ]
 
 [[queries]]
-name = "Q-16: two different, distinct aggregations, global"
-statement = '''
-    select count(distinct "cCode"), count(distinct "sourceIP")
-    from uservisits;
-'''
-concurrency = 3
-iterations = 150
-
-[[queries]]
-name = "Q-16a: two different, distinct aggregations, global"
-statement = '''
-SELECT
-    (SELECT count("cCode")
-     FROM (SELECT "cCode" FROM uservisits GROUP BY "cCode") t1),
-    (SELECT count("sourceIP")
-     FROM (SELECT "sourceIP" FROM uservisits GROUP BY "sourceIP") t2);
-'''
-concurrency = 3
-iterations = 150
-
-[[queries]]
-name = "Q-16b: two different, distinct aggregations, global"
-statement = '''
-  SELECT
-    COUNT("cCode") FILTER (WHERE cCode_unique) AS "count(DISTINCT cCode)",
-    COUNT("sourceIP") FILTER (WHERE sourceIP_unique) AS "count(DISTINCT sourceIP)"
-  FROM (
-    SELECT
-      "cCode",
-      "sourceIP",
-      row_number() OVER (PARTITION BY "cCode") = 1 AS cCode_unique,
-      row_number() OVER (PARTITION BY "sourceIP") = 1 AS sourceIP_unique
-    FROM uservisits
-  ) t;
-'''
-concurrency = 3
-iterations = 150
-
-[[queries]]
-name = "Q-17: three different, distinct aggregations, global"
-statement = '''
-    select count(distinct "cCode"), count(distinct "sourceIP"), count(distinct "adRevenue")
-    from uservisits; 
-'''
-concurrency = 3
-iterations = 150
-
-[[queries]]
 name = "Q-18: non-distinct sum, distinct count, global,"
 statement = '''
     SELECT SUM("adRevenue"), COUNT(DISTINCT "cCode") 
