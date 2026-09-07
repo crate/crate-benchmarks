@@ -124,6 +124,19 @@ concurrency = 2
 iterations = 100
 
 [[queries]]
+name = "Q-14a: two different, distinct aggregations, different group by"
+statement = '''
+    select l."cCode", l.c1, r.c2
+    from (select "cCode", count(distinct "searchWord") as c1
+        from uservisits group by "cCode") l
+    join (select "cCode", count(distinct "sourceIP") as c2
+        from uservisits group by "cCode") r
+    on l."cCode" = r."cCode"
+'''
+concurrency = 2
+iterations = 100
+
+[[queries]]
 name = "Q-15: two different, distinct aggregations, different group by (rewritten)"
 statement = '''
 with q1 as (
@@ -154,8 +167,8 @@ iterations = 100
 [[queries]]
 name = "Q-16: two different, distinct aggregations, global"
 statement = '''
-    select count(distinct "cCode"), count(distinct "sourceIP")                                                                    
-    from uservisits; 
+    select count(distinct "cCode"), count(distinct "sourceIP")
+    from uservisits;
 '''
 concurrency = 3
 iterations = 150
@@ -185,6 +198,85 @@ statement = '''
       row_number() OVER (PARTITION BY "cCode") = 1 AS cCode_unique,
       row_number() OVER (PARTITION BY "sourceIP") = 1 AS sourceIP_unique
     FROM uservisits
+  ) t;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-17: three different, distinct aggregations, global"
+statement = '''
+    select count(distinct "cCode"), count(distinct "sourceIP"), count(distinct "adRevenue")
+    from uservisits; 
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-18: non-distinct sum, distinct count, global,"
+statement = '''
+    SELECT SUM("adRevenue"), COUNT(DISTINCT "cCode") 
+    FROM uservisits;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-18a: non-distinct sum, distinct count, global, rewritten"
+statement = '''
+    SELECT SUM(partial_sum), COUNT("cCode")
+    FROM (
+        SELECT "cCode", SUM("adRevenue") AS partial_sum
+        FROM uservisits
+        GROUP BY "cCode"
+    ) t;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-19: non-distinct sum, distinct count, global"
+statement = '''
+    SELECT AVG("adRevenue"), COUNT(DISTINCT "cCode") 
+    FROM uservisits;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-19a: non-distinct sum, distinct count, global, rewritten"
+statement = '''
+  SELECT SUM(partial_sum) / SUM(partial_cnt) AS avg_revenue, COUNT("cCode")
+  FROM (
+      SELECT "cCode",
+             SUM("adRevenue")   AS partial_sum,
+             COUNT("adRevenue") AS partial_cnt
+      FROM uservisits
+      GROUP BY "cCode"
+  ) t;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-20: non-distinct sum, distinct count, global"
+statement = '''
+    SELECT AVG("adRevenue"), COUNT(DISTINCT "destinationURL") 
+    FROM uservisits;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-20a: non-distinct sum, distinct count, global, rewritten"
+statement = '''
+  SELECT SUM(partial_sum) / SUM(partial_cnt) AS avg_revenue, COUNT("destinationURL")
+  FROM (
+      SELECT "destinationURL",
+             SUM("adRevenue")   AS partial_sum,
+             COUNT("adRevenue") AS partial_cnt
+      FROM uservisits
+      GROUP BY "destinationURL"
   ) t;
 '''
 concurrency = 3
