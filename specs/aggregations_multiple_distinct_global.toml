@@ -6,11 +6,13 @@ statements = [
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
+    "REFRESH TABLE doc.uservisits",
+
     "ALTER TABLE doc.uservisits ADD COLUMN source_ip_2 TEXT",
     "UPDATE doc.uservisits SET source_ip_2 = \"sourceIP\"",
-    "ALTER TABLE doc.uservisits ADD COLUMN source_ip_3 TEXT",
-    "UPDATE doc.uservisits SET source_ip_3 = \"sourceIP\"",
     "REFRESH TABLE doc.uservisits",
+
+    
     "ANALYZE"
 ]
 
@@ -30,7 +32,7 @@ statement = '''
     from uservisits;
 '''
 concurrency = 1
-iterations = 100
+iterations = 50
 
 [[queries]]
 name = "Q-16-3: two different, high-card, distinct aggregations, global"

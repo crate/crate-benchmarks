@@ -1,0 +1,128 @@
+[setup]
+statement_files = ["../specs/sql/tbl.sql"]
+statements = [
+    '''
+    INSERT INTO tbl (
+        id, col_a_100, col_b_100,
+        col_a_90, col_b_90,
+        col_a_80, col_b_80,
+        col_a_70, col_b_70,
+        col_a_60, col_b_60,
+        col_a_50, col_b_50,
+        col_a_40, col_b_40,
+        col_a_30, col_b_30,
+        col_a_20, col_b_20,
+        col_a_10, col_b_10
+    )
+    SELECT
+        n, n, n,
+        n % 4500000, n % 4500000,
+        n % 4000000, n % 4000000,
+        n % 3500000, n % 3500000,
+        n % 3000000, n % 3000000,
+        n % 2500000, n % 2500000,
+        n % 2000000, n % 2000000,
+        n % 1500000, n % 1500000,
+        n % 1000000, n % 1000000,
+        n % 500000, n % 500000
+    FROM (SELECT generate_series AS n FROM generate_series(1, 5000000)) t
+    ''',
+    "REFRESH TABLE doc.tbl",
+
+    "ANALYZE"
+]
+
+
+[[queries]]
+name = "Q-100: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_100"), count(distinct "col_b_100")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-90: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_90"), count(distinct "col_b_90")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-80: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_80"), count(distinct "col_b_80")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-70: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_70"), count(distinct "col_b_70")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-60: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_60"), count(distinct "col_b_60")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-50: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_50"), count(distinct "col_b_50")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-40: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_40"), count(distinct "col_b_40")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-30: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_30"), count(distinct "col_b_30")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-20: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_20"), count(distinct "col_b_20")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+[[queries]]
+name = "Q-10: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "col_a_10"), count(distinct "col_b_10")
+    from tbl;
+'''
+concurrency = 1
+iterations = 100
+
+
+[teardown]
+statements = ["drop table if exists tbl"]
