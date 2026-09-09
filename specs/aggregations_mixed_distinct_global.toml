@@ -257,5 +257,29 @@ statement = '''
 concurrency = 3
 iterations = 150
 
+[[queries]]
+name = "Q-35: non-distinct sum, distinct count, global"
+statement = '''
+    SELECT AVG("adRevenue"), COUNT(DISTINCT "destinationURL")
+    FROM uservisits;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-35a: non-distinct sum, distinct count, global, rewritten"
+statement = '''
+  SELECT SUM(partial_sum) / SUM(partial_cnt) AS avg_revenue, COUNT("destinationURL")
+  FROM (
+      SELECT "destinationURL",
+             SUM("adRevenue")   AS partial_sum,
+             COUNT("adRevenue") AS partial_cnt
+      FROM uservisits
+      GROUP BY "destinationURL"
+  ) t;
+'''
+concurrency = 3
+iterations = 150
+
 [teardown]
 statements = ["drop table if exists uservisits"]

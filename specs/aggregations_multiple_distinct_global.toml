@@ -6,13 +6,37 @@ statements = [
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00003.gz' with (compression = 'gzip')",
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00004.gz' with (compression = 'gzip')",
     "copy uservisits from 'https://cdn.crate.io/downloads/datasets/amplab/1node/uservisits/part-00005.gz' with (compression = 'gzip')",
-    "refresh table uservisits"
+    "refresh table uservisits",
+    "ALTER TABLE doc.uservisits ADD COLUMN source_ip_2 TEXT",
+    "UPDATE doc.uservisits SET source_ip_2 = \"sourceIP\"",
+    "REFRESH TABLE doc.uservisits",
+    "ALTER TABLE doc.uservisits ADD COLUMN source_ip_3 TEXT",
+    "UPDATE doc.uservisits SET source_ip_3 = \"sourceIP\"",
+    "REFRESH TABLE doc.uservisits"
 ]
 
 [[queries]]
 name = "Q-16: two different, distinct aggregations, global"
 statement = '''
     select count(distinct "cCode"), count(distinct "sourceIP")
+    from uservisits;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-16-2: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "source_ip_2"), count(distinct "sourceIP")
+    from uservisits;
+'''
+concurrency = 3
+iterations = 150
+
+[[queries]]
+name = "Q-16-3: two different, high-card, distinct aggregations, global"
+statement = '''
+    select count(distinct "source_ip_3"), count(distinct "source_ip_2"), count(distinct "sourceIP")
     from uservisits;
 '''
 concurrency = 3

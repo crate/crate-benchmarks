@@ -7,13 +7,41 @@ set -Eeuo pipefail
 SPEC_FILE="specs/aggregations_mixed_distinct_global.toml"
 OUT_DIR="results"
 CONTAINER_NAME="cratedb-scratch"
+PAUSE=30
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --pause)
+      PAUSE="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      exit 1
+      ;;
+  esac
+done
+# REGEXES=(
+#   "Q-21:"
+#   "Q-21a:"
+#   "Q-22:"
+#   "Q-22a:"
+#   "Q-23:"
+#   "Q-23a:"
+# )
 REGEXES=(
-  "Q-21:"
-  "Q-21a:"
-  "Q-22:"
-  "Q-22a:"
-  "Q-23:"
-  "Q-23a:"
+  "Q-30:"
+  "Q-30a:"
+  "Q-31:"
+  "Q-31a:"
+  "Q-32:"
+  "Q-32a:"
+  "Q-33:"
+  "Q-33a:"
+  "Q-34:"
+  "Q-34a:"
+  "Q-35:"
+  "Q-35a:"
 )
 
 mkdir -p "$OUT_DIR"
@@ -23,7 +51,7 @@ start_cratedb() {
   docker run -d \
     -p 4200:4200 \
     -p 5433:5432 \
-    -e CRATE_HEAP_SIZE=16g \
+    -e CRATE_HEAP_SIZE=8g \
     --pull always \
     --rm \
     --name "$CONTAINER_NAME" \
@@ -61,6 +89,9 @@ for regex in "${REGEXES[@]}"; do
   deactivate
 
   stop_cratedb
+
+  echo "Pausing ${PAUSE}s before next test..."
+  sleep "$PAUSE"
 done
 
 echo "Done. Results in $OUT_DIR/"
