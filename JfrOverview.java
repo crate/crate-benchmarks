@@ -34,7 +34,7 @@ public class JfrOverview {
         public void add(double value) {
             this.count++;
             this.total += value;
-            this.max = Math.max(this.value, value);
+            this.max = Math.max(this.max, value);
             this.value = value;
         }
 
@@ -75,7 +75,7 @@ public class JfrOverview {
         public void add(long value) {
             this.count++;
             this.total += value;
-            this.max = Math.max(this.value, value);
+            this.max = Math.max(this.max, value);
             this.value = value;
         }
     }
