@@ -8,7 +8,8 @@ SPEC=specs/special.toml
 PAUSE_SECONDS=30
 
 # Ladder: decreasing column cardinality (100% unique down to 10%).
-LADDER=('Q-100:' 'Q-90:' 'Q-80:' 'Q-70:' 'Q-60:' 'Q-50:' 'Q-40:' 'Q-30:' 'Q-20:' 'Q-10:')
+# LADDER=('Q-100:' 'Q-90:' 'Q-80:' 'Q-70:' 'Q-60:' 'Q-50:' 'Q-40:' 'Q-30:' 'Q-20:' 'Q-10:')
+LADDER=('Q-90:' 'Q-80:' 'Q-70:')
 
 for i in "${!LADDER[@]}"; do
     name="${LADDER[$i]}"
@@ -16,7 +17,7 @@ for i in "${!LADDER[@]}"; do
     ./compare_run_saved.py \
         --v1 "$V1" \
         --v2 "$V2" \
-        --forks 1 \
+        --forks 5 \
         --env CRATE_HEAP_SIZE=16g \
         --spec "$SPEC" \
         --re-name "$name"

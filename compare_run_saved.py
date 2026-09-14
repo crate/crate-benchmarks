@@ -94,7 +94,7 @@ def main():
 
     try:
         subprocess.run(
-            ['sudo', 'sysctl', 'kernel.perf_event_paranoid=1'],
+            ['sysctl', 'kernel.perf_event_paranoid=1'],
             check=True,
         )
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
