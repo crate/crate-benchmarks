@@ -170,6 +170,20 @@ def jfr_extract_metrics(filename) -> Dict[str, Any]:
     return json.loads(output)
 
 
+def check_perf_event_paranoid():
+    path = '/proc/sys/kernel/perf_event_paranoid'
+    try:
+        with open(path) as f:
+            value = f.read().strip()
+    except OSError as e:
+        sys.exit(f'Could not read {path}: {e}')
+    if value != '1':
+        sys.exit(
+            f'kernel.perf_event_paranoid is {value}, expected 1.\n'
+            f'Run: sudo sysctl kernel.perf_event_paranoid=1'
+        )
+
+
 def perf_stat(pid: int) -> Optional[subprocess.Popen]:
     cmd = [
         "perf",
@@ -308,6 +322,7 @@ async def run_compare(
 
 
 def main():
+    check_perf_event_paranoid()
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument(
         '--v1',
