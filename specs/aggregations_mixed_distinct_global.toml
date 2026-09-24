@@ -10,7 +10,7 @@ statements = [
 ]
 
 [[queries]]
-name = "Q-18: non-distinct sum, distinct count, global,"
+name = "Q-18: non-distinct sum, distinct count, global"
 statement = '''
     SELECT SUM("adRevenue"), COUNT(DISTINCT "cCode") 
     FROM uservisits;

@@ -1,0 +1,141 @@
+[setup]
+statement_files = ["sql/sqllogic_select5_setup.sql"]
+
+# Last query of sqllogictest select5.test (join-64-4): 64-table comma join
+[[queries]]
+statement = '''SELECT x46,x59,x60,x24,x5,x28,x17,x19,x36,x51,x30,x25,x48,x31,x63,x7,x20,x10,x27,x32,x62,x21,x14,x15,x58,x50,x13,x43,x56,x12,x40,x41,x6,x45,x23,x54,x37,x8,x3,x22,x34,x29,x33,x55,x38,x26,x39,x35,x18,x52,x1,x2,x4,x11,x47,x44,x61,x49,x53,x64,x57,x42,x9,x16
+                 FROM t17,t7,t30,t12,t49,t23,t63,t51,t33,t43,t9,t62,t21,t48,t36,t1,t4,t25,t6,t35,t52,t58,t50,t14,t32,t53,t22,t13,t15,t10,t19,t61,t5,t11,t40,t29,t46,t31,t60,t55,t54,t16,t42,t2,t20,t39,t8,t38,t44,t41,t56,t64,t37,t59,t34,t3,t24,t57,t18,t45,t26,t27,t47,t28
+                WHERE a49=b21
+                  AND b32=a16
+                  AND a62=b15
+                  AND b43=a26
+                  AND b27=a54
+                  AND a57=b34
+                  AND b44=a35
+                  AND a51=b8
+                  AND b56=a31
+                  AND a33=b63
+                  AND b37=a10
+                  AND a21=b16
+                  AND b23=a7
+                  AND a37=b7
+                  AND a32=b50
+                  AND a6=b39
+                  AND a14=b47
+                  AND b9=a25
+                  AND a27=b6
+                  AND a29=b40
+                  AND a60=b36
+                  AND b64=a45
+                  AND b46=a36
+                  AND a39=b41
+                  AND b61=a64
+                  AND b17=a50
+                  AND a63=b14
+                  AND a18=b25
+                  AND b29=a2
+                  AND b58=a24
+                  AND a28=b42
+                  AND a12=b57
+                  AND a56=b2
+                  AND a4=b1
+                  AND b19=a8
+                  AND a41=b48
+                  AND a61=b52
+                  AND a40=b20
+                  AND a3=b62
+                  AND a11=b33
+                  AND a23=b26
+                  AND a34=b28
+                  AND b60=a52
+                  AND a31=10
+                  AND b30=a59
+                  AND b53=a47
+                  AND b5=a55
+                  AND b18=a43
+                  AND b3=a44
+                  AND a13=b24
+                  AND a46=b35
+                  AND a30=b51
+                  AND a17=b59
+                  AND b54=a5
+                  AND a38=b4
+                  AND a53=b55
+                  AND b22=a20
+                  AND a19=b38
+                  AND b13=a42
+                  AND a58=b49
+                  AND a1=b45
+                  AND b12=a48
+                  AND a15=b10
+                  AND a22=b11'''
+iterations = 100
+
+
+[teardown]
+statements = [
+    "drop table if exists t1",
+    "drop table if exists t2",
+    "drop table if exists t3",
+    "drop table if exists t4",
+    "drop table if exists t5",
+    "drop table if exists t6",
+    "drop table if exists t7",
+    "drop table if exists t8",
+    "drop table if exists t9",
+    "drop table if exists t10",
+    "drop table if exists t11",
+    "drop table if exists t12",
+    "drop table if exists t13",
+    "drop table if exists t14",
+    "drop table if exists t15",
+    "drop table if exists t16",
+    "drop table if exists t17",
+    "drop table if exists t18",
+    "drop table if exists t19",
+    "drop table if exists t20",
+    "drop table if exists t21",
+    "drop table if exists t22",
+    "drop table if exists t23",
+    "drop table if exists t24",
+    "drop table if exists t25",
+    "drop table if exists t26",
+    "drop table if exists t27",
+    "drop table if exists t28",
+    "drop table if exists t29",
+    "drop table if exists t30",
+    "drop table if exists t31",
+    "drop table if exists t32",
+    "drop table if exists t33",
+    "drop table if exists t34",
+    "drop table if exists t35",
+    "drop table if exists t36",
+    "drop table if exists t37",
+    "drop table if exists t38",
+    "drop table if exists t39",
+    "drop table if exists t40",
+    "drop table if exists t41",
+    "drop table if exists t42",
+    "drop table if exists t43",
+    "drop table if exists t44",
+    "drop table if exists t45",
+    "drop table if exists t46",
+    "drop table if exists t47",
+    "drop table if exists t48",
+    "drop table if exists t49",
+    "drop table if exists t50",
+    "drop table if exists t51",
+    "drop table if exists t52",
+    "drop table if exists t53",
+    "drop table if exists t54",
+    "drop table if exists t55",
+    "drop table if exists t56",
+    "drop table if exists t57",
+    "drop table if exists t58",
+    "drop table if exists t59",
+    "drop table if exists t60",
+    "drop table if exists t61",
+    "drop table if exists t62",
+    "drop table if exists t63",
+    "drop table if exists t64",
+]
