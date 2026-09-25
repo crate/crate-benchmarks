@@ -10,6 +10,9 @@ All arguments are forwarded to compare_run.py as-is.
 The layout below runs/ mirrors the location of the spec, so
 --spec specs/select/group_by_destinationURL.toml ends up in
 runs/select/group_by_destinationURL/run_yyyy_mm_dd_hh_mm.txt
+
+The JFR recordings are saved next to it as run_yyyy_mm_dd_hh_mm_v1_<fork>.jfr
+and run_yyyy_mm_dd_hh_mm_v2_<fork>.jfr, unless --jfr-dir is given explicitly.
 """
 
 import argparse
@@ -88,8 +91,11 @@ def main():
                    help=f'Directory the run outputs are stored in. Defaults to {RUNS_DIR}')
     args, forwarded = p.parse_known_args()
 
-    cmd = [sys.executable, COMPARE_RUN, '--spec', args.spec] + forwarded
     out_file = output_file(args.spec, args.runs_dir)
+    cmd = [sys.executable, COMPARE_RUN, '--spec', args.spec] + forwarded
+    if not any(a == '--jfr-dir' or a.startswith('--jfr-dir=') for a in forwarded):
+        run_name = os.path.splitext(os.path.basename(out_file))[0]
+        cmd += ['--jfr-dir', os.path.dirname(out_file), '--jfr-prefix', run_name + '_']
     started = datetime.now()
 
     try:

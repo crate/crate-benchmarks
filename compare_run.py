@@ -294,7 +294,9 @@ async def run_compare(
         protocol,
         report_indexing,
         diff_jfr: bool,
-        re_name: Optional[str] = None):
+        re_name: Optional[str] = None,
+        jfr_dir: Optional[str] = None,
+        jfr_prefix: str = ''):
     tmpdir = tempfile.mkdtemp()
     run_v1 = partial(_run_spec, v1, spec_v1, result_hosts, env_v1, settings_v1, tmpdir, protocol, report_indexing, re_name)
     run_v2 = partial(_run_spec, v2, spec_v2, result_hosts, env_v2, settings_v2, tmpdir, protocol, report_indexing, re_name)
@@ -316,6 +318,12 @@ async def run_compare(
             if diff_jfr:
                 subprocess.check_output(["jfrconv", "--diff", jfr_file1, jfr_file2, f"diff-{i}.html"])
                 subprocess.check_output(["jfrconv", "--diff", jfr_file2, jfr_file1, f"diff-{i}-reverse.html"])
+            if jfr_dir:
+                os.makedirs(jfr_dir, exist_ok=True)
+                for name, jfr_file in (('v1', jfr_file1), ('v2', jfr_file2)):
+                    target = os.path.join(jfr_dir, f'{jfr_prefix}{name}_{i}.jfr')
+                    shutil.move(jfr_file, target)
+                    print(f'Saved JFR recording to {target}')
 
     finally:
         shutil.rmtree(tmpdir, True)
@@ -359,6 +367,11 @@ def main():
                    help='Whether to report shard indexing statistics. Mostly useful when running indexing benchmarks. Disabled by default.')
     p.add_argument("--diff-jfr", action="store_true",
                    help="Uses the `jfrconv` CLI to generate a diff from the two profiles")
+    p.add_argument('--jfr-dir', type=str,
+                   help='Directory to save the JFR recordings to. Discarded if not given')
+    p.add_argument('--jfr-prefix', type=str, default='',
+                   help='Filename prefix for recordings saved to --jfr-dir. '
+                        'Files are named <prefix>v1_<fork>.jfr and <prefix>v2_<fork>.jfr')
     p.add_argument('--re-name', type=str,
                    help='Regex to filter queries by name. Only queries with a matching name are run')
     args = p.parse_args()
@@ -393,6 +406,8 @@ def main():
             report_indexing=args.report_indexing,
             diff_jfr=args.diff_jfr,
             re_name=args.re_name,
+            jfr_dir=args.jfr_dir,
+            jfr_prefix=args.jfr_prefix,
         ))
     except KeyboardInterrupt:
         print('Exiting..')
