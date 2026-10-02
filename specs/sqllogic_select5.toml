@@ -135,8 +135,8 @@ statement = '''SELECT x20,x37,x55,x40,x31,x15,x28,x48,x64,x17,x1,x56,x4,x11,x5,x
                   AND b1=a39
                   AND b56=a58
                   AND b58=a20'''
-concurrency = 3
-iterations = 350
+concurrency = 5
+iterations = 1000
 
 
 # sqllogictest select5.test, query 1 (join-4-1): 4-table comma join
