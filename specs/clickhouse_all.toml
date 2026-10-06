@@ -92,20 +92,20 @@ name = "CH-Q16"
 statement = "SELECT UserID, COUNT(*) FROM hits GROUP BY UserID ORDER BY COUNT(*) DESC LIMIT 10"
 iterations = 5
 
-# [[queries]]
-# name = "CH-Q17"
-# statement = "SELECT UserID, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10"
-# iterations = 5
+[[queries]]
+name = "CH-Q17"
+statement = "SELECT UserID, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10"
+iterations = 5
 
-# [[queries]]
-# name = "CH-Q18"
-# statement = "SELECT UserID, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, SearchPhrase LIMIT 10"
-# iterations = 5
+[[queries]]
+name = "CH-Q18"
+statement = "SELECT UserID, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, SearchPhrase LIMIT 10"
+iterations = 5
 
-# [[queries]]
-# name = "CH-Q19"
-# statement = "SELECT UserID, extract(minute FROM EventTime) AS m, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, m, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10"
-# iterations = 5
+[[queries]]
+name = "CH-Q19"
+statement = "SELECT UserID, extract(minute FROM EventTime) AS m, SearchPhrase, COUNT(*) FROM hits GROUP BY UserID, m, SearchPhrase ORDER BY COUNT(*) DESC LIMIT 10"
+iterations = 5
 
 [[queries]]
 name = "CH-Q20"
@@ -172,20 +172,20 @@ name = "CH-Q32"
 statement = "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM hits WHERE SearchPhrase <> '' GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10"
 iterations = 5
 
-# [[queries]]
-# name = "CH-Q33"
-# statement = "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM hits GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10"
-# iterations = 5
+[[queries]]
+name = "CH-Q33"
+statement = "SELECT WatchID, ClientIP, COUNT(*) AS c, SUM(IsRefresh), AVG(ResolutionWidth) FROM hits GROUP BY WatchID, ClientIP ORDER BY c DESC LIMIT 10"
+iterations = 5
 
-# [[queries]]
-# name = "CH-Q34"
-# statement = "SELECT URL, COUNT(*) AS c FROM hits GROUP BY URL ORDER BY c DESC LIMIT 10"
-# iterations = 5
+[[queries]]
+name = "CH-Q34"
+statement = "SELECT URL, COUNT(*) AS c FROM hits GROUP BY URL ORDER BY c DESC LIMIT 10"
+iterations = 5
 
-# [[queries]]
-# name = "CH-Q35"
-# statement = "SELECT 1, URL, COUNT(*) AS c FROM hits GROUP BY 1, URL ORDER BY c DESC LIMIT 10"
-# iterations = 5
+[[queries]]
+name = "CH-Q35"
+statement = "SELECT 1, URL, COUNT(*) AS c FROM hits GROUP BY 1, URL ORDER BY c DESC LIMIT 10"
+iterations = 5
 
 [[queries]]
 name = "CH-Q36"
