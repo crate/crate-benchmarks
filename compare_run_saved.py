@@ -12,7 +12,8 @@ The layout below runs/ mirrors the location of the spec, so
 runs/select/group_by_destinationURL/run_yyyy_mm_dd_hh_mm.txt
 
 The JFR recordings are saved next to it as run_yyyy_mm_dd_hh_mm_v1_<fork>.jfr
-and run_yyyy_mm_dd_hh_mm_v2_<fork>.jfr, unless --jfr-dir is given explicitly.
+and run_yyyy_mm_dd_hh_mm_v2_<fork>.jfr, unless --jfr-dir is given explicitly
+or --no-jfr is set.
 """
 
 import argparse
@@ -89,11 +90,13 @@ def main():
     p.add_argument('--spec', help='path to spec file', required=True)
     p.add_argument('--runs-dir', default=RUNS_DIR,
                    help=f'Directory the run outputs are stored in. Defaults to {RUNS_DIR}')
+    p.add_argument('--no-jfr', action='store_true',
+                   help='Do not save the JFR recordings next to the run output')
     args, forwarded = p.parse_known_args()
 
     out_file = output_file(args.spec, args.runs_dir)
     cmd = [sys.executable, COMPARE_RUN, '--spec', args.spec] + forwarded
-    if not any(a == '--jfr-dir' or a.startswith('--jfr-dir=') for a in forwarded):
+    if not args.no_jfr and not any(a == '--jfr-dir' or a.startswith('--jfr-dir=') for a in forwarded):
         run_name = os.path.splitext(os.path.basename(out_file))[0]
         cmd += ['--jfr-dir', os.path.dirname(out_file), '--jfr-prefix', run_name + '_']
     started = datetime.now()

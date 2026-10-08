@@ -1,18 +1,29 @@
 #!/usr/bin/env bash
 #
 # Start a single CrateDB node in Docker, run a SQL file against it and stop it
-# again, leaving the data behind in DATA_DIR. The result can be reused with
-# compare_run.py / compare_run_saved.py via `-s path.data=$DATA_DIR`.
+# again, leaving the data behind in $DATA_ROOT/$DATA_DIR_NAME. The result can be
+# reused with compare_run.py / compare_run_saved.py via `-s path.data=<that dir>`.
 #
 # All variables below can be overridden from the environment, e.g.:
-#   VERSION=6.2 DATA_DIR=/tmp/hits ./load_data_docker.sh
+#   VERSION=6.2 DATA_DIR_NAME=v6_2_hits_data_1M ./load_data_docker.sh
+#   VERSION=nightly DATA_DIR_NAME=nightly_hits_data_1M SQL_FILE_NAME=load_hits_1M.sql ./load_data_docker.sh
 
 set -euo pipefail
 
 VERSION="${VERSION:-6.3}"
-DATA_DIR="${DATA_DIR:-/home/haris/projects/crate/test-data/v6_3_hits_data_1M}"
-SQL_FILE="${SQL_FILE:-/home/haris/Documents/Notes/CrateDB/load_hits_1M.sql}"
-# Table whose row count is printed once loading is done
+# Releases are published as crate:<version>, nightlies only as crate/crate:nightly*
+if [[ "$VERSION" == nightly* ]]; then
+    IMAGE="${IMAGE:-crate/crate:$VERSION}"
+else
+    IMAGE="${IMAGE:-crate:$VERSION}"
+fi
+DATA_ROOT=/home/haris/projects/crate/test-data
+SQL_ROOT=/home/haris/Documents/Notes/CrateDB
+# Name of the data dir below DATA_ROOT
+DATA_DIR_NAME="${DATA_DIR_NAME:-v6_3_hits_data_1M}"
+# Name of the SQL file below SQL_ROOT
+SQL_FILE_NAME="${SQL_FILE_NAME:-load_hits_1M.sql}"
+# Table whose row count is printed (with the CrateDB version) once loading is done
 TABLE="${TABLE:-hits}"
 # Directory holding the files referenced by `COPY ... FROM 'file:///...'`.
 # Mounted at the same path inside the container so the paths in SQL_FILE work.
@@ -20,6 +31,15 @@ IMPORT_DIR="${IMPORT_DIR:-/home/haris/projects/crate/test-data/clickhouse}"
 HEAP_SIZE="${HEAP_SIZE:-4g}"
 HTTP_PORT="${HTTP_PORT:-4200}"
 PG_PORT="${PG_PORT:-5432}"
+
+for name in "$DATA_DIR_NAME" "$SQL_FILE_NAME"; do
+    if [[ -z "$name" || "$name" == */* ]]; then
+        echo "Expected a plain name, not a path: '$name'" >&2
+        exit 1
+    fi
+done
+DATA_DIR="$DATA_ROOT/$DATA_DIR_NAME"
+SQL_FILE="$SQL_ROOT/$SQL_FILE_NAME"
 
 CONTAINER="crate-load-${VERSION//./_}"
 
@@ -41,13 +61,13 @@ cleanup() {
 }
 trap cleanup EXIT
 
-docker pull "crate:$VERSION"
+docker pull "$IMAGE"
 docker run -d --name "$CONTAINER" \
     -p "$HTTP_PORT:4200" -p "$PG_PORT:5432" \
     -e CRATE_HEAP_SIZE="$HEAP_SIZE" \
     -v "$DATA_DIR:/data" \
     -v "$IMPORT_DIR:$IMPORT_DIR:ro" \
-    "crate:$VERSION" \
+    "$IMAGE" \
     crate -Cdiscovery.type=single-node -Cpath.data=/data
 
 echo "Waiting for CrateDB on port $HTTP_PORT"
@@ -70,4 +90,8 @@ sql() {
         -d "{\"stmt\": \"$1\"}"
 }
 sql "REFRESH TABLE $TABLE" >/dev/null
-sql "SELECT count(*) FROM $TABLE" | python3 -c 'import json, sys; print(json.load(sys.stdin)["rows"][0][0])'
+sql "SELECT version(), count(*) FROM $TABLE" | python3 -c '
+import json, sys
+version, rows = json.load(sys.stdin)["rows"][0]
+print(f"version: {version}")
+print(f"rows:    {rows}")'
