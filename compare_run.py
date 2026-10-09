@@ -7,6 +7,7 @@ compare the results
 """
 
 import argparse
+import getpass
 import json
 import os
 import shutil
@@ -171,17 +172,25 @@ def jfr_extract_metrics(filename) -> Dict[str, Any]:
 
 
 def check_perf_event_paranoid():
+    strict = getpass.getuser() == 'haris'
     path = '/proc/sys/kernel/perf_event_paranoid'
     try:
         with open(path) as f:
             value = f.read().strip()
     except OSError as e:
-        sys.exit(f'Could not read {path}: {e}')
-    if value != '1':
-        sys.exit(
-            f'kernel.perf_event_paranoid is {value}, expected 1.\n'
-            f'Run: sudo sysctl kernel.perf_event_paranoid=1'
-        )
+        if strict:
+            sys.exit(f'Could not read {path}: {e}')
+        print(f'Could not read {path}: {e}, perf stats may be missing', file=sys.stderr)
+        return
+    if value == '1':
+        return
+    if not strict:
+        print(f'kernel.perf_event_paranoid is {value}, perf stats may be missing', file=sys.stderr)
+        return
+    sys.exit(
+        f'kernel.perf_event_paranoid is {value}, expected 1.\n'
+        f'Run: sudo sysctl kernel.perf_event_paranoid=1'
+    )
 
 
 def perf_stat(pid: int) -> Optional[subprocess.Popen]:
