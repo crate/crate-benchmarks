@@ -3,7 +3,7 @@ statements = [
   "create table t005 (x long) clustered into 5 shards",
   "insert into t005 (x) (select x % 500000 from generate_series(0, 9999999) as t (x))",
   "refresh table t005",
-  "optimize table t005"
+  "OPTIMIZE TABLE t005 WITH (max_num_segments = 1)"
 ]
 
 
