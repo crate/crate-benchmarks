@@ -1,0 +1,19 @@
+[setup]
+statements = [
+  "create table t015 (x long) clustered into 5 shards",
+  "insert into t015 (x) (select x % 1500000 from generate_series(0, 9999999) as t (x))",
+  "refresh table t015",
+  "optimize table t015"
+]
+
+
+[[queries]]
+name = "count_distinct_t015"
+statement = "select count(distinct x) from t015"
+concurrency = 1
+iterations = 50
+
+[teardown]
+statements = [
+  "drop table if exists t015"
+]
