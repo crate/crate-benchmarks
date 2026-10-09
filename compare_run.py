@@ -130,9 +130,9 @@ def format_perf_stat_value(k: str, v: Dict[str, Any], max_digits: int, max_keyle
         f"{k:<{max_keylen}}: "
     ]
     if "metric-value" in v:
-        parts.append(f"{float(v["metric-value"]): {max_digits}.2f}")
+        parts.append(f"{float(v['metric-value']): {max_digits}.2f}")
     elif "counter-value" in v:
-        parts.append(f"{float(v["counter-value"]): {max_digits}.2f}")
+        parts.append(f"{float(v['counter-value']): {max_digits}.2f}")
     unit = v.get("unit", "")
     if unit:
         parts.append(unit)
