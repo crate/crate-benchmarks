@@ -1,7 +1,7 @@
 [setup]
 statements = [
   "create table t075 (x long) clustered into 5 shards",
-  "insert into t075 (x) (select x % 7500000 from generate_series(0, 9999999) as t (x))",
+  "insert into t075 (x) (select x % 7500000 from generate_series(1, 10000000) as t (x))",
   "refresh table t075"
 ]
 
@@ -11,6 +11,7 @@ name = "count_distinct_t075"
 statement = "select count(distinct x) from t075"
 concurrency = 1
 iterations = 10
+warmup = 3
 
 [teardown]
 statements = [

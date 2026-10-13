@@ -1,0 +1,68 @@
+[setup]
+statements = [
+  """create table t (
+    str_01 string,
+    str_05 string,
+    str_10 string,
+    str_15 string,
+    str_20 string,
+    str_25 string,
+    int_01 integer,
+    int_05 integer,
+    int_10 integer,
+    int_15 integer,
+    int_20 integer,
+    int_25 integer
+  ) clustered into 5 shards""",
+  """insert into t (str_01, str_05, str_10, str_15, str_20, str_25, int_01, int_05, int_10, int_15, int_20, int_25) (
+    select
+      'v' || (x % 100000)::text,
+      'v' || (x % 500000)::text,
+      'v' || (x % 1000000)::text,
+      'v' || (x % 1500000)::text,
+      'v' || (x % 2000000)::text,
+      'v' || (x % 2500000)::text,
+      x % 100000,
+      x % 500000,
+      x % 1000000,
+      x % 1500000,
+      x % 2000000,
+      x % 2500000
+    from generate_series(1, 10000000) as g (x)
+  )""",
+  "refresh table t",
+  "optimize table t"
+]
+
+[[queries]]
+name = "count_distinct_str_int_01"
+statement = "select count(distinct str_01), count(distinct int_01) from t"
+concurrency = 1
+iterations = 50
+warmup = 3
+
+[[queries]]
+name = "count_distinct_str_int_05"
+statement = "select count(distinct str_05), count(distinct int_05) from t"
+concurrency = 1
+iterations = 50
+warmup = 3
+
+[[queries]]
+name = "count_distinct_str_05_10"
+statement = "select count(distinct str_05), count(distinct str_10) from t"
+concurrency = 1
+iterations = 50
+warmup = 3
+
+[[queries]]
+name = "count_distinct_int_05_10"
+statement = "select count(distinct int_05), count(distinct int_10) from t"
+concurrency = 1
+iterations = 50
+warmup = 3
+
+[teardown]
+statements = [
+  "drop table if exists t"
+]
