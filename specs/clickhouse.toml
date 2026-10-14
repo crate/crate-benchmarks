@@ -8,51 +8,51 @@ statements = [
 ]
 
 [[queries]]
-name = "CH-Q1"
+name = "CH-Q01"
 statement = "SELECT COUNT(*) FROM hits"
 iterations = 10
 
 [[queries]]
-name = "CH-Q2"
+name = "CH-Q02"
 statement = "SELECT COUNT(*) FROM hits WHERE AdvEngineID <> 0"
 iterations = 10
 warmup = 3
 
 [[queries]]
-name = "CH-Q3"
+name = "CH-Q03"
 statement = "SELECT SUM(AdvEngineID), COUNT(*), AVG(ResolutionWidth) FROM hits"
 iterations = 5
 
 [[queries]]
-name = "CH-Q4"
+name = "CH-Q04"
 statement = "SELECT AVG(UserID) FROM hits"
 iterations = 10
 warmup = 3
 
 [[queries]]
-name = "CH-Q5"
+name = "CH-Q05"
 statement = "SELECT COUNT(DISTINCT UserID) FROM hits"
 iterations = 5
 
 [[queries]]
-name = "CH-Q6"
+name = "CH-Q06"
 statement = "SELECT COUNT(DISTINCT SearchPhrase) FROM hits"
 iterations = 5
 
 [[queries]]
-name = "CH-Q7"
+name = "CH-Q07"
 statement = "SELECT MIN(EventDate), MAX(EventDate) FROM hits"
 iterations = 10
 warmup = 3
 
 [[queries]]
-name = "CH-Q8"
+name = "CH-Q08"
 statement = "SELECT AdvEngineID, COUNT(*) FROM hits WHERE AdvEngineID <> 0 GROUP BY AdvEngineID ORDER BY COUNT(*) DESC"
 iterations = 10
 warmup = 3
 
 [[queries]]
-name = "CH-Q9"
+name = "CH-Q09"
 statement = "SELECT RegionID, COUNT(DISTINCT UserID) AS u FROM hits GROUP BY RegionID ORDER BY u DESC LIMIT 10"
 iterations = 5
 
