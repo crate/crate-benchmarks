@@ -15,6 +15,13 @@ concurrency = 1
 iterations = 100
 warmup = 3
 
+[[queries]]
+name = "select_x_count_star"
+statement = "SELECT x, count(*) FROM t005 GROUP BY x"
+concurrency = 1
+iterations = 100
+warmup = 3
+
 [teardown]
 statements = [
   "drop table if exists t005"
