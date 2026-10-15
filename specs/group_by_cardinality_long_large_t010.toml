@@ -7,9 +7,23 @@ statements = [
 ]
 
 
+# [[queries]]
+# name = "count_distinct_t010"
+# statement = "select count(distinct x) from t010"
+# concurrency = 1
+# iterations = 100
+# warmup = 3
+
 [[queries]]
-name = "count_distinct_t010"
-statement = "select count(distinct x) from t010"
+name = "collect_set_t010"
+statement = "SELECT collection_count(collect_set(x)) FROM t010"
+concurrency = 1
+iterations = 100
+warmup = 3
+
+[[queries]]
+name = "collect_numeric_set_t010"
+statement = "SELECT collection_count(collect_numeric_set(x)) FROM t010"
 concurrency = 1
 iterations = 100
 warmup = 3

@@ -8,16 +8,30 @@ statements = [
 ]
 
 
+# [[queries]]
+# name = "count_distinct_t005"
+# statement = "select count(distinct x) from t005"
+# concurrency = 1
+# iterations = 100
+# warmup = 3
+
+# [[queries]]
+# name = "select_x_count_star"
+# statement = "SELECT x, count(*) FROM t005 GROUP BY x"
+# concurrency = 1
+# iterations = 100
+# warmup = 3
+
 [[queries]]
-name = "count_distinct_t005"
-statement = "select count(distinct x) from t005"
+name = "collect_set_t005"
+statement = "SELECT collection_count(collect_set(x)) FROM t005"
 concurrency = 1
 iterations = 100
 warmup = 3
 
 [[queries]]
-name = "select_x_count_star"
-statement = "SELECT x, count(*) FROM t005 GROUP BY x"
+name = "collect_numeric_set_t005"
+statement = "SELECT collection_count(collect_numeric_set(x)) FROM t005"
 concurrency = 1
 iterations = 100
 warmup = 3
