@@ -1,0 +1,19 @@
+[setup]
+statements = [
+  "create table t075 (x long) clustered into 5 shards",
+  "insert into t075 (x) (select x % 7500000 from generate_series(1, 10000000) as t (x))",
+  "refresh table t075",
+  "optimize table t075"
+]
+
+[[queries]]
+name = "collect_numeric_set_t075"
+statement = "SELECT collection_count(collect_numeric_set(x)) FROM t075"
+concurrency = 1
+iterations = 50
+warmup = 3
+
+[teardown]
+statements = [
+  "drop table if exists t075"
+]
