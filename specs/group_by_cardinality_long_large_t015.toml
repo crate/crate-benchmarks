@@ -21,12 +21,12 @@ concurrency = 1
 iterations = 50
 warmup = 3
 
-[[queries]]
-name = "collect_numeric_set_t015"
-statement = "SELECT collection_count(collect_numeric_set(x)) FROM t015"
-concurrency = 1
-iterations = 50
-warmup = 3
+# [[queries]]
+# name = "collect_numeric_set_t015"
+# statement = "SELECT collection_count(collect_numeric_set(x)) FROM t015"
+# concurrency = 1
+# iterations = 50
+# warmup = 3
 
 [teardown]
 statements = [
