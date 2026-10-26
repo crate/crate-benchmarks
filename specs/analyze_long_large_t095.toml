@@ -1,0 +1,16 @@
+[setup]
+statements = [
+  "create table t095 (x long)",
+  "insert into t095 (x) (select x % 9500000 from generate_series(1, 10000000) as t (x))",
+  "refresh table t095",
+  "optimize table t095"
+]
+
+[[queries]]
+name = "analyze"
+statement = '''analyze'''
+concurrency = 1
+iterations = 250
+
+[teardown]
+statements = ["drop table if exists t095"]
