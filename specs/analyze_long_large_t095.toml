@@ -10,6 +10,7 @@ statements = [
 name = "analyze"
 statement = '''analyze'''
 concurrency = 1
+warmup = 25
 iterations = 250
 
 [teardown]
