@@ -20,7 +20,7 @@ from typing import Optional, Dict, Any
 from uuid import uuid4
 
 from cr8.log import Logger
-from cr8.run_crate import get_crate, CrateNode
+from cr8.run_crate import get_crate, CrateNode, _crates_cache
 from cr8.run_spec import do_run_spec
 
 from compare_measures import Diff, print_diff
@@ -233,8 +233,22 @@ def perf_stat_results(proc: subprocess.Popen) -> Dict[str, Any]:
     return metrics
 
 
+def _get_crate(version):
+    try:
+        return get_crate(version)
+    except subprocess.CalledProcessError as e:
+        # cr8 can't pull a branch that was force-pushed; replace the local branch with the remote one
+        if e.cmd[:2] != ['git', 'pull']:
+            raise
+        branch = e.cmd[-1]
+        src_repo = os.path.join(_crates_cache(), 'sources_tmp')
+        subprocess.run(['git', 'fetch', 'origin', branch], cwd=src_repo, check=True, stdin=subprocess.DEVNULL)
+        subprocess.run(['git', 'reset', '--hard', 'FETCH_HEAD'], cwd=src_repo, check=True, stdin=subprocess.DEVNULL)
+        return get_crate(version)
+
+
 async def _run_spec(version, spec, result_hosts, env, settings, tmpdir, protocol, report_indexing, re_name):
-    crate_dir = get_crate(version)
+    crate_dir = _get_crate(version)
     settings = dict(settings)
     settings.setdefault('cluster.name', str(uuid4()))
     data_copy = None
