@@ -4,7 +4,9 @@
 [setup]
 statement_files = ["../sql/hits.sql"]
 statements = [
-  "COPY hits FROM 'https://datasets.clickhouse.com/hits_compatible/hits.tsv.gz' WITH (compression = 'gzip', delimiter = '\t', format = 'csv', header = false, empty_string_as_null = false)"
+  "COPY hits FROM 'https://datasets.clickhouse.com/hits_compatible/hits.tsv.gz' WITH (compression = 'gzip', delimiter = '\t', format = 'csv', header = false, empty_string_as_null = false)",
+  "REFRESH TABLE hits",
+  "OPTIMIZE TABLE hits WITH (max_num_segments = 1)"
 ]
 
 [[queries]]
