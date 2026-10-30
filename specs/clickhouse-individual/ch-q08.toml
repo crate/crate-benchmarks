@@ -1,0 +1,17 @@
+# A copy of the benchmark from https://benchmark.clickhouse.com
+# Licensed under Creative Commons, see https://github.com/ClickHouse/ClickBench/blob/main/LICENSE
+
+[setup]
+statement_files = ["../sql/hits.sql"]
+statements = [
+  "COPY hits FROM 'https://datasets.clickhouse.com/hits_compatible/hits.tsv.gz' WITH (compression = 'gzip', delimiter = '\t', format = 'csv', header = false, empty_string_as_null = false)"
+]
+
+[[queries]]
+name = "CH-Q08"
+statement = "SELECT AdvEngineID, COUNT(*) FROM hits WHERE AdvEngineID <> 0 GROUP BY AdvEngineID ORDER BY COUNT(*) DESC"
+iterations = 100
+warmup = 20
+
+[teardown]
+statements = ["drop table if exists hits"]
