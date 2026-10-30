@@ -1,0 +1,12 @@
+versions = [
+    "latest-nightly"
+]
+
+configurations = [
+    "16g.toml"
+]
+
+[specs]
+full = [
+  "../specs/clickhouse.toml"
+]
