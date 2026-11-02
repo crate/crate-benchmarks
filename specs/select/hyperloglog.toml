@@ -18,10 +18,17 @@ statements = [
 ]
 
 [[queries]]
+name = "hll-str-low-cardinality"
 statement = '''select hyperloglog_distinct("cCode") from uservisits'''
 iterations = 50
 
 [[queries]]
+name = "hll-str-group-by"
+statement = '''select "cCode", hyperloglog_distinct("destinationURL") from uservisits group by 1'''
+iterations = 50
+
+[[queries]]
+name = "hll-timestamp"
 statement = '''select hyperloglog_distinct("visitDate") from uservisits'''
 iterations = 50
 
