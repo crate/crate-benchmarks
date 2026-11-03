@@ -11,7 +11,7 @@ name = "analyze-t095"
 statement = '''analyze'''
 concurrency = 1
 warmup = 50
-iterations = 500
+iterations = 300
 
 [teardown]
 statements = ["drop table if exists t095"]
