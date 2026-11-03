@@ -7,7 +7,7 @@ statements = [
 ]
 
 [[queries]]
-name = "analyze"
+name = "analyze-t095"
 statement = '''analyze'''
 concurrency = 1
 warmup = 25
