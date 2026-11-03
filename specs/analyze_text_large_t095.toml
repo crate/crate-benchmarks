@@ -1,0 +1,17 @@
+[setup]
+statements = [
+  "create table t095 (x text)",
+  "insert into t095 (x) (select md5((x % 9500000)::text) from generate_series(1, 10000000) as t (x))",
+  "refresh table t095",
+  "optimize table t095"
+]
+
+[[queries]]
+name = "analyze-text-t095"
+statement = '''analyze'''
+concurrency = 1
+warmup = 50
+iterations = 300
+
+[teardown]
+statements = ["drop table if exists t095"]
