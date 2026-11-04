@@ -3,7 +3,7 @@ statements = [
   "create table t095 (x long)",
   "insert into t095 (x) (select x % 9500000 from generate_series(1, 10000000) as t (x))",
   "refresh table t095",
-  "optimize table t095"
+  "optimize table t095 with (max_num_segments = 1000)"
 ]
 
 [[queries]]
