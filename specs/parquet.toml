@@ -1,0 +1,32 @@
+[setup]
+statement_files = ["sql/parquet_fdw.sql"]
+
+[[queries]]
+name = "parquet a"
+statement = "select count(*) from houseprices"
+warmup = 3
+iterations = 10
+
+[[queries]]
+name = "parquet b"
+statement = "select price from houseprices where price > 50000"
+warmup = 3
+iterations = 10
+
+[[queries]]
+name = "parquet c"
+statement = "select sum(price) from houseprices"
+warmup = 3
+iterations = 10
+
+[[queries]]
+name = "parquet d"
+statement = """select avg(price) as avg_price, district
+  from houseprices
+  group by district
+  order by avg_price desc"""
+warmup = 3
+iterations = 10
+
+[teardown]
+statements = ["drop server if exists pq cascade"]
