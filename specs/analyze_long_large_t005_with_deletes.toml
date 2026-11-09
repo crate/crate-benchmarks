@@ -1,0 +1,19 @@
+[setup]
+statements = [
+  "create table t005 (x long)",
+  "insert into t005 (x) (select x % 500000 from generate_series(1, 10000000) as t (x))",
+  "refresh table t005",
+  "optimize table t005 with (max_num_segments = 1000)",
+  "delete from t005 where x % 10 = 0",
+  "refresh table t005"
+]
+
+[[queries]]
+name = "analyze-long-t005-with-deletes"
+statement = '''analyze'''
+concurrency = 1
+warmup = 50
+iterations = 300
+
+[teardown]
+statements = ["drop table if exists t005"]
