@@ -1,0 +1,25 @@
+[setup]
+statement_files = ["./sql/wide.sql", "./sql/wide_obj.sql"]
+
+    [[setup.data_cmds]]
+    target = "wide"
+    cmd = ['generators/wide.sh']
+    bulk_size = 500
+
+    [[setup.data_cmds]]
+    target = "wide_obj"
+    cmd = ['generators/wide_obj.sh']
+    bulk_size = 500
+
+[[queries]]
+name = "analyze-wide-table"
+statement = "select obj from wide_obj limit 500"
+iterations = 400
+concurrency = 10
+
+
+[teardown]
+statements = [
+  "drop table if exists wide",
+  "drop table if exists wide_obj",
+]

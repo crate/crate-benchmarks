@@ -3,7 +3,8 @@ statements = [
   "create table t090 (x long) clustered into 5 shards",
   "insert into t090 (x) (select x % 9000000 from generate_series(1, 10000000) as t (x))",
   "refresh table t090",
-  "optimize table t090"
+  "optimize table t090",
+  "analyze"
 ]
 
 [[queries]]
