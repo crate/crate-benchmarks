@@ -6,27 +6,33 @@ statements = [
   "optimize table t050"
 ]
 
-
-# [[queries]]
-# name = "count_distinct_t050"
-# statement = "select count(distinct x) from t050"
-# concurrency = 1
-# iterations = 50
-# warmup = 3
+[[queries]]
+name = "count_distinct_t050"
+statement = "select count(distinct x) from t050"
+concurrency = 1
+iterations = 200
+warmup = 50
 
 [[queries]]
-name = "collect_set_t050"
-statement = "SELECT collection_count(collect_set(x)) FROM t050"
+name = "select_x_count_star_t050"
+statement = "SELECT x, count(*) FROM t050 GROUP BY x"
 concurrency = 1
-iterations = 50
-warmup = 3
+iterations = 200
+warmup = 50
+
+# [[queries]]
+# name = "collect_set_t050"
+# statement = "SELECT collection_count(collect_set(x)) FROM t050"
+# concurrency = 1
+# iterations = 200
+# warmup = 50
 
 # [[queries]]
 # name = "collect_numeric_set_t050"
 # statement = "SELECT collection_count(collect_numeric_set(x)) FROM t050"
 # concurrency = 1
-# iterations = 50
-# warmup = 3
+# iterations = 200
+# warmup = 50
 
 [teardown]
 statements = [
