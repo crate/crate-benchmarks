@@ -14,6 +14,11 @@ runs/select/group_by_destinationURL/run_yyyy_mm_dd_hh_mm.txt
 The JFR recordings are saved next to it as run_yyyy_mm_dd_hh_mm_v1_<fork>.jfr
 and run_yyyy_mm_dd_hh_mm_v2_<fork>.jfr, unless --jfr-dir is given explicitly
 or --no-jfr is set.
+
+compare_run.py runs with TMPDIR set to /var/tmp/crate-benchmarks-run-<timestamp>,
+so the data directories of the CrateDB nodes end up below it and
+io_monitor.sh knows which disk to watch. /var/tmp must not be on tmpfs,
+otherwise the data would live in RAM instead of on disk.
 """
 
 import argparse
@@ -27,6 +32,7 @@ from datetime import datetime
 HERE = os.path.dirname(os.path.abspath(__file__))
 COMPARE_RUN = os.path.join(HERE, 'compare_run.py')
 RUNS_DIR = os.path.join(HERE, 'runs')
+TMP_ROOT = '/var/tmp'
 
 
 def spec_subdir(spec: str) -> str:
@@ -94,12 +100,23 @@ def main():
                    help='Do not save the JFR recordings next to the run output')
     args, forwarded = p.parse_known_args()
 
+    tmp_fstype = subprocess.run(
+        ['findmnt', '-no', 'FSTYPE', '-T', TMP_ROOT],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.strip()
+    if tmp_fstype == 'tmpfs':
+        sys.exit(f'{TMP_ROOT} is on tmpfs, CrateDB data would live in RAM instead of on disk')
+
     out_file = output_file(args.spec, args.runs_dir)
     cmd = [sys.executable, COMPARE_RUN, '--spec', args.spec] + forwarded
     if not args.no_jfr and not any(a == '--jfr-dir' or a.startswith('--jfr-dir=') for a in forwarded):
         run_name = os.path.splitext(os.path.basename(out_file))[0]
         cmd += ['--jfr-dir', os.path.dirname(out_file), '--jfr-prefix', run_name + '_']
     started = datetime.now()
+    tmpdir = os.path.join(TMP_ROOT, 'crate-benchmarks-run-' + started.strftime('%Y_%m_%d_%H_%M_%S'))
+    os.makedirs(tmpdir)
 
     try:
         subprocess.run(
@@ -109,11 +126,12 @@ def main():
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         print(f'Warning: failed to set kernel.perf_event_paranoid=1: {e}', file=sys.stderr)
 
-    env = dict(os.environ, PYTHONUNBUFFERED='1')
+    env = dict(os.environ, PYTHONUNBUFFERED='1', TMPDIR=tmpdir)
     print(f'Writing output to {out_file}')
     with open(out_file, 'w', encoding='utf-8') as out:
         out.write(f'# started:  {started.isoformat(timespec="seconds")}\n')
         out.write(f'# cwd:      {os.getcwd()}\n')
+        out.write(f'# tmpdir:   {tmpdir}\n')
         out.write('# command:  ' + ' '.join(shlex.quote(a) for a in cmd) + '\n')
         out.write('\n')
         out.flush()

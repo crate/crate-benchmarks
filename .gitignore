@@ -50,3 +50,4 @@ join-order-benchmark/imdb.tgz
 
 runs/
 results/
+io_monitor_out/
