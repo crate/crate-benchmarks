@@ -13,7 +13,7 @@ statement_files = ["./sql/wide.sql", "./sql/wide_obj.sql"]
 
 [[queries]]
 name = "analyze-wide-table"
-statement = "select obj from wide_obj limit 500"
+statement = "analyze"
 iterations = 400
 concurrency = 10
 

@@ -14,12 +14,12 @@ concurrency = 1
 iterations = 200
 warmup = 50
 
-[[queries]]
-name = "select_x_count_star_t090"
-statement = "SELECT x, count(*) FROM t090 GROUP BY x"
-concurrency = 1
-iterations = 200
-warmup = 50
+# [[queries]]
+# name = "select_x_count_star_t090"
+# statement = "SELECT x, count(*) FROM t090 GROUP BY x"
+# concurrency = 1
+# iterations = 200
+# warmup = 50
 
 # [[queries]]
 # name = "collect_set_t090"
