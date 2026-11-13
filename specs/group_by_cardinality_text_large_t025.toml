@@ -1,0 +1,34 @@
+[setup]
+statements = [
+  "create table t025 (x text) clustered into 5 shards",
+  "insert into t025 (x) (select md5((x % 2500000)::text) from generate_series(1, 10000000) as t (x))",
+  "refresh table t025",
+  "optimize table t025",
+  "analyze"
+]
+
+[[queries]]
+name = "count_distinct_text_t025"
+statement = "select count(distinct x) from t025"
+concurrency = 1
+iterations = 200
+warmup = 50
+
+# [[queries]]
+# name = "select_x_count_star_text_t025"
+# statement = "SELECT x, count(*) FROM t025 GROUP BY x"
+# concurrency = 1
+# iterations = 200
+# warmup = 50
+
+# [[queries]]
+# name = "collect_set_text_t025"
+# statement = "SELECT collection_count(collect_set(x)) FROM t025"
+# concurrency = 1
+# iterations = 200
+# warmup = 50
+
+[teardown]
+statements = [
+  "drop table if exists t025"
+]
