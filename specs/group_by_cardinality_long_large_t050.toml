@@ -1,7 +1,7 @@
 [setup]
 statements = [
   "create table t050 (x long) clustered into 5 shards",
-  "insert into t050 (x) (select x % 5000000 from generate_series(1, 10000000) as t (x))",
+  "insert into t050 (x) (select floor(random() * 6275005) from generate_series(1, 10000000) as t (x))",
   "refresh table t050",
   "optimize table t050",
   "analyze"
