@@ -1,7 +1,7 @@
 [setup]
 statements = [
   "create table t020 (x text) clustered into 5 shards",
-  "insert into t020 (x) (select md5((x % 2000000)::text) from generate_series(1, 10000000) as t (x))",
+  "insert into t020 (x) (select md5(floor(random() * 2014052)::text) from generate_series(1, 10000000) as t (x))",
   "refresh table t020",
   "optimize table t020",
   "analyze"
