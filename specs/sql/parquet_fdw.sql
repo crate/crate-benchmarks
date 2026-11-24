@@ -3,7 +3,7 @@ OPTIONS (files ['s3://datasets-documentation/uk-house-prices/parquet/house_price
 
 CREATE FOREIGN TABLE houseprices (
   "price" INT,
-  "date" DATE,
+  "date" INT,
   "postcode1" TEXT,
   "postcode2" TEXT,
   "type" int,
@@ -17,5 +17,3 @@ CREATE FOREIGN TABLE houseprices (
   "district" TEXT,
   "county" TEXT
 ) SERVER pq;
-
-

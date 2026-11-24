@@ -28,5 +28,11 @@ statement = """select avg(price) as avg_price, district
 warmup = 3
 iterations = 10
 
+[[queries]]
+name = "parquet e"
+statement = "select * from houseprices limit 100"
+warmup = 3
+iterations = 10
+
 [teardown]
 statements = ["drop server if exists pq cascade"]
